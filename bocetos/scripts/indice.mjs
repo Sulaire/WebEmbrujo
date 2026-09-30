@@ -14,6 +14,8 @@ import { fileURLToPath } from 'node:url';
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..');
 const i = process.argv.indexOf('--suelto');
 const SUELTO = i > -1 ? process.argv[i + 1] : null;
+const j = process.argv.indexOf('--sueltos');
+const SUELTOS = j > -1 ? process.argv[j + 1] : null;
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -43,7 +45,7 @@ for (const f of (await readdir(join(RAIZ, 'notas'))).filter((f) => f.endsWith('.
 notas.sort((a, b) => a.n - b.n);
 
 async function marco(nota, ancho, alto, etiqueta) {
-  const atributos = `title="${esc(nota.nombre)}, ${etiqueta}" loading="lazy" width="${ancho}" height="${alto}"`;
+  const atributos = `title="${esc(nota.nombre)}, ${etiqueta}" width="${ancho}" height="${alto}"`;
   if (!SUELTO) return `<iframe src="${esc(nota.fichero)}" ${atributos}></iframe>`;
   const html = await fuentesEnLinea(await readFile(join(RAIZ, nota.fichero), 'utf8'));
   return `<iframe srcdoc="${esc(html)}" ${atributos}></iframe>`;
@@ -140,6 +142,17 @@ iframe { display: block; border: 1px solid var(--filete); border-radius: 10px; b
 </body>
 </html>
 `;
+
+// --sueltos DIR: cada boceto en su propio HTML con las fuentes dentro. Pesan
+// poco y se abren en cualquier visor, que a veces no carga una página grande.
+if (SUELTOS) {
+  for (const nota of notas) {
+    const html = await fuentesEnLinea(await readFile(join(RAIZ, nota.fichero), 'utf8'));
+    await writeFile(join(SUELTOS, `embrujo-${nota.fichero}`), html);
+    console.log(`embrujo-${nota.fichero} ${Math.round(html.length / 1024)} KB`);
+  }
+  process.exit(0);
+}
 
 const destino = SUELTO ?? join(RAIZ, 'index.html');
 await writeFile(destino, pagina);
