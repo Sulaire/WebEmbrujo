@@ -33,3 +33,12 @@ Sulaire/WebAvpInox) y de lo que falta por confirmar en `bocetos/DATOS.md`.
 - [ ] Dominio y cuentas a nombre del cliente
 - [ ] Ficha de Google del Embrujo Plaza
 - [ ] Quitar el borrador y publicar
+
+## Ideas apuntadas
+
+Sin casilla a propósito: no son trabajo decidido y no cuentan en la barra del HUB.
+
+- **"Hoy fútbol".** Cuando haya partido de Liga o de Champions, que la web lo
+  diga ("Hoy fútbol en la Plaza · 21:00"). Apuntada por Jordi el 30/09/2026.
+  Por decidir: de dónde sale el calendario de partidos (a mano por el bar, o de
+  una fuente pública) y si se enseña solo en la Plaza.
