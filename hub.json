@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Sulaire/Cosmerito/main/hub.schema.json",
+  "leeme": "Ficha de este proyecto para Cosmerito, el HUB desde el que Jordi (Sulaire) gestiona todos sus proyectos. El HUB la lee para montar su tablero; por eso existe, para no copiar el estado a mano. Mantenla al día en el mismo commit que cambie lo que describe (estado, fase, despliegue) y pon 'actualizado' a la fecha. Nada secreto aquí. No cambies el id ni quites el sigilo. Explicación completa: https://github.com/Sulaire/Cosmerito/blob/main/docs/HUB_JSON.md",
+  "version": 1,
+  "id": "embrujo",
+  "nombre": "Embrujo Guardo",
+  "descripcion": "Web de los dos bares Embrujo de Guardo (Palencia): la terraza del río Carrión y la cervecería de la Plaza de la Constitución. En bocetos, sin publicar.",
+  "tipo": "web-cliente",
+  "estado": "activo",
+  "fase": "Fase 0 — Bocetos: elegir entre los tests 15 y 16",
+  "cliente": {
+    "negocio": "Embrujo Río y Embrujo Plaza (Guardo, Palencia)",
+    "sigilo": true
+  },
+  "repo": {
+    "rama_de_trabajo": "claude/modest-clarke-7971sd"
+  },
+  "despliegue": {
+    "plataforma": "ninguno"
+  },
+  "progreso": {
+    "archivo": "ROADMAP.md"
+  },
+  "estado_actual": "bocetos/DATOS.md",
+  "relacionados": [
+    "bus-asiatico",
+    "avp-inox"
+  ],
+  "etiquetas": [
+    "hosteleria",
+    "html-estatico"
+  ],
+  "actualizado": "2026-09-30"
+}
