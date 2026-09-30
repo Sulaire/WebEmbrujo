@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo · La tirada (ronda 3, C)</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{
+  --noche:#070b1a;        /* fondo general, cielo */
+  --noche-2:#0d1530;      /* fondo de secciones y cartas */
+  --pagina:#111c3d;       /* cara de las cartas */
+  --tormenta:#243163;     /* nubes, bordes, niebla */
+  --sombra:#03050d;       /* siluetas, orilla y pie */
+  --luna:#f1ecdc;         /* texto principal y luna */
+  --luna-suave:#b3bcd8;   /* texto secundario */
+  --neon:#4cc3ff;         /* UNICO acento: neon azul del edificio */
+  --apagado:#8b95b8;      /* neon de un local cerrado: tenue, sin brillo */
+  --abierto:#6ee7a1;      /* punto de estado: abierto */
+  --cerrado:#ff9b8a;      /* punto de estado: cerrado */
+  --relleno:#ffe45c;      /* solo lo sin confirmar */
+  --relleno-tinta:#1a1500;
+
+  --radio:12px;
+  --gutter:clamp(16px,4vw,40px);
+  --ancho:1120px;
+  --f-titulo:'IM Fell English SC',Georgia,serif;
+  --f-texto:'Spectral',Georgia,serif;
+  --f-plaza:'Dancing Script',cursive;
+  --brillo:0 0 5px rgb(from var(--neon) r g b / .9),0 0 18px rgb(from var(--neon) r g b / .55),0 0 40px rgb(from var(--neon) r g b / .3);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--noche);color:var(--luna);
+  font-family:var(--f-texto);font-size:clamp(1rem,.96rem + .25vw,1.1rem);line-height:1.5;
+  overflow-wrap:anywhere;
+}
+h1,h2,h3{font-family:var(--f-titulo);font-weight:400;line-height:1.05;margin:0;overflow-wrap:normal}
+p{margin:0 0 .6em}
+a{color:var(--neon)}
+:focus-visible{outline:3px solid var(--neon);outline-offset:3px;border-radius:4px}
+mark.relleno{
+  background:var(--relleno);color:var(--relleno-tinta);
+  padding:.05em .4em;border-radius:4px;font-style:normal;font-size:.85em;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.salto{position:absolute;left:8px;top:-80px;z-index:60;background:var(--neon);color:var(--noche);
+  padding:.7em 1em;border-radius:var(--radio);text-decoration:none;min-height:44px}
+.salto:focus{top:8px}
+.franja{background:var(--sombra);color:var(--luna-suave);font-size:.8rem;line-height:1.4;
+  text-align:center;padding:.45em var(--gutter);border-bottom:1px solid var(--tormenta)}
+.franja strong{color:var(--luna);font-weight:400}
+.caja{max-width:var(--ancho);margin-inline:auto;padding-inline:var(--gutter)}
+main:focus{outline:none}
+[hidden]{display:none !important}
+
+/* ---------- selector de prueba (solo boceto) ---------- */
+.prueba{background:var(--sombra);border-bottom:1px dashed var(--tormenta);font-size:.85rem;color:var(--luna-suave)}
+.prueba .caja{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .5rem;padding-block:.35rem}
+.prueba .rotulo-prueba{font-style:italic}
+.prueba .rotulo-prueba b{font-weight:400;color:var(--relleno)}
+.prueba button{
+  font:inherit;font-size:.85rem;min-height:44px;min-width:44px;padding:.2em .7em;cursor:pointer;
+  background:var(--noche);color:var(--luna-suave);border:1px solid var(--tormenta);border-radius:999px}
+.prueba button[aria-pressed="true"]{border-color:var(--neon);color:var(--neon)}
+
+/* ---------- botones ---------- */
+.botones{display:flex;flex-wrap:wrap;gap:.6rem}
+.boton{
+  display:inline-flex;align-items:center;gap:.55em;min-height:48px;
+  padding:.5em 1em;border:1.5px solid var(--neon);border-radius:var(--radio);
+  color:var(--neon);background:var(--noche);text-decoration:none;font-size:1rem;line-height:1.2;
+  box-shadow:0 0 16px rgb(from var(--neon) r g b / .22);transition:background .2s,color .2s}
+.boton svg{width:1.1em;height:1.1em;flex:none}
+.boton b{font-weight:400;color:var(--luna)}
+.boton:hover{background:var(--neon);color:var(--noche)}
+.boton:hover b{color:var(--noche)}
+
+/* ---------- portada: el rotulo ---------- */
+.portada{
+  position:relative;overflow:clip;isolation:isolate;padding-block:1.2rem 1.6rem;
+  background:
+    radial-gradient(1.5px 1.5px at 12% 18%,var(--luna) 50%,transparent 51%),
+    radial-gradient(1px 1px at 28% 8%,var(--luna) 50%,transparent 51%),
+    radial-gradient(1px 1px at 44% 30%,var(--luna-suave) 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 6% 46%,var(--luna-suave) 50%,transparent 51%),
+    radial-gradient(1px 1px at 58% 10%,var(--luna) 50%,transparent 51%),
+    radial-gradient(ellipse 90% 60% at 80% 10%,var(--noche-2),transparent 70%),
+    var(--noche);
+}
+.cielo{position:absolute;top:.2rem;right:-18px;width:min(46vw,300px);height:auto;z-index:0}
+.cielo .halo{fill:url(#halo)}
+.cielo .disco{fill:var(--luna)}
+.cielo .crater{fill:var(--tormenta);opacity:.16}
+.cielo .nube{fill:var(--tormenta)}
+.cielo .nube-2{fill:var(--noche-2)}
+.cuervo{fill:var(--sombra)}
+.portada .caja{position:relative;z-index:2}
+.lugar{font-style:italic;color:var(--luna-suave);margin:0 0 .2rem;max-width:52%}
+.logo{font-size:clamp(3rem,15.5vw,8rem);letter-spacing:.04em;color:var(--luna);margin-top:clamp(2.2rem,12vw,5rem);text-shadow:var(--brillo)}
+.letras span{display:inline-block}
+.lema{font-family:var(--f-titulo);font-size:clamp(1.2rem,1rem + 1.4vw,1.9rem);margin:.35rem 0 .9rem;line-height:1.2}
+.plaza{font-family:var(--f-plaza);font-weight:600;font-size:1.3em;letter-spacing:0;text-transform:none}
+.lema .plaza{color:var(--neon)}
+.niebla{position:absolute;left:0;bottom:0;width:200%;height:140px;z-index:1;pointer-events:none;opacity:.55;
+  background:
+    radial-gradient(ellipse 12% 45% at 10% 70%,rgb(from var(--tormenta) r g b / .6),transparent 70%),
+    radial-gradient(ellipse 16% 40% at 32% 80%,rgb(from var(--tormenta) r g b / .5),transparent 70%),
+    radial-gradient(ellipse 12% 45% at 60% 70%,rgb(from var(--tormenta) r g b / .6),transparent 70%),
+    radial-gradient(ellipse 16% 40% at 82% 80%,rgb(from var(--tormenta) r g b / .5),transparent 70%)}
+
+/* estado de cada local, como una ficha pequena */
+.estados{display:grid;grid-template-columns:minmax(0,1fr);gap:.6rem;margin-top:.4rem}
+@media (min-width:700px){.estados{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.ficha{background:rgb(from var(--noche-2) r g b / .9);border:1px solid var(--tormenta);border-radius:var(--radio);
+  padding:.65rem .8rem;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem .7rem;align-items:center}
+.ficha .nombre-ficha{font-family:var(--f-titulo);font-size:1.6rem;line-height:1}
+.ficha .nombre-ficha .plaza{font-size:1.1em}
+.ficha .estado{grid-column:1/-1}
+.ficha .boton{grid-column:2;grid-row:1;padding:.4em .8em}
+.nota-horario{margin:.7rem 0 0;font-size:.85rem}
+
+/* neon de cada local: encendido sin JS, y con JS solo si esta abierto */
+.neon-local{color:var(--neon);text-shadow:var(--brillo)}
+.js .neon-local{color:var(--apagado);text-shadow:none}
+.js .neon-local[data-estado="abierto"]{color:var(--neon);text-shadow:var(--brillo)}
+.estado{margin:0;font-size:.95rem;color:var(--luna);display:flex;align-items:baseline;gap:.5em}
+.estado::before{content:"";flex:none;width:.7em;height:.7em;border-radius:50%;background:var(--cerrado);transform:translateY(.05em)}
+.estado[data-estado="abierto"]::before{background:var(--abierto);box-shadow:0 0 8px var(--abierto)}
+
+/* ---------- secciones ---------- */
+section{padding-block:clamp(1.8rem,5vw,3.5rem)}
+.titulo-seccion h2{font-size:clamp(1.7rem,1.3rem + 2.4vw,2.8rem)}
+.titulo-seccion p{color:var(--luna-suave);font-style:italic;margin:.35rem 0 0;font-size:.95rem}
+
+/* ---------- la tirada de promociones ---------- */
+.tirada{background:linear-gradient(var(--noche),var(--noche-2))}
+.tirada-cabeza{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.6rem;align-items:end;margin-bottom:1rem}
+.baraja-mano{width:clamp(96px,24vw,150px);height:auto;display:block;overflow:hidden}
+.baraja-mano .mano{transform-box:view-box}
+.baraja-mano .silueta{fill:var(--sombra);stroke:var(--neon);stroke-width:2;stroke-linejoin:round}
+.baraja-mano .vaso{fill:var(--noche-2);stroke:var(--neon);stroke-width:2.2}
+.baraja-mano .espuma{fill:var(--luna)}
+.baraja-mano .burbuja{fill:var(--luna-suave);opacity:.7}
+.baraja-mano .naipe-dibujo{fill:var(--noche-2);stroke:var(--tormenta);stroke-width:2}
+.baraja-mano .naipe-frente{fill:var(--pagina);stroke:var(--neon);stroke-width:2}
+.baraja-mano .niebla-mano{fill:var(--tormenta);opacity:.8}
+.cartas{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(.45rem,2vw,1.4rem);max-width:820px}
+.cartas li{position:relative;display:flex}
+.carta{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;border-radius:var(--radio);perspective:1000px}
+.carta:focus-visible{outline:3px solid var(--neon);outline-offset:4px}
+.giro{display:grid;height:100%;transform-style:preserve-3d}
+.giro>span{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radio)}
+.cara{
+  display:flex;flex-direction:column;gap:.25rem;padding:.7rem .55rem .6rem;text-align:center;
+  background:var(--pagina);border:1px solid var(--neon);box-shadow:inset 0 0 0 4px var(--pagina),inset 0 0 0 5px var(--tormenta),0 0 18px rgb(from var(--neon) r g b / .25)}
+.cara .de{font-style:italic;font-size:.78rem;color:var(--luna-suave)}
+.cara .de .plaza{font-size:1.25em;color:var(--luna)}
+.cara .grande{font-family:var(--f-titulo);font-size:clamp(1.55rem,1.1rem + 2.4vw,2.6rem);color:var(--neon);line-height:1}
+.cara .que{font-size:clamp(.82rem,.76rem + .35vw,1rem);line-height:1.25;color:var(--luna)}
+.cara .fuente{margin-top:auto;padding-top:.35rem;border-top:1px dotted var(--tormenta);font-size:.74rem;line-height:1.3;color:var(--luna-suave);font-style:italic}
+.cara .fuente mark{font-size:.95em}
+.dorso{display:none}
+.js .dorso{
+  display:grid;place-items:center;transform:rotateY(180deg);
+  background:radial-gradient(circle at 50% 42%,var(--noche-2),var(--noche) 75%);
+  border:1px solid var(--neon);box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--tormenta),0 0 18px rgb(from var(--neon) r g b / .3)}
+.dorso svg{width:84%;height:auto;max-height:92%}
+.d-trazo{fill:none;stroke:var(--neon);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.d-luna{fill:var(--luna)}
+.d-cuervo{fill:var(--sombra);stroke:var(--neon);stroke-width:1.6;stroke-linejoin:round}
+.d-chispa{fill:var(--luna-suave)}
+.boca-abajo .giro{transform:rotateY(180deg)}
+.nota-tirada{color:var(--luna-suave);font-size:.85rem;font-style:italic;margin:.9rem 0 0}
+
+/* ---------- las cartas grandes ---------- */
+.mesa{background:var(--noche-2)}
+.rejilla{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1rem,3vw,1.8rem)}
+@media (min-width:860px){.rejilla{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.carta-grande{
+  position:relative;background:var(--pagina);border:1px solid var(--neon);border-radius:calc(var(--radio) + 4px);
+  padding:0 0 1rem;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 0 0 5px var(--noche),0 0 0 6px var(--tormenta),0 22px 44px -18px var(--sombra),0 0 26px rgb(from var(--neon) r g b / .18)}
+.carta-grande::before{content:"";position:absolute;inset:6px;border:1px dashed rgb(from var(--tormenta) r g b / .9);border-radius:var(--radio);pointer-events:none}
+.esquina{position:absolute;top:.55rem;left:.8rem;z-index:2;font-family:var(--f-titulo);font-size:1rem;color:var(--luna-suave);line-height:1;text-align:center}
+.esquina.abajo{top:auto;left:auto;bottom:.55rem;right:.8rem;transform:rotate(180deg)}
+.lamina{display:block;width:100%;height:auto;background:var(--noche);border-bottom:1px solid var(--tormenta)}
+.lamina .disco{fill:var(--luna)}
+.lamina .halo{fill:url(#halo-2)}
+.lamina .agua{fill:var(--noche-2)}
+.lamina .reflejo{stroke:var(--luna);stroke-width:3;stroke-linecap:round;opacity:.55}
+.lamina .reflejo-neon{stroke:var(--neon);stroke-width:2;stroke-linecap:round;opacity:.7}
+.lamina .arbol{fill:var(--sombra)}
+.lamina .linea-neon{fill:none;stroke:var(--neon);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.lamina .cuervo-grande{fill:var(--sombra);stroke:var(--neon);stroke-width:1.8;stroke-linejoin:round}
+.lamina .ojo{fill:var(--luna)}
+.lamina .niebla-l{fill:var(--tormenta);opacity:.7}
+.cuerpo-carta{padding:.9rem clamp(1rem,3vw,1.5rem) 0;display:flex;flex-direction:column;gap:.55rem;flex:1}
+.etiqueta{display:block;font-size:.85rem;color:var(--luna-suave);font-style:italic}
+.carta-grande h3{font-size:clamp(2rem,1.5rem + 2vw,2.8rem)}
+.carta-grande h3 .plaza{font-size:1.2em}
+.lo-que-hay{list-style:none;padding:0;margin:0;font-size:.97rem}
+.lo-que-hay li{position:relative;padding-left:1.3rem;margin-bottom:.3rem}
+.lo-que-hay li::before{content:"";position:absolute;left:.15rem;top:.55em;width:.5rem;height:.5rem;border-radius:50%;
+  background:var(--pagina);box-shadow:inset -.18rem 0 0 var(--luna)}
+.google{display:inline-flex;align-items:baseline;gap:.4em;margin:0;align-self:flex-start;border:1px solid var(--tormenta);border-radius:var(--radio);padding:.15em .7em;font-size:.95rem}
+.google span{font-family:var(--f-titulo);font-size:1.4em;color:var(--neon)}
+/* el sorteo, bien visible */
+.sorteo{position:relative;border:2px solid var(--neon);border-radius:var(--radio);padding:.75rem .9rem .7rem 4.2rem;
+  background:var(--noche);box-shadow:0 0 22px rgb(from var(--neon) r g b / .28),inset 0 0 18px rgb(from var(--neon) r g b / .12)}
+.sorteo svg{position:absolute;left:.7rem;top:.8rem;width:2.9rem;height:2.9rem}
+.b-trazo{fill:none;stroke:var(--neon);stroke-width:2.2;stroke-linejoin:round}
+.b-punto{fill:var(--luna)}
+.sorteo .cuando{display:block;font-style:italic;color:var(--luna-suave);font-size:.85rem}
+.sorteo strong{display:block;font-family:var(--f-titulo);font-weight:400;font-size:clamp(1.35rem,1.1rem + 1vw,1.7rem);line-height:1.1;color:var(--luna);text-shadow:0 0 12px rgb(from var(--neon) r g b / .5)}
+.sorteo p{margin:.25rem 0 0;font-size:.9rem;color:var(--luna-suave)}
+.datos-local{border-top:1px solid var(--tormenta);padding-top:.7rem;margin-top:auto;color:var(--luna-suave);font-size:.92rem}
+.datos-local p{margin-bottom:.45em}
+.datos-local .horario b{font-weight:400;color:var(--luna)}
+
+/* avisador y camino */
+.rejilla.segunda{margin-top:clamp(1rem,3vw,1.8rem)}
+.avisador .cuerpo-carta{flex-direction:row;align-items:center;gap:1rem;padding-top:2rem}
+.disco-aviso{width:clamp(96px,28vw,140px);height:auto;flex:none;overflow:visible}
+.disco-aviso .cuerpo{fill:var(--sombra);stroke:var(--neon);stroke-width:3}
+.disco-aviso .anillo{fill:none;stroke:var(--neon);stroke-width:5;opacity:.9}
+.disco-aviso .centro{fill:var(--noche-2);stroke:var(--tormenta);stroke-width:2}
+.disco-aviso .onda{fill:none;stroke:var(--neon);stroke-width:2;opacity:0}
+.disco-aviso .luna-mini{fill:var(--luna)}
+.avisador h3{font-size:clamp(1.6rem,1.3rem + 1.4vw,2.2rem);margin-bottom:.35rem}
+.avisador .cita{font-size:1.05rem;margin:0 0 .3rem}
+.avisador .cita+p{font-size:.9rem;color:var(--luna-suave);margin:0}
+.camino .cuerpo-carta{padding-top:2rem}
+.camino h3{font-size:clamp(1.6rem,1.3rem + 1.4vw,2.2rem)}
+.mapa{display:block;width:100%;height:auto;border:1px solid var(--tormenta);border-radius:var(--radio);background:var(--noche)}
+.mapa .rio-agua{fill:var(--noche-2);stroke:var(--neon);stroke-width:1.6}
+.mapa .reflejo{stroke:var(--luna-suave);stroke-width:2;stroke-linecap:round;opacity:.45}
+.mapa .reflejo-neon{stroke:var(--neon);stroke-width:2;stroke-linecap:round;opacity:.55}
+.mapa .arbol{fill:var(--tormenta);opacity:.75}
+.mapa .casco{fill:none;stroke:var(--tormenta);stroke-width:1.5;stroke-dasharray:2 4}
+.mapa .ruta{fill:none;stroke:var(--luna);stroke-width:2.6;stroke-dasharray:1 7;stroke-linecap:round}
+.mapa .marca{fill:var(--sombra);stroke:var(--neon);stroke-width:2.2;filter:drop-shadow(0 0 3px var(--neon))}
+.mapa .marca-luna{fill:var(--luna)}
+.mapa text{font-family:var(--f-titulo);fill:var(--luna);font-size:17px}
+.mapa .t-rio{font-family:var(--f-texto);font-style:italic;fill:var(--luna-suave);font-size:14px}
+.mapa .t-plaza{font-family:var(--f-plaza);font-weight:600;fill:var(--neon);font-size:22px}
+.leyenda{font-size:.9rem;color:var(--luna-suave);margin:0}
+.leyenda b{font-weight:400;color:var(--luna)}
+
+/* ---------- pie ---------- */
+.pie{background:var(--sombra);border-top:1px solid var(--tormenta);padding-block:clamp(1.6rem,4vw,2.6rem)}
+.pie h2{font-size:clamp(1.5rem,1.2rem + 1.6vw,2.2rem);margin-bottom:.3rem}
+.pie p{color:var(--luna-suave);font-size:.95rem}
+.pie .botones{margin:.7rem 0 1rem}
+.pie .firma{font-size:.85rem;border-top:1px solid var(--tormenta);padding-top:.8rem;margin:0}
+
+/* ---------- estrellas y paseantes: solo con movimiento ---------- */
+.estrella{position:absolute;width:var(--t,12px);height:var(--t,12px);pointer-events:none;z-index:3;opacity:0}
+.estrella svg{display:block;width:100%;height:100%;fill:var(--luna);filter:drop-shadow(0 0 4px var(--neon))}
+.paseo{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:40;display:none}
+.paseante{position:absolute;left:0;opacity:0}
+.paseante svg{display:block;width:100%;height:auto}
+.paseante .silueta{fill:var(--sombra);stroke:var(--neon);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+.paseante .ojos{fill:var(--luna)}
+.paseante .palo{stroke:var(--neon);stroke-width:3;stroke-linecap:round;fill:none}
+.bruja{top:4px;width:clamp(84px,11vw,120px)}
+.gato{bottom:0;width:clamp(70px,9vw,100px)}
+
+@media (min-width:900px){
+  .portada{padding-block:2rem 2.4rem}
+  .cielo{right:max(0px,calc((100vw - var(--ancho))/2));width:min(30vw,380px)}
+  .logo{margin-top:3.2rem}
+  .lema{max-width:48rem}
+  .baraja-mano{width:170px}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  .js .encendiendo .letras span{animation:encender .5s steps(1,end) both;animation-delay:calc(.25s + var(--n) * .2s)}
+  .js .encendiendo .letras span:nth-child(5){animation:encender .5s steps(1,end) both,titilar 1.6s steps(1,end) 2.4s 1}
+  .js .enciende.neon-local[data-estado="abierto"]{animation:encender-local 1.8s steps(1,end) both}
+  .cuervo{animation:vuelo 18s linear 1.5s infinite}
+  .ala{transform-box:fill-box;transform-origin:50% 90%;animation:aleteo .45s ease-in-out infinite alternate}
+  .niebla{animation:niebla 70s linear infinite}
+  .giro{transition:transform .75s cubic-bezier(.3,.7,.2,1)}
+  .boca-abajo:hover .giro{transform:rotateY(170deg) translateY(-4px)}
+  .estrella{animation:brotar 2.2s ease-out forwards;animation-delay:var(--d,0s)}
+  .avisador .disco-aviso .vibra{transform-box:fill-box;transform-origin:center;animation:vibra 3.4s infinite}
+  .avisador .disco-aviso .anillo{animation:luz 3.4s infinite}
+  .avisador .disco-aviso .onda{transform-box:fill-box;transform-origin:center;animation:onda 3.4s infinite}
+  .avisador .disco-aviso .onda+.onda{animation-delay:.2s}
+  .avisador{animation:temblor 3.4s infinite}
+  .js .baraja-mano .mano{transform:translateY(100px)}
+  .js .baraja-mano.vista .mano{animation:asoma 1.6s cubic-bezier(.3,.8,.3,1) .2s both}
+  .baraja-mano .burbuja{animation:sube-b 2.4s ease-in infinite}
+  .baraja-mano .burbuja:nth-of-type(2){animation-delay:.8s}
+  .baraja-mano .burbuja:nth-of-type(3){animation-delay:1.6s}
+  .mapa .ruta{animation:andar 6s linear infinite}
+  .paseo{display:block}
+  .bruja.cruza{animation:cruza-bruja 8s linear both}
+  .bruja.cruza svg{animation:balanceo 1.1s ease-in-out infinite alternate}
+  .gato.cruza{animation:cruza-gato 11s linear both}
+  .gato.cruza svg{animation:paso .35s ease-in-out infinite alternate}
+}
+@keyframes encender{0%{color:var(--tormenta);text-shadow:none}30%{color:var(--luna);text-shadow:var(--brillo)}45%{color:var(--tormenta);text-shadow:none}60%,100%{color:var(--luna);text-shadow:var(--brillo)}}
+@keyframes titilar{0%{opacity:1}20%{opacity:.35}30%{opacity:1}55%{opacity:.5}62%,100%{opacity:1}}
+@keyframes encender-local{0%{color:var(--apagado);text-shadow:none}12%{color:var(--neon);text-shadow:var(--brillo)}20%{color:var(--apagado);text-shadow:none}34%{color:var(--neon);text-shadow:var(--brillo)}40%{color:var(--apagado);text-shadow:none}55%,100%{color:var(--neon);text-shadow:var(--brillo)}}
+@keyframes vuelo{0%{transform:translateX(-340px) translateY(20px)}55%,100%{transform:translateX(360px) translateY(-30px)}}
+@keyframes aleteo{from{transform:scaleY(1)}to{transform:scaleY(-.35)}}
+@keyframes niebla{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes brotar{0%{opacity:0;transform:translateY(0) scale(.3) rotate(0)}25%{opacity:1;transform:translateY(-6px) scale(1) rotate(20deg)}100%{opacity:0;transform:translateY(-34px) scale(.5) rotate(70deg)}}
+@keyframes vibra{0%,55%,100%{transform:none}58%{transform:translate(-4px,1px) rotate(-3deg)}61%{transform:translate(4px,-1px) rotate(3deg)}64%{transform:translate(-4px,0) rotate(-2deg)}67%{transform:translate(3px,1px) rotate(2deg)}70%{transform:translate(-2px,0)}74%{transform:none}}
+@keyframes temblor{0%,56%,100%{transform:none}59%{transform:translateX(-1.5px) rotate(-.3deg)}63%{transform:translateX(1.5px) rotate(.3deg)}67%{transform:translateX(-1px)}71%{transform:none}}
+@keyframes luz{0%,54%{opacity:.3}58%,76%{opacity:1}90%,100%{opacity:.3}}
+@keyframes onda{0%,55%{opacity:0;transform:scale(1)}60%{opacity:.8}85%,100%{opacity:0;transform:scale(1.3)}}
+@keyframes asoma{from{transform:translateY(100px)}to{transform:none}}
+@keyframes sube-b{0%{transform:translateY(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-22px);opacity:0}}
+@keyframes andar{to{stroke-dashoffset:-80}}
+@keyframes cruza-bruja{0%{transform:translateX(-160px) translateY(10px);opacity:.9}100%{transform:translateX(calc(100vw + 40px)) translateY(-20px);opacity:.9}}
+@keyframes cruza-gato{0%{transform:translateX(calc(100vw + 20px)) scaleX(-1);opacity:.95}100%{transform:translateX(-140px) scaleX(-1);opacity:.95}}
+@keyframes balanceo{from{transform:translateY(-5px) rotate(-3deg)}to{transform:translateY(5px) rotate(2deg)}}
+@keyframes paso{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<div class="franja"><strong>Boceto de la ronda 3 · C de 3 · La tirada</strong> · no es la web del bar · lo marcado en amarillo está sin confirmar</div>
+
+<div class="prueba" id="prueba" hidden>
+  <div class="caja" role="group" aria-labelledby="prueba-t">
+    <span class="rotulo-prueba" id="prueba-t"><b>Solo en el boceto.</b> Ver como si fuera:</span>
+    <button type="button" data-cuando="ahora" aria-pressed="true">ahora</button>
+    <button type="button" data-cuando="2,1200" aria-pressed="false">martes 20:00</button>
+    <button type="button" data-cuando="6,840" aria-pressed="false">sábado 14:00</button>
+    <button type="button" data-cuando="4,1080" aria-pressed="false">jueves 18:00</button>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <radialGradient id="halo"><stop offset="45%" style="stop-color:var(--luna);stop-opacity:.22"/><stop offset="100%" style="stop-color:var(--luna);stop-opacity:0"/></radialGradient>
+    <radialGradient id="halo-2"><stop offset="40%" style="stop-color:var(--luna);stop-opacity:.25"/><stop offset="100%" style="stop-color:var(--luna);stop-opacity:0"/></radialGradient>
+    <symbol id="s-dorso" viewBox="0 0 100 150">
+      <rect class="d-trazo" x="8" y="8" width="84" height="134" rx="6"/>
+      <circle class="d-luna" cx="50" cy="62" r="24"/>
+      <g class="d-cuervo" transform="translate(21 48) scale(.5)"><path d="M58 30 C48 18 32 6 6 0 C20 12 28 20 34 30 Z"/><path d="M64 30 C74 16 90 4 118 -2 C104 10 94 20 88 30 Z"/><path d="M22 34 C34 26 60 24 86 30 C96 32 104 30 112 26 L106 34 C100 38 92 40 86 38 C62 42 40 42 22 34 Z M10 30 L24 32 L22 36 Z"/></g>
+      <circle class="d-chispa" cx="22" cy="28" r="1.8"/><circle class="d-chispa" cx="78" cy="30" r="1.4"/><circle class="d-chispa" cx="80" cy="104" r="1.8"/><circle class="d-chispa" cx="20" cy="112" r="1.4"/>
+      <path class="d-trazo" d="M24 110 q6 -4 12 0 t12 0 t12 0 t12 0 t12 0 M30 120 q5 -3 10 0 t10 0 t10 0 t10 0"/>
+      <path class="d-trazo" d="M50 14 v8 M46 18 h8 M50 128 v8 M46 132 h8"/>
+    </symbol>
+    <symbol id="s-estrella" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></symbol>
+    <symbol id="s-tel" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+    <symbol id="s-bombo" viewBox="0 0 48 48">
+      <circle class="b-trazo" cx="24" cy="22" r="17"/>
+      <path class="b-trazo" d="M24 5 v34 M7 22 h34 M12 10 l24 24 M36 10 l-24 24"/>
+      <circle class="b-punto" cx="17" cy="17" r="3"/><circle class="b-punto" cx="30" cy="27" r="3"/>
+      <path class="b-trazo" d="M14 44 h20 M24 39 v5"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="portada" id="portada">
+  <svg class="cielo" viewBox="0 0 400 320" aria-hidden="true" focusable="false">
+    <defs><clipPath id="marco"><rect width="400" height="320"/></clipPath></defs>
+    <g clip-path="url(#marco)">
+      <circle class="halo" cx="240" cy="145" r="160"/>
+      <circle class="disco" cx="240" cy="145" r="112"/>
+      <circle class="crater" cx="205" cy="110" r="22"/>
+      <circle class="crater" cx="275" cy="175" r="30"/>
+      <circle class="crater" cx="262" cy="95" r="11"/>
+      <circle class="crater" cx="198" cy="185" r="13"/>
+      <g class="cuervo">
+        <g transform="translate(128 104) scale(1.35)">
+          <path class="ala" d="M58 30 C48 18 32 6 6 0 C20 12 28 20 34 30 Z"/>
+          <path class="ala" d="M64 30 C74 16 90 4 118 -2 C104 10 94 20 88 30 Z"/>
+          <path d="M22 34 C34 26 60 24 86 30 C96 32 104 30 112 26 L106 34 C100 38 92 40 86 38 C62 42 40 42 22 34 Z M10 30 L24 32 L22 36 Z"/>
+          <path d="M34 36 L18 46 L40 40 Z"/>
+        </g>
+      </g>
+      <ellipse class="nube-2" cx="310" cy="250" rx="84" ry="24"/>
+      <ellipse class="nube" cx="190" cy="262" rx="140" ry="30"/>
+      <ellipse class="nube" cx="300" cy="282" rx="94" ry="24"/>
+    </g>
+  </svg>
+  <div class="niebla" aria-hidden="true"></div>
+
+  <div class="caja">
+    <p class="lugar">Guardo · Palencia · a orillas del Carrión</p>
+    <h1 class="logo" id="rotulo"><span class="sr">Embrujo</span><span class="letras" aria-hidden="true"><span style="--n:0">E</span><span style="--n:1">M</span><span style="--n:2">B</span><span style="--n:3">R</span><span style="--n:4">U</span><span style="--n:5">J</span><span style="--n:6">O</span></span></h1>
+    <p class="lema">Dos locales en Guardo: el del río y el de la <span class="plaza">plaza</span></p>
+
+    <div class="estados">
+      <div class="ficha">
+        <span class="nombre-ficha neon-local" data-local="rio">Río</span>
+        <a class="boton" href="tel:+34646251640" aria-label="Llamar al Embrujo Río, 646 25 16 40"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><b>646 25 16 40</b></a>
+        <p class="estado" data-estado-de="rio" hidden></p>
+      </div>
+      <div class="ficha">
+        <span class="nombre-ficha neon-local" data-local="plaza"><span class="plaza">plaza</span></span>
+        <a class="boton" href="tel:+34646981186" aria-label="Llamar al Embrujo Plaza, 646 98 11 86"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><b>646 98 11 86</b></a>
+        <p class="estado" data-estado-de="plaza" hidden></p>
+      </div>
+    </div>
+    <p class="nota-horario"><mark class="relleno">El horario es de ejemplo, sin confirmar: sale de carteles, prensa y Restaurant Guru</mark></p>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+  <section class="tirada" aria-labelledby="t-tirada">
+    <div class="caja">
+      <div class="tirada-cabeza">
+        <div class="titulo-seccion">
+          <h2 id="t-tirada">Descubre la promoción de esta semana</h2>
+          <p>Tres cartas boca abajo. Dales la vuelta.</p>
+        </div>
+        <svg class="baraja-mano" id="baraja-mano" viewBox="0 0 150 170" aria-hidden="true" focusable="false">
+          <g class="mano">
+            <path class="silueta" d="M58 170 L60 104 C52 102 46 96 46 88 L46 70 C46 64 52 62 56 66 L58 72 L58 58 C58 52 66 52 67 58 L68 70 L68 54 C68 48 77 48 77 54 L78 70 L79 58 C79 52 88 52 88 58 L88 96 C88 102 84 106 82 106 L84 170 Z"/>
+            <rect class="vaso" x="60" y="6" width="44" height="58" rx="4"/>
+            <path class="vaso" d="M104 18 C120 18 120 50 104 50"/>
+            <circle class="burbuja" cx="72" cy="52" r="1.8"/><circle class="burbuja" cx="84" cy="56" r="1.5"/><circle class="burbuja" cx="94" cy="50" r="1.8"/>
+            <path class="espuma" d="M56 12 C54 2 66 -2 72 4 C76 -4 90 -4 94 4 C100 -2 112 4 108 14 L60 16 C57 16 56 14 56 12 Z"/>
+            <path class="silueta" d="M46 72 L64 70 M46 82 L64 80"/>
+          </g>
+          <rect class="naipe-dibujo" x="14" y="112" width="96" height="56" rx="6" transform="rotate(-6 62 140)"/>
+          <rect class="naipe-dibujo" x="30" y="114" width="96" height="56" rx="6" transform="rotate(4 78 142)"/>
+          <rect class="naipe-frente" x="22" y="116" width="100" height="54" rx="6"/>
+          <circle cx="72" cy="140" r="11" style="fill:var(--luna)"/>
+          <path d="M56 146 C62 142 72 142 80 144 C84 140 88 140 92 141 L89 144 L92 151 L87 149 L84 146 C74 150 64 150 56 146 Z" style="fill:var(--sombra);stroke:var(--neon);stroke-width:1.2"/>
+          <ellipse class="niebla-mano" cx="30" cy="166" rx="34" ry="6"/><ellipse class="niebla-mano" cx="118" cy="166" rx="30" ry="5"/>
+        </svg>
+      </div>
+
+      <ul class="cartas">
+        <li>
+          <button class="carta" type="button" aria-pressed="true" data-n="1">
+            <span class="giro">
+              <span class="cara">
+                <span class="de">en la <span class="plaza">plaza</span></span>
+                <span class="grande">2 €</span>
+                <span class="que">Caña o tinto de verano</span>
+                <span class="fuente">Pegatina del cartel de la Plaza <mark class="relleno">sin fecha</mark></span>
+              </span>
+              <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Carta 1 boca abajo. Púlsala para descubrir la promoción.</span></span>
+            </span>
+          </button>
+        </li>
+        <li>
+          <button class="carta" type="button" aria-pressed="true" data-n="2">
+            <span class="giro">
+              <span class="cara">
+                <span class="de">en el río</span>
+                <span class="grande">2,5 €</span>
+                <span class="que">Cañones y calimotxos, y festival de chorizos de tapa</span>
+                <span class="fuente">Cartel «Regreso al Embrujo Río», viernes 3 de julio</span>
+              </span>
+              <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Carta 2 boca abajo. Púlsala para descubrir la promoción.</span></span>
+            </span>
+          </button>
+        </li>
+        <li>
+          <button class="carta" type="button" aria-pressed="true" data-n="3">
+            <span class="giro">
+              <span class="cara">
+                <span class="de">en la <span class="plaza">plaza</span></span>
+                <span class="grande">Cesta</span>
+                <span class="que">Sorteo de la cesta de embutidos en el descanso</span>
+                <span class="fuente">Cartel de la Plaza, «Toda la Liga y Champions»</span>
+              </span>
+              <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Carta 3 boca abajo. Púlsala para descubrir la promoción.</span></span>
+            </span>
+          </button>
+        </li>
+      </ul>
+      <p class="nota-tirada">Promociones sacadas de sus carteles de Instagram. <mark class="relleno">Cuáles valen esta semana, sin confirmar</mark></p>
+    </div>
+  </section>
+
+  <section class="mesa" aria-labelledby="t-mesa">
+    <div class="caja">
+      <h2 class="sr" id="t-mesa">Los dos locales</h2>
+      <div class="rejilla">
+
+        <article class="carta-grande" aria-labelledby="t-rio">
+          <span class="esquina" aria-hidden="true">I</span>
+          <svg class="lamina" viewBox="0 0 400 130" aria-hidden="true" focusable="false">
+            <circle class="halo" cx="200" cy="52" r="70"/>
+            <circle class="disco" cx="200" cy="52" r="34"/>
+            <path class="arbol" d="M0 92 C8 40 40 30 50 60 C58 26 96 22 104 70 C110 54 130 56 132 92 Z M400 92 C392 44 362 36 352 62 C344 30 306 28 300 72 C292 58 272 60 272 92 Z"/>
+            <rect class="agua" x="0" y="90" width="400" height="40"/>
+            <path class="linea-neon" d="M0 90.5 H400"/>
+            <line class="reflejo" x1="176" y1="100" x2="224" y2="100"/>
+            <line class="reflejo" x1="184" y1="109" x2="216" y2="109"/>
+            <line class="reflejo" x1="192" y1="118" x2="208" y2="118"/>
+            <line class="reflejo-neon" x1="40" y1="104" x2="110" y2="104"/>
+            <line class="reflejo-neon" x1="290" y1="112" x2="360" y2="112"/>
+            <line class="reflejo-neon" x1="120" y1="122" x2="160" y2="122"/>
+          </svg>
+          <div class="cuerpo-carta">
+            <div>
+              <span class="etiqueta">Embrujo Río · junto al Carrión · desde 2008</span>
+              <h3 id="t-rio"><span class="neon-local" data-local="rio">El Río</span></h3>
+            </div>
+            <p class="estado" data-estado-de="rio" hidden></p>
+            <ul class="lo-que-hay">
+              <li>Terraza enorme bajo los árboles, pegada al río.</li>
+              <li>Cocina desde las 16:00: patatas embrujadas, rabas, gambones, pulpo gratinado, solomillo con queso y cebolla.</li>
+              <li>Postres caseros: Pantera Rosa, Tigretón, Kinder Bueno, mascarpone con Lotus. Precios <mark class="relleno">sin confirmar</mark></li>
+              <li>Pincho con la consumición y comida para llevar. En verano, DJ jueves y viernes.</li>
+            </ul>
+            <p class="google"><span>4,6</span> en Google, con 636 reseñas</p>
+            <div class="sorteo">
+              <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><use href="#s-bombo"/></svg>
+              <span class="cuando">Los miércoles</span>
+              <strong>Sorteo de cenas y raciones</strong>
+              <p>Entre los clientes. Así fue en el verano de 2025 (guardo.org). <mark class="relleno">Si sigue este año, sin confirmar</mark></p>
+            </div>
+            <div class="datos-local">
+              <p class="horario" data-horario-de="rio"><b>Horario:</b> abre a las 16:00. De miércoles a sábado hasta la 1:00, el domingo hasta las 0:00. Lunes y martes cerrado <mark class="relleno">días de cierre sin confirmar</mark></p>
+              <p>Restaurant Guru lo da «cerrado temporalmente» a finales de septiembre de 2026 <mark class="relleno">¿cierre de temporada? sin confirmar</mark></p>
+              <p>Camino la Renta, 1, Guardo <mark class="relleno">¿o Camino de San Miguel? sin confirmar</mark></p>
+              <div class="botones"><a class="boton" href="tel:+34646251640"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar al Río · <b>646 25 16 40</b></span></a></div>
+            </div>
+          </div>
+          <span class="esquina abajo" aria-hidden="true">I</span>
+        </article>
+
+        <article class="carta-grande" aria-labelledby="t-plaza">
+          <span class="esquina" aria-hidden="true">II</span>
+          <svg class="lamina" viewBox="0 0 400 130" aria-hidden="true" focusable="false">
+            <circle class="halo" cx="292" cy="46" r="60"/>
+            <path class="disco" d="M300 16 a32 32 0 1 0 0 60 a26 26 0 1 1 0 -60 z"/>
+            <path class="linea-neon" d="M40 118 V74 H360 V118 M40 74 L60 58 H340 L360 74 M72 118 V92 a14 14 0 0 1 28 0 V118 M136 118 V92 a14 14 0 0 1 28 0 V118 M236 118 V92 a14 14 0 0 1 28 0 V118 M300 118 V92 a14 14 0 0 1 28 0 V118"/>
+            <rect class="niebla-l" x="0" y="118" width="400" height="12"/>
+            <g transform="translate(150 16)">
+              <path class="cuervo-grande" d="M8 44 C20 30 44 24 64 30 C72 20 84 16 94 20 C98 22 100 26 98 30 L108 32 L97 36 C94 42 88 46 82 48 L86 58 L80 58 L76 50 L70 58 L64 58 L68 50 C44 54 24 52 8 44 Z"/>
+              <circle class="ojo" cx="90" cy="26" r="2.4"/>
+            </g>
+          </svg>
+          <div class="cuerpo-carta">
+            <div>
+              <span class="etiqueta">Embrujo Plaza · Plaza de la Constitución · desde el 4 de diciembre de 2025</span>
+              <h3 id="t-plaza"><span class="neon-local" data-local="plaza">La <span class="plaza">plaza</span></span></h3>
+            </div>
+            <p class="estado" data-estado-de="plaza" hidden></p>
+            <ul class="lo-que-hay">
+              <li>Ocho grifos de cerveza nacional y de importación, y picoteo.</li>
+              <li>Toda la Liga y la Champions, con una pantalla de unas 100 pulgadas.</li>
+              <li>Futbolín y diana. Terraza con dos carpas.</li>
+              <li>Caña o tinto de verano, 2 €.</li>
+            </ul>
+            <div class="sorteo">
+              <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><use href="#s-bombo"/></svg>
+              <span class="cuando">En el descanso del fútbol, o a las 21:30</span>
+              <strong>Sorteo de la cesta de embutidos</strong>
+              <p>Del cartel de la Plaza: «abrimos los miércoles para que disfrutes del fútbol». <mark class="relleno">Qué días hay sorteo, sin confirmar</mark></p>
+            </div>
+            <div class="datos-local">
+              <p class="horario" data-horario-de="plaza"><b>Horario:</b> lunes y martes cerrado por descanso. De miércoles a viernes de 16:00 a 23:00; sábado y domingo de 13:00 a 23:00 <mark class="relleno">horario de la inauguración, sin confirmar</mark></p>
+              <p>Plaza de la Constitución, donde estaba el Peter. Número <mark class="relleno">sin confirmar</mark></p>
+              <div class="botones"><a class="boton" href="tel:+34646981186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar a la Plaza · <b>646 98 11 86</b></span></a></div>
+            </div>
+          </div>
+          <span class="esquina abajo" aria-hidden="true">II</span>
+        </article>
+      </div>
+
+      <div class="rejilla segunda">
+        <article class="carta-grande avisador" aria-labelledby="t-avisador">
+          <span class="esquina" aria-hidden="true">III</span>
+          <div class="cuerpo-carta">
+            <svg class="disco-aviso" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+              <circle class="onda" cx="60" cy="60" r="54"/><circle class="onda" cx="60" cy="60" r="54"/>
+              <g class="vibra">
+                <circle class="cuerpo" cx="60" cy="60" r="46"/>
+                <circle class="anillo" cx="60" cy="60" r="36"/>
+                <circle class="centro" cx="60" cy="60" r="24"/>
+                <path class="luna-mini" d="M64 46 a14 14 0 1 0 0 28 a11 11 0 1 1 0 -28 z"/>
+              </g>
+            </svg>
+            <div>
+              <h3 id="t-avisador">El avisador</h3>
+              <p class="cita">Pides en barra, te damos el avisador y cuando vibra vas a por lo tuyo.</p>
+              <p>Así se pide en la Plaza: te lo llevas a la mesa, a la terraza o al futbolín.</p>
+            </div>
+          </div>
+          <span class="esquina abajo" aria-hidden="true">III</span>
+        </article>
+
+        <article class="carta-grande camino" aria-labelledby="t-camino">
+          <span class="esquina" aria-hidden="true">IV</span>
+          <div class="cuerpo-carta">
+            <h3 id="t-camino">La carta del camino</h3>
+            <svg class="mapa" viewBox="0 0 400 230" role="img" aria-labelledby="mapa-t">
+              <title id="mapa-t">Esquema de Guardo, no a escala: el río Carrión cruza de arriba abajo; el Embrujo Río está en la orilla, entre árboles; el Embrujo Plaza, en el centro; un camino de puntos une los dos.</title>
+              <path class="casco" d="M190 40 C250 20 340 40 360 100 C378 160 330 206 260 206 C210 206 176 170 176 120 C176 84 170 50 190 40 Z"/>
+              <path class="rio-agua" d="M70 0 C90 50 60 90 80 130 C100 170 70 200 84 230 L126 230 C112 200 142 170 122 130 C102 90 132 50 112 0 Z"/>
+              <line class="reflejo" x1="88" y1="40" x2="104" y2="40"/><line class="reflejo-neon" x1="84" y1="96" x2="104" y2="96"/>
+              <line class="reflejo" x1="98" y1="150" x2="116" y2="150"/><line class="reflejo-neon" x1="94" y1="200" x2="110" y2="200"/>
+              <circle class="arbol" cx="148" cy="138" r="13"/><circle class="arbol" cx="160" cy="162" r="11"/><circle class="arbol" cx="142" cy="178" r="10"/><circle class="arbol" cx="30" cy="80" r="12"/><circle class="arbol" cx="40" cy="104" r="10"/>
+              <path class="ruta" d="M150 150 C190 150 200 120 230 116 C250 113 262 108 270 104"/>
+              <g transform="translate(138 138)"><path class="marca" d="M0 26 V8 L12 0 L24 8 V26 Z"/><circle class="marca-luna" cx="12" cy="14" r="4.5"/></g>
+              <g transform="translate(270 88)"><rect class="marca" x="0" y="0" width="30" height="30" rx="4"/><circle class="marca-luna" cx="15" cy="15" r="6"/></g>
+              <text x="136" y="208">Río</text>
+              <text class="t-rio" x="16" y="30">río Carrión</text>
+              <text class="t-rio" x="128" y="224">escondido en la orilla</text>
+              <text class="t-plaza" x="262" y="78">plaza</text>
+              <text class="t-rio" x="236" y="146">centro de Guardo</text>
+            </svg>
+            <p class="leyenda"><b>Esquema, no a escala.</b> El Río queda escondido en la orilla del Carrión, entre árboles, y cuesta dar con él la primera vez. A pie de uno a otro: <mark class="relleno">minutos sin confirmar</mark></p>
+          </div>
+          <span class="esquina abajo" aria-hidden="true">IV</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <h2>Llama al que te pille más cerca</h2>
+    <div class="botones">
+      <a class="boton" href="tel:+34646251640"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Río · <b>646 25 16 40</b></span></a>
+      <a class="boton" href="tel:+34646981186"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Plaza · <b>646 98 11 86</b></span></a>
+      <a class="boton" href="https://www.instagram.com/embrujo_guardo/" aria-label="Instagram del Embrujo: @embrujo_guardo">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5z M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8z M17.5 6.5h.01"/></svg>
+        <b>@embrujo_guardo</b>
+      </a>
+    </div>
+    <p>Reservas y preguntas, por privado en Instagram. WhatsApp: <mark class="relleno">sin confirmar</mark> · Correo: <mark class="relleno">sin confirmar</mark></p>
+    <p class="firma">Embrujo Río y Embrujo Plaza · Guardo (Palencia) · de Elena y Nete</p>
+  </div>
+</footer>
+
+<div class="paseo" aria-hidden="true">
+  <div class="paseante bruja" id="bruja">
+    <svg viewBox="0 0 160 100">
+      <path class="palo" d="M20 72 L150 60"/>
+      <path class="silueta" d="M22 72 C12 64 4 62 0 64 C6 70 2 76 0 82 C8 82 14 80 24 76 Z"/>
+      <path class="silueta" d="M58 68 C56 50 62 36 74 32 C84 36 90 50 92 64 C80 70 70 70 58 68 Z"/>
+      <path class="silueta" d="M88 60 L106 64 L104 70 L86 68 Z"/>
+      <path class="silueta" d="M84 42 L108 56"/>
+      <circle class="silueta" cx="78" cy="26" r="9"/>
+      <circle class="ojos" cx="82" cy="25" r="1.6"/>
+      <path class="silueta" d="M64 20 C74 16 88 16 96 20 C88 23 72 23 64 20 Z"/>
+      <path class="silueta" d="M70 19 C72 8 70 2 62 -2 C76 0 84 8 88 18 Z"/>
+    </svg>
+  </div>
+  <div class="paseante gato" id="gato">
+    <svg viewBox="0 0 120 80">
+      <path class="silueta" d="M8 30 C0 20 6 6 14 10 C10 16 12 26 20 34"/>
+      <path class="silueta" d="M18 36 C22 26 44 22 70 26 C78 27 84 30 86 36 L86 62 L80 62 L78 46 C66 50 44 50 32 46 L30 62 L24 62 C18 54 16 44 18 36 Z"/>
+      <path class="silueta" d="M80 32 C80 22 84 14 88 12 L92 20 L100 20 L104 12 C108 16 110 24 108 32 C106 40 98 44 92 44 C86 44 80 40 80 32 Z"/>
+      <circle class="ojos" cx="90" cy="30" r="2"/><circle class="ojos" cx="100" cy="30" r="2"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  /* Horario de EJEMPLO, sin confirmar. Dias: 0 domingo ... 6 sabado.
+     Si el cierre es igual o anterior a la apertura, cierra pasada la medianoche. */
+  var HORARIO = {
+    confirmado:false,
+    rio:{
+      nombre:'Río',
+      fuente:'Abre a las 16:00 (varias fuentes). Cierres y dias de descanso: Restaurant Guru, sin confirmar.',
+      dias:{0:['16:00','00:00'],3:['16:00','01:00'],4:['16:00','01:00'],5:['16:00','01:00'],6:['16:00','01:00']}
+    },
+    plaza:{
+      nombre:'Plaza',
+      fuente:'Lunes y martes cerrado: cartel real. Horas: prensa de la inauguración, sin confirmar.',
+      dias:{3:['16:00','23:00'],4:['16:00','23:00'],5:['16:00','23:00'],6:['13:00','23:00'],0:['13:00','23:00']}
+    }
+  };
+  var DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  var mueve=window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+
+  function min(h){var p=h.split(':');return (+p[0])*60+(+p[1])}
+  function hora(h){var p=h.split(':'),n=+p[0];return n+':'+p[1]}
+  function aLas(h){
+    if(h==='00:00')return 'a medianoche';
+    return (+h.split(':')[0]===1?'a la ':'a las ')+hora(h);
+  }
+  /* Devuelve {abierto, texto} para un local, un dia (0-6) y unos minutos (0-1439) */
+  function estado(local,dia,m){
+    var d=HORARIO[local].dias, hoy=d[dia], ayer=d[(dia+6)%7];
+    if(ayer){var a=min(ayer[0]),c=min(ayer[1]); if(c<=a && m<c) return {abierto:true,texto:'Abierto ahora · cerramos '+aLas(ayer[1])}}
+    if(hoy){
+      var a2=min(hoy[0]),c2=min(hoy[1]);
+      if(m>=a2 && (c2<=a2 || m<c2)) return {abierto:true,texto:'Abierto ahora · cerramos '+aLas(hoy[1])};
+      if(m<a2) return {abierto:false,texto:'Cerrado ahora · abrimos hoy '+aLas(hoy[0])};
+    }
+    for(var i=1;i<=7;i++){
+      var dd=(dia+i)%7;
+      if(d[dd]) return {abierto:false,texto:'Cerrado ahora · abrimos '+(i===1?'mañana':'el '+DIAS[dd])+' '+aLas(d[dd][0])};
+    }
+    return {abierto:false,texto:'Cerrado ahora'};
+  }
+  window.__estadoEmbrujo=estado;
+
+  var cuando='ahora';
+  function pintar(reencender){
+    var dia,m;
+    if(cuando==='ahora'){var f=new Date();dia=f.getDay();m=f.getHours()*60+f.getMinutes()}
+    else{var p=cuando.split(',');dia=+p[0];m=+p[1]}
+    ['rio','plaza'].forEach(function(l){
+      var e=estado(l,dia,m), clave=e.abierto?'abierto':'cerrado';
+      document.querySelectorAll('[data-estado-de="'+l+'"]').forEach(function(p){p.textContent=e.texto;p.dataset.estado=clave;p.hidden=false});
+      document.querySelectorAll('.neon-local[data-local="'+l+'"]').forEach(function(n){
+        n.dataset.estado=clave;
+        if(reencender){n.classList.remove('enciende');void n.offsetWidth;n.classList.add('enciende')}
+      });
+    });
+  }
+
+  /* rotulo: se enciende letra a letra la primera vez */
+  var rotulo=document.getElementById('rotulo'), visto=false;
+  try{visto=localStorage.getItem('embrujo-r3c-encendido')==='1';localStorage.setItem('embrujo-r3c-encendido','1')}catch(e){}
+  function encenderRotulo(){rotulo.classList.remove('encendiendo');void rotulo.offsetWidth;rotulo.classList.add('encendiendo')}
+  if(!visto)encenderRotulo();
+  pintar(true);
+
+  /* selector de prueba (solo en el boceto) */
+  var prueba=document.getElementById('prueba');
+  prueba.hidden=false;
+  var botones=prueba.querySelectorAll('button');
+  botones.forEach(function(b){
+    b.addEventListener('click',function(){
+      cuando=b.dataset.cuando;
+      botones.forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});
+      encenderRotulo();pintar(true);
+    });
+  });
+  setInterval(function(){if(cuando==='ahora')pintar(false)},60000);
+
+  /* estrellas: solo en la portada y al dar la vuelta a una carta */
+  function estrellas(caja,n){
+    if(!mueve)return;
+    for(var i=0;i<n;i++){
+      var s=document.createElement('span');
+      s.className='estrella';s.setAttribute('aria-hidden','true');
+      s.innerHTML='<svg><use href="#s-estrella"/></svg>';
+      s.style.left=(6+Math.random()*84)+'%';s.style.top=(6+Math.random()*80)+'%';
+      s.style.setProperty('--t',(8+Math.random()*9).toFixed(0)+'px');
+      s.style.setProperty('--d',(Math.random()*.9).toFixed(2)+'s');
+      caja.appendChild(s);
+      setTimeout(function(x){return function(){x.remove()}}(s),3400);
+    }
+  }
+  setTimeout(function(){estrellas(document.getElementById('portada'),10)},visto?300:1900);
+
+  /* cartas boca abajo */
+  document.querySelectorAll('.carta').forEach(function(c){
+    var cara=c.querySelector('.cara'), dorso=c.querySelector('.dorso');
+    function poner(arriba){
+      c.classList.toggle('boca-abajo',!arriba);
+      c.setAttribute('aria-pressed',arriba?'true':'false');
+      if(arriba){cara.removeAttribute('aria-hidden');dorso.setAttribute('aria-hidden','true')}
+      else{cara.setAttribute('aria-hidden','true');dorso.removeAttribute('aria-hidden')}
+    }
+    poner(false);
+    c.addEventListener('click',function(){
+      var arriba=c.getAttribute('aria-pressed')!=='true';
+      poner(arriba);
+      if(arriba)setTimeout(function(){estrellas(c.parentNode,6)},350);
+    });
+  });
+
+  /* la mano sale de detras de la baraja al llegar */
+  var baraja=document.getElementById('baraja-mano');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){baraja.classList.add('vista');io.disconnect()}})},{threshold:.6});
+    io.observe(baraja);
+  }else baraja.classList.add('vista');
+
+  /* la bruja y el gato cruzan de vez en cuando, por el borde de la pantalla */
+  if(mueve){
+    var turno=0;
+    function cruzar(){
+      var p=document.getElementById(turno%2?'gato':'bruja');turno++;
+      p.classList.remove('cruza');void p.offsetWidth;p.classList.add('cruza');
+      setTimeout(cruzar,25000+Math.random()*15000);
+    }
+    setTimeout(cruzar,9000);
+  }
+})();
+</script>
+</body>
+</html>
