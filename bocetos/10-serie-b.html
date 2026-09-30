@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo · Serie B (boceto 10)</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+:root{
+  --negro:#0b0a0c;        /* fondo general, la caja del VHS */
+  --negro-2:#17141a;      /* carátulas, tarjetas y estantería */
+  --negro-3:#241f27;      /* bordes, trama de puntos, baldas */
+  --hueso:#f4ecd6;        /* texto principal y papel de las etiquetas */
+  --hueso-suave:#bfb6a2;  /* texto secundario y créditos */
+  --sangre:#ff4040;       /* UNICO acento: el título que gotea, botones, sellos */
+  --fosforo:#5dff7a;      /* solo texto de pantalla de VHS (PLAY, contador) */
+  --relleno:#ffe14a;      /* amarillo de póster: solo lo sin confirmar */
+  --relleno-tinta:#1a1400;
+
+  --radio:6px;
+  --gutter:clamp(16px,4vw,40px);
+  --ancho:1180px;
+  --f-titulo:'Creepster',Impact,fantasy;
+  --f-texto:'Archivo Narrow','Arial Narrow',sans-serif;
+  --f-pantalla:'VT323',ui-monospace,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--negro);color:var(--hueso);
+  font-family:var(--f-texto);font-size:clamp(1.05rem,1rem + .3vw,1.2rem);line-height:1.5;
+  overflow-wrap:anywhere;overflow-x:clip;
+}
+h1,h2,h3{margin:0;line-height:1;overflow-wrap:normal}
+p{margin:0 0 .75em}
+a{color:var(--sangre)}
+:focus-visible{outline:3px solid var(--fosforo);outline-offset:3px;border-radius:var(--radio)}
+main:focus{outline:none}
+mark.relleno{
+  background:var(--relleno);color:var(--relleno-tinta);font-weight:700;
+  padding:.05em .4em;border-radius:3px;font-size:.88em;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
+.salto{position:absolute;left:8px;top:-80px;z-index:60;background:var(--sangre);color:var(--negro);
+  padding:.7em 1em;border-radius:var(--radio);font-weight:700;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.salto:focus{top:8px}
+.franja{
+  background:#000;color:var(--hueso-suave);font-size:.82rem;line-height:1.4;text-align:center;
+  padding:.45em var(--gutter);border-bottom:1px solid var(--negro-3);
+}
+.franja strong{color:var(--hueso)}
+.caja{max-width:var(--ancho);margin-inline:auto;padding-inline:var(--gutter)}
+.pantalla{font-family:var(--f-pantalla);color:var(--fosforo);letter-spacing:.04em;text-shadow:0 0 6px rgb(from var(--fosforo) r g b / .55)}
+
+/* ---------- rayas de tracking (decorado) ---------- */
+.lineas{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:repeating-linear-gradient(0deg, rgb(from var(--negro) r g b / .2) 0 1px, transparent 1px 3px);
+  mix-blend-mode:multiply;
+}
+.tracking{
+  position:absolute;left:0;right:0;height:14px;top:78%;pointer-events:none;z-index:4;opacity:.55;
+  background:
+    repeating-linear-gradient(90deg, rgb(from var(--hueso) r g b / .5) 0 2px, transparent 2px 9px, rgb(from var(--hueso) r g b / .25) 9px 10px, transparent 10px 23px);
+  filter:blur(.4px);
+}
+
+/* ---------- botones ---------- */
+.botones{display:flex;flex-wrap:wrap;gap:.7rem;position:relative;z-index:5}
+.boton{
+  display:inline-flex;align-items:center;gap:.55em;min-height:48px;
+  padding:.55em 1.05em;border-radius:var(--radio);
+  background:var(--sangre);color:var(--negro);text-decoration:none;
+  font-family:var(--f-texto);font-weight:700;font-size:1.02rem;line-height:1.2;text-transform:uppercase;letter-spacing:.02em;
+  border:2px solid var(--sangre);box-shadow:4px 4px 0 var(--negro-3);
+  transition:transform .15s, box-shadow .15s, background .15s, color .15s;
+}
+.boton svg{width:1.15em;height:1.15em;flex:none}
+.boton span{white-space:nowrap}
+.boton:hover{background:var(--negro);color:var(--sangre);transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sangre)}
+.boton.hueco{background:transparent;color:var(--hueso);border-color:var(--hueso-suave)}
+.boton.hueco:hover{color:var(--sangre);border-color:var(--sangre)}
+
+/* ---------- portada: la carátula ---------- */
+.portada{padding-block:clamp(18px,4vw,48px) clamp(28px,5vw,64px);
+  background:
+    radial-gradient(circle at 1px 1px, var(--negro-3) 1px, transparent 1.6px) 0 0/7px 7px,
+    var(--negro);
+}
+.estuche{
+  display:grid;grid-template-columns:clamp(46px,7vw,78px) minmax(0,1fr);
+  max-width:1060px;margin-inline:auto;
+  border:2px solid var(--negro-3);border-radius:var(--radio);overflow:hidden;
+  box-shadow:0 30px 60px -30px #000, 0 0 0 1px #000;
+}
+.lomo{
+  background:var(--negro-2);border-right:2px solid var(--negro-3);
+  display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.9rem 0;
+}
+.lomo .vertical{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap}
+.lomo .titulo-lomo{font-family:var(--f-titulo);color:var(--sangre);font-size:clamp(1.7rem,4vw,2.6rem);letter-spacing:.06em}
+.lomo .etiqueta{background:var(--hueso);color:var(--negro);font-weight:700;font-size:.72rem;letter-spacing:.14em;
+  padding:.6em .25em;border-radius:3px;text-transform:uppercase}
+.lomo .vhs{font-family:var(--f-texto);font-weight:700;font-size:.8rem;letter-spacing:.2em;color:var(--hueso-suave);
+  border:1px solid var(--hueso-suave);padding:.2em .15em;border-radius:3px}
+
+.caratula{position:relative;overflow:hidden;background:var(--negro-2);isolation:isolate;
+  padding:clamp(14px,3vw,32px) clamp(16px,4vw,48px) clamp(24px,4vw,44px);
+}
+.osd{position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
+  font-size:clamp(1.35rem,1.1rem + 1vw,1.9rem);line-height:1}
+.presenta{position:relative;z-index:2;margin:clamp(12px,2.5vw,26px) 0 0;text-align:center;
+  font-weight:700;text-transform:uppercase;letter-spacing:.24em;font-size:clamp(.72rem,.66rem + .3vw,.9rem);color:var(--hueso-suave)}
+.presenta strong{color:var(--hueso)}
+
+.escena{position:relative;z-index:1;margin:clamp(4px,1vw,10px) auto 0;max-width:720px}
+.escena svg{display:block;width:100%;height:auto}
+.escena .brillo{fill:url(#resplandor)}
+.escena .sombra{fill:#000}
+.escena .rio-l{stroke:var(--negro-3);stroke-width:3;fill:none}
+.escena .rio-c{stroke:var(--sangre);stroke-width:2;fill:none;opacity:.55}
+.escena .jarra{fill:var(--hueso)}
+.escena .espuma{fill:var(--hueso)}
+.escena .cerveza{fill:var(--negro-3)}
+
+.titulo{position:relative;z-index:2;text-align:center;margin-top:clamp(-70px,-7vw,-28px)}
+.logo{
+  font-family:var(--f-titulo);font-weight:400;color:var(--sangre);
+  font-size:clamp(4rem,1.4rem + 13vw,11rem);letter-spacing:.03em;line-height:.9;
+  text-shadow:4px 4px 0 #000, 0 0 30px rgb(from var(--sangre) r g b / .35);
+}
+.goteo{display:flex;justify-content:center;gap:clamp(18px,6vw,70px);height:clamp(22px,4vw,44px);margin-top:-.2em}
+.goteo i{display:block;width:clamp(5px,.9vw,9px);background:var(--sangre);border-radius:0 0 999px 999px;height:var(--h,60%);
+  transform-origin:top}
+.goteo i::after{content:"";display:block;position:relative;top:100%;left:50%;width:170%;aspect-ratio:1;margin-left:-85%;margin-top:-50%;
+  background:var(--sangre);border-radius:50% 50% 50% 50% / 40% 40% 60% 60%}
+.lema{font-family:var(--f-texto);font-weight:700;font-style:normal;text-transform:uppercase;
+  font-size:clamp(1.05rem,.9rem + .9vw,1.6rem);letter-spacing:.06em;line-height:1.25;margin:clamp(14px,2.5vw,26px) auto .6em;max-width:34ch;text-wrap:balance;text-align:center}
+.lema em{font-style:normal;color:var(--sangre)}
+.sinopsis{text-align:center;max-width:56ch;margin-inline:auto;color:var(--hueso)}
+.sinopsis strong{color:var(--sangre)}
+.caratula .botones{justify-content:center;margin-top:1.1rem}
+
+.sello{
+  position:absolute;z-index:6;right:clamp(10px,3vw,40px);top:clamp(56px,9vw,90px);
+  width:clamp(92px,15vw,140px);aspect-ratio:1;border-radius:50%;
+  border:3px double var(--sangre);color:var(--sangre);background:rgb(from var(--negro) r g b / .8);
+  display:grid;place-content:center;text-align:center;transform:rotate(12deg);
+  font-weight:700;text-transform:uppercase;line-height:1.05;padding:.5em;
+  font-size:clamp(.58rem,.5rem + .35vw,.8rem);letter-spacing:.04em;
+}
+.sello b{display:block;font-size:1.25em;letter-spacing:.08em;margin-block:.15em}
+
+.creditos{position:relative;z-index:2;margin:clamp(18px,3vw,30px) auto 0;max-width:62ch;text-align:center;
+  text-transform:uppercase;color:var(--hueso-suave);font-size:clamp(.7rem,.64rem + .3vw,.86rem);line-height:1.35;letter-spacing:.06em;
+  border-top:1px solid var(--negro-3);padding-top:.9em}
+.creditos b{color:var(--hueso);letter-spacing:.1em}
+.creditos .nota{display:block;margin-top:.5em;text-transform:none;letter-spacing:0}
+
+/* ---------- titulares de sección ---------- */
+.seccion{padding-block:clamp(40px,7vw,90px);position:relative}
+.cabecera{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4rem 1.2rem;margin-bottom:clamp(20px,3.5vw,36px)}
+.cabecera h2{font-family:var(--f-titulo);font-weight:400;color:var(--sangre);font-size:clamp(2.4rem,1.6rem + 4vw,4.6rem);letter-spacing:.03em}
+.cabecera p{margin:0;color:var(--hueso-suave);max-width:46ch}
+.cabecera .pantalla{font-size:1.4rem}
+
+/* ---------- las dos entregas ---------- */
+.entregas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(18px,3vw,32px)}
+.cinta{position:relative;overflow:hidden;background:var(--negro-2);border:2px solid var(--negro-3);border-radius:var(--radio);
+  display:grid;grid-template-rows:auto 1fr;isolation:isolate}
+.cinta-cab{position:relative;padding:1rem 1.2rem 1.1rem;border-bottom:2px dashed var(--negro-3);
+  background:
+    repeating-linear-gradient(135deg, rgb(from var(--sangre) r g b / .12) 0 10px, transparent 10px 22px),
+    var(--negro);}
+.cinta-cab .pantalla{font-size:1.25rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.cinta h3{font-family:var(--f-titulo);font-weight:400;color:var(--hueso);font-size:clamp(2.2rem,1.6rem + 2.6vw,3.4rem);letter-spacing:.03em;margin-top:.35rem}
+.cinta h3 span{color:var(--sangre)}
+.cinta .entrega{display:inline-block;margin-top:.5rem;background:var(--hueso);color:var(--negro);font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;font-size:.8rem;padding:.25em .6em;border-radius:3px}
+.cinta-cuerpo{padding:1.1rem 1.2rem 1.3rem;display:flex;flex-direction:column;gap:.9rem}
+.cinta-cuerpo p{margin:0}
+.reparto h4, .ficha h4{margin:0 0 .35rem;font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--hueso-suave)}
+.reparto ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.4rem}
+.reparto li{border:1px solid var(--negro-3);background:var(--negro);border-radius:3px;padding:.2em .55em;font-weight:700;text-transform:uppercase;font-size:.9rem;letter-spacing:.03em}
+.ficha dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.3rem .9rem}
+.ficha dt{color:var(--hueso-suave);text-transform:uppercase;font-size:.85rem;letter-spacing:.08em;padding-top:.12em}
+.ficha dd{margin:0}
+.critica{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;border:1px solid var(--negro-3);border-radius:var(--radio);padding:.6rem .8rem}
+.critica .estrellas{color:var(--sangre);font-size:1.25rem;letter-spacing:.1em}
+.critica b{font-size:1.4rem}
+.cinta .botones{margin-top:auto}
+.estreno{position:absolute;top:14px;right:-38px;transform:rotate(35deg);background:var(--sangre);color:var(--negro);
+  font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;padding:.35em 3em;z-index:5}
+.cinta .lineas{opacity:.6}
+.cinta.secuela .cinta-cab .pantalla{padding-right:4.5rem}
+
+/* ---------- cartelera / videoclub ---------- */
+.cartelera{background:
+  linear-gradient(var(--negro-2),var(--negro-2)) padding-box;border-block:2px solid var(--negro-3)}
+.aviso{display:flex;gap:.6rem;align-items:flex-start;flex-wrap:wrap;margin:0 0 1.4rem;color:var(--hueso-suave)}
+.estante{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:1.4rem 1rem}
+.caja-vhs{position:relative;overflow:hidden;background:var(--negro);border:2px solid var(--negro-3);border-radius:var(--radio);
+  padding:0 0 1rem;display:flex;flex-direction:column;isolation:isolate;box-shadow:0 10px 0 -4px var(--negro-3)}
+.caja-vhs .dia{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.55rem .9rem;
+  background:var(--hueso);color:var(--negro);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.9rem}
+.caja-vhs .dia small{white-space:nowrap;font-size:.75rem;letter-spacing:.08em;border:1.5px solid var(--negro);border-radius:3px;padding:.05em .4em}
+.caja-vhs h3{font-family:var(--f-titulo);font-weight:400;font-size:clamp(1.7rem,1.4rem + 1vw,2.2rem);color:var(--sangre);letter-spacing:.03em;
+  padding:.8rem .9rem .2rem}
+.caja-vhs .genero{margin:0 .9rem .5rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.14em;color:var(--hueso-suave)}
+.caja-vhs p{margin:0 .9rem .5rem}
+.caja-vhs .donde{margin-top:auto;padding-top:.3rem;font-size:1.2rem}
+.caja-vhs.cerrado h3{color:var(--hueso-suave)}
+.caja-vhs .lineas{opacity:.5}
+
+/* ---------- pie ---------- */
+.pie{padding-block:clamp(36px,6vw,64px) clamp(28px,4vw,40px);background:#000}
+.pie-rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:1.5rem 2rem;align-items:start}
+.pie h2{font-family:var(--f-titulo);font-weight:400;color:var(--sangre);font-size:clamp(2rem,1.6rem + 2vw,3rem);letter-spacing:.03em;margin-bottom:.4rem}
+.pie p{color:var(--hueso-suave)}
+.pie .rebobinar{font-size:clamp(1.5rem,1.2rem + 1vw,2rem);line-height:1.1}
+.pie .fin{margin-top:2rem;border-top:1px solid var(--negro-3);padding-top:1rem;display:flex;justify-content:space-between;gap:.5rem 1rem;flex-wrap:wrap;font-size:.9rem}
+.pie a{display:inline-flex;align-items:center;min-height:44px;color:var(--hueso);font-weight:700}
+
+/* ---------- lo que se mueve ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .caratula{animation:tracking-carga 1.1s steps(1,end) .15s both}
+  .caratula .tracking{animation:barrer 7s linear 1.3s infinite}
+  .logo{animation:sacudida 1.1s steps(1,end) .15s both}
+  .goteo i{animation:gotear 2.4s cubic-bezier(.5,0,.8,.4) 1.2s both}
+  .goteo i:nth-child(2){animation-delay:1.6s}
+  .goteo i:nth-child(3){animation-delay:1.35s}
+  .goteo i:nth-child(4){animation-delay:1.9s}
+  .goteo i:nth-child(5){animation-delay:1.5s}
+  .osd .play{animation:parpadeo 1.2s steps(1,end) infinite}
+  .cinta:hover, .caja-vhs:hover, .cinta:focus-within, .caja-vhs:focus-within{animation:tracking-hover .5s steps(1,end)}
+  .cinta:hover .tracking, .caja-vhs:hover .tracking{animation:barrer .6s linear}
+  .boton:hover{animation:tiron .3s steps(1,end)}
+}
+.cinta .tracking, .caja-vhs .tracking{top:-20px}
+@keyframes tracking-carga{
+  0%{transform:translateX(0);filter:none}
+  8%{transform:translateX(-9px) skewX(-6deg);filter:contrast(1.6) saturate(1.8) hue-rotate(-12deg)}
+  16%{transform:translateX(7px);filter:brightness(1.5)}
+  24%{transform:translateX(-3px) skewX(3deg);filter:none}
+  34%{transform:translateY(4px);filter:contrast(1.3)}
+  44%{transform:none;filter:none}
+  60%{transform:translateX(5px) skewX(-2deg)}
+  66%,100%{transform:none;filter:none}
+}
+@keyframes sacudida{
+  0%,100%{text-shadow:4px 4px 0 #000, 0 0 30px rgb(from var(--sangre) r g b / .35)}
+  10%{text-shadow:-7px 0 0 var(--fosforo), 7px 0 0 #000}
+  22%{text-shadow:6px 0 0 var(--fosforo), -5px 2px 0 #000}
+  40%{text-shadow:-3px 0 0 var(--fosforo), 4px 4px 0 #000}
+}
+@keyframes gotear{from{transform:scaleY(.1)}to{transform:scaleY(1)}}
+@keyframes parpadeo{50%{opacity:.35}}
+@keyframes barrer{from{top:-20px}to{top:105%}}
+@keyframes tracking-hover{
+  0%{transform:none}
+  20%{transform:translateX(-5px) skewX(-3deg)}
+  40%{transform:translateX(4px)}
+  60%{transform:translateX(-2px) skewX(2deg)}
+  80%,100%{transform:none}
+}
+@keyframes tiron{0%{filter:none}30%{filter:hue-rotate(40deg) saturate(2)}60%{filter:none}}
+
+@media (min-width:900px){
+  .sello{top:clamp(80px,9vw,110px)}
+}
+@media (max-width:520px){
+  .sello{position:relative;right:auto;top:auto;margin:14px auto 0;transform:rotate(-6deg)}
+  .titulo{margin-top:-18px}
+}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<div class="franja"><strong>Boceto de estética 10 de 11 · Serie B</strong> · no es la web del bar · lo marcado en amarillo está sin confirmar</div>
+
+<header class="portada">
+  <div class="caja">
+    <div class="estuche">
+      <div class="lomo" aria-hidden="true">
+        <span class="vhs">VHS</span>
+        <span class="vertical titulo-lomo">EMBRUJO</span>
+        <span class="vertical etiqueta">Guardo · PAL · 2 entregas</span>
+      </div>
+
+      <div class="caratula">
+        <div class="osd pantalla" aria-hidden="true">
+          <span><span class="play">PLAY ▶</span></span>
+          <span class="contador" data-contador>00:00:00</span>
+        </div>
+
+        <p class="presenta">Elena y Nete <strong>presentan</strong></p>
+
+        <div class="escena" aria-hidden="true">
+          <svg viewBox="0 0 720 300" focusable="false">
+            <defs>
+              <radialGradient id="resplandor" cx="50%" cy="72%" r="55%">
+                <stop offset="0%" style="stop-color:var(--sangre);stop-opacity:.55"/>
+                <stop offset="55%" style="stop-color:var(--sangre);stop-opacity:.12"/>
+                <stop offset="100%" style="stop-color:var(--sangre);stop-opacity:0"/>
+              </radialGradient>
+            </defs>
+            <rect class="brillo" width="720" height="300"/>
+            <!-- árboles de la orilla -->
+            <path class="sombra" d="M0 230 C20 150 60 140 70 180 C80 110 130 100 140 170 C150 130 185 125 190 190 L190 240 L0 240 Z"/>
+            <path class="sombra" d="M720 230 C700 140 660 132 648 176 C636 104 584 98 574 168 C560 128 528 132 526 196 L526 240 L720 240 Z"/>
+            <!-- el río Carrión -->
+            <rect class="sombra" x="0" y="232" width="720" height="68"/>
+            <path class="rio-c" d="M40 252 q30 -8 60 0 t60 0 t60 0 M430 262 q30 -8 60 0 t60 0 t60 0 M150 282 q30 -8 60 0 t60 0 M480 290 q30 -6 60 0 t60 0"/>
+            <!-- el brazo que sale del río con su caña -->
+            <path class="sombra" d="M340 300 L346 176 L390 176 L386 300 Z"/>
+            <path class="sombra" d="M336 184 C330 160 340 146 356 146 L394 146 C404 146 406 160 402 176 L396 190 C380 196 352 196 336 184 Z"/>
+            <!-- la caña -->
+            <path class="jarra" d="M398 92 C430 92 430 142 398 142 L398 130 C414 130 414 104 398 104 Z"/>
+            <rect class="jarra" x="336" y="72" width="64" height="86" rx="5"/>
+            <rect class="cerveza" x="344" y="90" width="48" height="60" rx="2"/>
+            <path class="espuma" d="M330 80 C326 62 344 56 350 64 C354 50 374 50 378 62 C386 52 406 58 404 74 C406 84 398 88 390 86 L340 88 C332 88 330 84 330 80 Z"/>
+            <!-- los dedos por delante -->
+            <rect class="sombra" x="324" y="104" width="46" height="13" rx="6.5"/>
+            <rect class="sombra" x="322" y="119" width="50" height="13" rx="6.5"/>
+            <rect class="sombra" x="324" y="134" width="48" height="13" rx="6.5"/>
+            <rect class="sombra" x="328" y="149" width="42" height="12" rx="6"/>
+          </svg>
+        </div>
+
+        <div class="titulo">
+          <h1 class="logo">EMBRUJO</h1>
+          <div class="goteo" aria-hidden="true">
+            <i style="--h:55%"></i><i style="--h:90%"></i><i style="--h:40%"></i><i style="--h:75%"></i><i style="--h:50%"></i>
+          </div>
+        </div>
+
+        <p class="lema">Esta noche, en el río… <em>nadie quiere irse a casa</em></p>
+        <p class="sinopsis">Dos bares en Guardo, Palencia. Una terraza enorme bajo los árboles del Carrión y una cervecería con <strong>8 grifos</strong> en la Plaza de la Constitución. Llama y pregunta, que contestan.</p>
+
+        <div class="botones">
+          <a class="boton" href="tel:+34646251640">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+            <span>Río · 646 25 16 40</span>
+          </a>
+          <a class="boton" href="tel:+34646981186">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+            <span>Plaza · 646 98 11 86</span>
+          </a>
+        </div>
+
+        <p class="sello">Clasificada <b>para todos los públicos</b> hasta los del pueblo de al lado</p>
+
+        <p class="creditos">
+          Una producción de <b>Elena y Nete</b> · con <b>Embrujo Río</b> y <b>Embrujo Plaza</b> · música de <b>DJ Alex</b> · efectos especiales <b>patatas embrujadas</b> · rodada en <b>Guardo, Palencia</b>
+          <span class="nota">Reparto real, peli de broma. Aquí no se asusta a nadie.</span>
+        </p>
+
+        <div class="lineas" aria-hidden="true"></div>
+        <div class="tracking" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+  <section class="seccion" aria-labelledby="t-entregas">
+    <div class="caja">
+      <div class="cabecera">
+        <h2 id="t-entregas">Las dos entregas</h2>
+        <p>La original junto al río y la secuela en la plaza. Mismos dueños, distinto plan. Se pueden ver en cualquier orden.</p>
+      </div>
+
+      <div class="entregas">
+        <article class="cinta" aria-labelledby="t-rio">
+          <div class="cinta-cab">
+            <div class="pantalla" aria-hidden="true"><span>CH 01</span><span>SP ▶ 2008</span></div>
+            <h3 id="t-rio">EMBRUJO <span>RÍO</span></h3>
+            <span class="entrega">La original · 2008</span>
+          </div>
+          <div class="cinta-cuerpo">
+            <p>Terraza muy grande bajo los árboles, pegada al Carrión. Sillas rojas, banderines de colores y la pared azul con el rótulo de luz. El 27 de junio de 2025 cumplió 17 años.</p>
+            <div class="reparto">
+              <h4>Reparto</h4>
+              <ul>
+                <li>Patatas embrujadas</li><li>Rabas</li><li>Gambones</li><li>Pulpo gratinado</li>
+                <li>Solomillo con queso y cebolla</li><li>Tarta Pantera Rosa</li><li>Tigretón</li>
+              </ul>
+            </div>
+            <div class="ficha">
+              <h4>Ficha técnica</h4>
+              <dl>
+                <dt>Sesión</dt><dd>Abre a las 16:00 y ya hay cocina. Días de cierre <mark class="relleno">sin confirmar</mark></dd>
+                <dt>Temporada</dt><dd>A finales de septiembre sale como cerrado temporalmente: <mark class="relleno">¿cierre de temporada? sin confirmar</mark></dd>
+                <dt>Dónde</dt><dd>Junto al río Carrión, Guardo. <mark class="relleno">Camino la Renta, 1 o Camino de San Miguel: sin confirmar</mark></dd>
+                <dt>Para llevar</dt><dd>Sí. Precios <mark class="relleno">sin confirmar</mark></dd>
+              </dl>
+            </div>
+            <div class="critica">
+              <span class="estrellas" aria-hidden="true">★★★★★</span>
+              <span><b>4,6</b> en Google · 636 reseñas</span>
+            </div>
+            <p>Ya tuvo su parodia: <strong>Regreso al Embrujo Río</strong>, con cañones y calimotxos a 2,5 € y festival de chorizos de tapa.</p>
+            <div class="botones">
+              <a class="boton" href="tel:+34646251640">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+                <span>Llamar al Río</span>
+              </a>
+            </div>
+          </div>
+          <div class="lineas" aria-hidden="true"></div>
+          <div class="tracking" aria-hidden="true"></div>
+        </article>
+
+        <article class="cinta secuela" aria-labelledby="t-plaza">
+          <span class="estreno" aria-hidden="true">Secuela</span>
+          <div class="cinta-cab">
+            <div class="pantalla" aria-hidden="true"><span>CH 02</span><span>SP ▶ 2025</span></div>
+            <h3 id="t-plaza">EMBRUJO <span>PLAZA</span></h3>
+            <span class="entrega">La secuela · estreno 4 dic 2025</span>
+          </div>
+          <div class="cinta-cuerpo">
+            <p>Cervecería en la Plaza de la Constitución, donde estaba el Peter. Se estrenó el jueves 4 de diciembre de 2025 a las 19:00. Pides en la barra, te dan un avisador y cuando suena, a por ello.</p>
+            <div class="reparto">
+              <h4>Reparto</h4>
+              <ul>
+                <li>8 grifos</li><li>Cerveza de importación</li><li>Picoteo</li><li>Futbolín</li><li>Diana</li><li>Pantalla de unas 100"</li>
+              </ul>
+            </div>
+            <div class="ficha">
+              <h4>Ficha técnica</h4>
+              <dl>
+                <dt>Descanso</dt><dd>Lunes y martes cerrado</dd>
+                <dt>Sesión</dt><dd>Entre semana de 16:00 a 23:00 más o menos, fines de semana desde las 13:00. <mark class="relleno">Horario de la inauguración, puede haber cambiado</mark></dd>
+                <dt>Taquilla</dt><dd>Caña y tinto de verano, 2 €</dd>
+                <dt>Dónde</dt><dd>Plaza de la Constitución, Guardo. Portal <mark class="relleno">sin confirmar</mark></dd>
+              </dl>
+            </div>
+            <p>Terraza con dos carpas y mucha madera dentro.</p>
+            <div class="botones">
+              <a class="boton" href="tel:+34646981186">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+                <span>Llamar a la Plaza</span>
+              </a>
+            </div>
+          </div>
+          <div class="lineas" aria-hidden="true"></div>
+          <div class="tracking" aria-hidden="true"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion cartelera" aria-labelledby="t-cartelera">
+    <div class="caja">
+      <div class="cabecera">
+        <h2 id="t-cartelera">Cartelera</h2>
+        <p class="pantalla" aria-hidden="true">REC ● SESIONES DE LA SEMANA</p>
+      </div>
+      <p class="aviso">Lo del Río es la programación del verano de 2025. <mark class="relleno">Si vuelve igual el verano que viene, sin confirmar</mark></p>
+
+      <ul class="estante">
+        <li class="caja-vhs cerrado">
+          <div class="dia">Lunes y martes <small>Plaza</small></div>
+          <h3>Descanso</h3>
+          <p class="genero">Drama · sin sesión</p>
+          <p>La Plaza cierra por descanso. En el Río, <mark class="relleno">sin confirmar</mark></p>
+          <p class="donde pantalla" aria-hidden="true">■ STOP</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+        <li class="caja-vhs">
+          <div class="dia">Miércoles <small>Plaza</small></div>
+          <h3>Noche de Champions</h3>
+          <p class="genero">Acción · fútbol</p>
+          <p>Abren los miércoles para ver el partido. Sorteo de una cesta de embutidos en el descanso o a las 21:30.</p>
+          <p class="donde pantalla" aria-hidden="true">PLAY ▶ PANTALLA 100"</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+        <li class="caja-vhs">
+          <div class="dia">Miércoles <small>Río · verano</small></div>
+          <h3>El sorteo</h3>
+          <p class="genero">Suspense · cenas y raciones</p>
+          <p>Entre los clientes se sortean cenas y raciones. Nadie se va hasta saber quién gana.</p>
+          <p class="donde pantalla" aria-hidden="true">PLAY ▶ TERRAZA</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+        <li class="caja-vhs">
+          <div class="dia">Jueves y viernes <small>Río · verano</small></div>
+          <h3>La noche del DJ</h3>
+          <p class="genero">Musical · terraza</p>
+          <p>Música en la terraza junto al río. Quién pincha cada noche, <mark class="relleno">sin confirmar</mark></p>
+          <p class="donde pantalla" aria-hidden="true">PLAY ▶ ♪ ♪ ♪</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+        <li class="caja-vhs">
+          <div class="dia">Fin de semana <small>Plaza</small></div>
+          <h3>Toda la Liga</h3>
+          <p class="genero">Acción · futbolín y diana</p>
+          <p>Todos los partidos en las pantallas. Desde las 13:00, <mark class="relleno">horario sin confirmar</mark></p>
+          <p class="donde pantalla" aria-hidden="true">PLAY ▶ 8 GRIFOS</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+        <li class="caja-vhs">
+          <div class="dia">Precios <small>Taquilla</small></div>
+          <h3>Pase de 2 €</h3>
+          <p class="genero">Comedia · para todos</p>
+          <p>En la Plaza, caña o tinto de verano a 2 €. En el Río, <mark class="relleno">precios sin confirmar</mark></p>
+          <p class="donde pantalla" aria-hidden="true">◀◀ REW ▶▶ FF</p>
+          <div class="lineas" aria-hidden="true"></div><div class="tracking" aria-hidden="true"></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <div class="pie-rejilla">
+      <div>
+        <h2>Fin</h2>
+        <p class="rebobinar pantalla">◀◀ REBOBINE ANTES DE DEVOLVER</p>
+      </div>
+      <div>
+        <p><strong>Embrujo Río</strong> · junto al Carrión<br><a href="tel:+34646251640">646 25 16 40</a></p>
+        <p><strong>Embrujo Plaza</strong> · Plaza de la Constitución<br><a href="tel:+34646981186">646 98 11 86</a></p>
+      </div>
+      <div>
+        <p>Instagram, con los carteles de los dos: <a class="ig" href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a></p>
+        <p>WhatsApp <mark class="relleno">sin confirmar</mark> · Correo <mark class="relleno">sin confirmar</mark></p>
+      </div>
+    </div>
+    <div class="fin">
+      <span>Embrujo · Guardo, Palencia · Elena y Nete</span>
+      <span>Titular y NIF <mark class="relleno">sin confirmar</mark></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var c=document.querySelector('[data-contador]');
+  if(!c||!window.matchMedia||!matchMedia('(prefers-reduced-motion: no-preference)').matches)return;
+  var t0=Date.now();
+  function dos(n){return (n<10?'0':'')+n}
+  setInterval(function(){
+    var s=Math.floor((Date.now()-t0)/1000);
+    c.textContent=dos(Math.floor(s/3600))+':'+dos(Math.floor(s/60)%60)+':'+dos(s%60);
+  },1000);
+})();
+</script>
+</body>
+</html>

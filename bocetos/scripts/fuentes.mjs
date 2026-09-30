@@ -19,6 +19,9 @@ const FAMILIAS = [
   'Anton', 'Bitter:wght@400;700',
   'IM+Fell+English+SC', 'Spectral:ital,wght@0,400;1,400', 'Dancing+Script:wght@600',
   'Overpass:wght@400;800',
+  'Rye', 'Nunito:wght@400;800',
+  'Creepster', 'Archivo+Narrow:wght@400;700', 'VT323',
+  'Cinzel+Decorative:wght@700', 'Cormorant+Garamond:ital,wght@0,500;1,500',
 ];
 
 await mkdir(DESTINO, { recursive: true });
