@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo Plaza · Los grifos</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+:root{
+  --negro:#0e0b09;
+  --madera:#2b1b11;
+  --madera-clara:#4a2f1d;
+  --veta:#3a2416;
+  --ambar:#f5a623;
+  --espuma:#f7efdd;
+  --espuma-suave:#d9ccb3;
+  --cromo:#b9b2a6;
+  --led-apagado:#2a1c0c;
+  --cromo-claro:#e9e5dd;
+  --cromo-oscuro:#6f6a62;
+  --cromo-sombra:#3d3a36;
+  --pantalla:#050403;
+  --pantalla-marco:#1c1c1c;
+  --disco:#1b1612;
+  --disco-aro:#3a3029;
+  --maneta-oscura:#1c120b;
+  --maneta-clara:#5a3a24;
+  --sombra:rgba(0,0,0,.5);
+  --brillo-ambar:rgba(245,166,35,.55);
+  --relleno:#ffe45c;
+  --relleno-texto:#1a1400;
+  --r:10px;
+  --r-peq:6px;
+  --gutter:clamp(16px,4vw,48px);
+  --ancho:1180px;
+  --titular:'Big Shoulders Display',Impact,'Arial Narrow',sans-serif;
+  --texto:'Barlow',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--negro);color:var(--espuma);font-family:var(--texto);font-weight:400;font-size:clamp(1rem,.95rem + .3vw,1.125rem);line-height:1.55;overflow-wrap:anywhere}
+h1,h2,h3{font-family:var(--titular);font-weight:800;line-height:.95;margin:0;text-transform:uppercase;letter-spacing:.01em;overflow-wrap:break-word}
+p{margin:0 0 .8em}
+a{color:var(--ambar)}
+strong{font-weight:600}
+mark.relleno{background:var(--relleno);color:var(--relleno-texto);padding:0 .3em;border-radius:3px;font-weight:600;white-space:normal}
+:focus-visible{outline:3px solid var(--ambar);outline-offset:3px;border-radius:var(--r-peq)}
+.saltar{position:absolute;left:var(--gutter);top:-100px;background:var(--ambar);color:var(--negro);padding:.7em 1em;border-radius:var(--r-peq);font-weight:600;z-index:10;text-decoration:none}
+.saltar:focus{top:8px}
+.franja{background:var(--relleno);color:var(--relleno-texto);font-size:.8rem;font-weight:600;text-align:center;padding:.4em var(--gutter);line-height:1.35}
+.envoltura{width:min(100%,var(--ancho));margin-inline:auto;padding-inline:var(--gutter)}
+main:focus{outline:none}
+.antetitulo{font-family:var(--titular);font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:var(--ambar);font-size:clamp(.95rem,.9rem + .3vw,1.1rem);margin:0 0 .6em}
+
+/* ---------- madera ---------- */
+.madera{
+  background:
+    repeating-linear-gradient(90deg,transparent 0 38px,var(--sombra) 38px 40px,transparent 40px 91px,var(--veta) 91px 93px),
+    linear-gradient(180deg,var(--veta),var(--madera) 40%,var(--madera));
+}
+
+/* ---------- portada ---------- */
+.portada{padding-block:clamp(28px,6vw,72px) 0;position:relative;overflow:hidden}
+.portada__cab{display:grid;gap:clamp(16px,3vw,40px);grid-template-columns:minmax(0,1fr)}
+@media (min-width:900px){.portada__cab{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:end}}
+.portada h1{font-size:clamp(3.4rem,2rem + 9vw,9.5rem);color:var(--espuma)}
+.portada h1 span{display:block;color:var(--ambar)}
+.portada__que{font-size:clamp(1.05rem,1rem + .5vw,1.35rem);max-width:34ch;color:var(--espuma)}
+.portada__que strong{color:var(--ambar)}
+.llamadas{display:grid;gap:10px;grid-template-columns:minmax(0,1fr);margin-top:1.2em}
+@media (min-width:520px){.llamadas{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.boton{display:flex;align-items:center;gap:.7em;min-height:52px;padding:.6em 1em;border-radius:var(--r);text-decoration:none;font-weight:600;line-height:1.2;border:2px solid var(--ambar)}
+.boton svg{flex:none;width:22px;height:22px}
+.boton small{display:block;font-weight:400;font-size:.85em;opacity:.9}
+.boton--lleno{background:var(--ambar);color:var(--negro)}
+.boton--hueco{background:transparent;color:var(--espuma)}
+.boton--hueco svg{color:var(--ambar)}
+
+/* fila de grifos */
+.barra{margin-top:clamp(28px,5vw,56px)}
+.grifos{list-style:none;margin:0;padding:0 0 0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(4px,1.2vw,18px);align-items:end}
+.grifo{text-align:center}
+.grifo svg{display:block;width:100%;height:auto;max-width:92px;margin-inline:auto;overflow:visible}
+.grifo .maneta{transform-box:fill-box;transform-origin:50% 100%}
+.grifo__num{display:block;font-family:var(--titular);font-weight:800;font-size:clamp(1.1rem,.8rem + 1.5vw,2rem);color:var(--negro);background:var(--ambar);border-radius:var(--r-peq);margin:6px auto 0;width:min(100%,2.2em);line-height:1.35}
+.riel{height:clamp(14px,2vw,22px);background:linear-gradient(180deg,var(--cromo),var(--cromo-oscuro) 60%,var(--cromo-sombra));border-radius:3px 3px 0 0;margin-top:-2px}
+.mostrador{height:clamp(22px,4vw,44px);background:var(--negro)}
+.carta{background:var(--negro);padding-block:clamp(20px,4vw,40px) clamp(32px,6vw,64px)}
+.carta__cab{display:flex;flex-wrap:wrap;gap:.4em 1.2em;align-items:baseline;justify-content:space-between;margin-bottom:1em}
+.carta__cab h2{font-size:clamp(1.8rem,1.3rem + 2.5vw,3rem)}
+.precio{font-family:var(--titular);font-weight:800;font-size:clamp(1.3rem,1rem + 1.2vw,2rem);color:var(--ambar);text-transform:uppercase}
+.lista-grifos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (min-width:760px){.lista-grifos{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.lista-grifos li{border:1px solid var(--madera-clara);border-radius:var(--r);padding:.55em .7em;display:flex;gap:.6em;align-items:center;min-width:0}
+.lista-grifos b{font-family:var(--titular);font-weight:800;font-size:1.5rem;color:var(--ambar);line-height:1;flex:none;width:1.1em;text-align:center}
+.lista-grifos span{min-width:0;font-size:.92rem;line-height:1.5}
+.nota-carta{margin-top:1em;color:var(--espuma-suave);font-size:.95rem}
+
+/* ---------- locales ---------- */
+.locales{padding-block:clamp(40px,7vw,96px)}
+.locales__rejilla{display:grid;gap:clamp(18px,3vw,32px);grid-template-columns:minmax(0,1fr)}
+@media (min-width:960px){.locales__rejilla{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}}
+.local{border-radius:var(--r);padding:clamp(20px,3.5vw,36px)}
+.local--plaza{background:var(--negro);border:1px solid var(--madera-clara)}
+.local--rio{background:var(--espuma);color:var(--negro)}
+.local--rio a{color:var(--madera)}
+.local--rio .antetitulo{color:var(--madera-clara)}
+.local h2{font-size:clamp(2.2rem,1.6rem + 3vw,4rem);margin-bottom:.35em}
+.local--rio h2{font-size:clamp(1.8rem,1.4rem + 2vw,3rem)}
+.datos{list-style:none;margin:0 0 1em;padding:0;display:grid;gap:.45em}
+.datos li{padding-left:1.3em;position:relative}
+.datos li::before{content:"";position:absolute;left:0;top:.62em;width:.6em;height:.6em;border-radius:50%;background:var(--ambar)}
+.local--rio .datos li::before{background:var(--madera-clara)}
+.google{display:inline-flex;align-items:baseline;gap:.4em;flex-wrap:wrap;border-top:2px solid var(--negro);padding-top:.6em;margin-top:.4em}
+.google b{font-family:var(--titular);font-weight:800;font-size:2rem;line-height:1}
+
+/* videomarcador */
+.marcador{margin:1.2em 0 1.4em;border-radius:var(--r);background:var(--pantalla);border:4px solid var(--pantalla-marco);box-shadow:0 0 0 1px var(--madera-clara), inset 0 0 30px var(--sombra);padding:12px;overflow:hidden}
+.marcador__fila{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;text-align:center;font-family:var(--titular);font-weight:800;text-transform:uppercase}
+.marcador__equipo{font-size:clamp(.9rem,.7rem + 1vw,1.35rem);letter-spacing:.08em;color:var(--espuma)}
+.marcador__reloj{font-size:clamp(2rem,1.4rem + 3vw,3.4rem);color:var(--ambar);background:var(--led-apagado);border-radius:var(--r-peq);padding:.05em .35em;line-height:1.1;text-shadow:0 0 12px var(--brillo-ambar)}
+.marcador__reloj small{display:block;font-size:.3em;letter-spacing:.2em;color:var(--espuma);text-shadow:none;line-height:1.3}
+.pantalla{margin-top:10px;position:relative;border-radius:var(--r-peq);min-height:4.2em;display:grid;place-items:center;padding:.5em;
+  background:radial-gradient(circle at 50% 50%,var(--veta) 0 1px,transparent 1.6px) 0 0/6px 6px, var(--led-apagado)}
+.pantalla__msg{margin:0;font-family:var(--titular);font-weight:800;text-transform:uppercase;color:var(--ambar);font-size:clamp(1.25rem,.9rem + 1.8vw,2.1rem);line-height:1.05;text-align:center;text-shadow:0 0 10px var(--brillo-ambar)}
+.eventos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.eventos li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7em;align-items:start;border-left:4px solid var(--ambar);padding:.3em 0 .3em .8em}
+.eventos b{font-family:var(--titular);font-weight:800;text-transform:uppercase;color:var(--ambar);letter-spacing:.05em;min-width:5.6em}
+
+/* ---------- avisador ---------- */
+.aviso{padding-block:clamp(44px,8vw,110px)}
+.aviso__rejilla{display:grid;gap:clamp(24px,4vw,64px);grid-template-columns:minmax(0,1fr);align-items:center}
+@media (min-width:860px){.aviso__rejilla{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}}
+.aviso h2{font-size:clamp(2.6rem,1.6rem + 5vw,6rem);margin-bottom:.3em}
+.aviso h2 span{color:var(--ambar)}
+.disco{width:min(78vw,380px);margin-inline:auto;position:relative}
+.disco svg{display:block;width:100%;height:auto;overflow:visible}
+.pasos{list-style:none;counter-reset:p;margin:1.2em 0 0;padding:0;display:grid;gap:12px}
+.pasos li{counter-increment:p;display:grid;grid-template-columns:3rem minmax(0,1fr);gap:.8em;align-items:start;background:var(--sombra);border-radius:var(--r);padding:.8em .9em}
+.pasos li::before{content:counter(p);font-family:var(--titular);font-weight:800;font-size:2.4rem;line-height:1;color:var(--negro);background:var(--ambar);border-radius:50%;width:3rem;height:3rem;display:grid;place-items:center}
+.pasos strong{display:block;font-size:1.1em;color:var(--espuma)}
+.pasos p{margin:0;color:var(--espuma-suave)}
+
+/* ---------- pie ---------- */
+.pie{background:var(--negro);border-top:4px solid var(--ambar);padding-block:clamp(28px,5vw,48px)}
+.pie__rejilla{display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:760px){.pie__rejilla{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pie h2{font-size:1.5rem;color:var(--ambar);margin-bottom:.3em}
+.pie p{margin:0 0 .3em;color:var(--espuma-suave)}
+.pie a{display:inline-flex;align-items:center;min-height:44px;color:var(--espuma);font-weight:600}
+.pie__firma{margin-top:24px;font-size:.85rem;color:var(--espuma-suave)}
+
+/* ---------- movimiento ---------- */
+.marcador__rotativo{display:none}
+@media (prefers-reduced-motion:no-preference){
+  .marcador__rotativo{display:block;position:absolute;inset:0}
+  .marcador__rotativo p{position:absolute;inset:0;display:grid;place-items:center;padding:.5em;opacity:0;animation:rota 12s infinite}
+  .marcador__rotativo p:nth-child(2){animation-delay:4s}
+  .marcador__rotativo p:nth-child(3){animation-delay:8s}
+  .pantalla--fija{visibility:hidden}
+  @keyframes rota{0%{opacity:0;transform:translateY(40%)}4%,30%{opacity:1;transform:none}34%,100%{opacity:0;transform:translateY(-40%)}}
+
+  .disco__cuerpo{transform-box:fill-box;transform-origin:center;animation:vibra 3.2s infinite}
+  .disco__luz{animation:luz 3.2s infinite}
+  .disco__ondas circle{transform-box:fill-box;transform-origin:center;animation:onda 3.2s infinite;opacity:0}
+  .disco__ondas circle:nth-child(2){animation-delay:.2s}
+  @keyframes vibra{0%,55%,100%{transform:none}58%{transform:translate(-5px,1px) rotate(-2deg)}61%{transform:translate(5px,-1px) rotate(2deg)}64%{transform:translate(-5px,0) rotate(-1.5deg)}67%{transform:translate(4px,1px) rotate(1.5deg)}70%{transform:translate(-3px,0)}73%{transform:translate(2px,0)}76%{transform:none}}
+  @keyframes luz{0%,54%{opacity:.18}58%,76%{opacity:1}90%,100%{opacity:.18}}
+  @keyframes onda{0%,55%{opacity:0;transform:scale(1)}60%{opacity:.7}85%,100%{opacity:0;transform:scale(1.25)}}
+
+  .grifo .maneta{transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+  .grifo:hover .maneta{transform:rotate(-14deg)}
+  .grifo .chorro{transform-box:fill-box;transform-origin:top;transform:scaleY(0);transition:transform .3s ease .1s}
+  .grifo:hover .chorro{transform:scaleY(1)}
+  .boton{transition:transform .15s}
+  .boton:hover{transform:translateY(-2px)}
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<div class="franja" role="note">Boceto de estética 5 de 8 · Los grifos · no es la web del bar · lo marcado en amarillo está sin confirmar</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="g-cromo" x1="0" x2="1">
+      <stop offset="0" style="stop-color:var(--cromo-oscuro)"/><stop offset=".45" style="stop-color:var(--cromo-claro)"/><stop offset="1" style="stop-color:var(--cromo-oscuro)"/>
+    </linearGradient>
+    <linearGradient id="g-maneta" x1="0" x2="1">
+      <stop offset="0" style="stop-color:var(--maneta-oscura)"/><stop offset=".5" style="stop-color:var(--maneta-clara)"/><stop offset="1" style="stop-color:var(--maneta-oscura)"/>
+    </linearGradient>
+    <symbol id="grifo" viewBox="0 0 60 190">
+      <g class="maneta">
+        <rect x="19" y="4" width="22" height="92" rx="9" fill="url(#g-maneta)"/>
+        <rect x="23" y="16" width="14" height="42" rx="4" style="fill:var(--ambar)"/>
+        <rect x="26" y="96" width="8" height="18" fill="url(#g-cromo)"/>
+      </g>
+      <rect class="chorro" x="37.5" y="168" width="4" height="22" rx="2" style="fill:var(--ambar)"/>
+      <path d="M14 112h32v14h-6v16c0 6 4 8 4 14v12h-10v-12c0-4-4-6-4-14v-4H14z" fill="url(#g-cromo)"/>
+      <rect x="10" y="116" width="10" height="72" fill="url(#g-cromo)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- PORTADA -->
+  <section class="portada madera" aria-labelledby="t-portada">
+    <div class="envoltura">
+      <div class="portada__cab">
+        <div>
+          <p class="antetitulo">Guardo · Plaza de la Constitución</p>
+          <h1 id="t-portada">Embrujo <span>Plaza</span></h1>
+        </div>
+        <div>
+          <p class="portada__que">Cervecería con <strong>8 grifos</strong> de cerveza nacional y de importación, picoteo, futbolín, diana y el fútbol en una pantalla de unas 100 pulgadas.</p>
+          <p class="portada__que">Y si te apetece terraza bajo los árboles, <strong>el otro Embrujo está en el río</strong>.</p>
+          <div class="llamadas">
+            <a class="boton boton--lleno" href="tel:+34646981186">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+              <span>Llamar a la Plaza<small>646 98 11 86</small></span>
+            </a>
+            <a class="boton boton--hueco" href="tel:+34646251640">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+              <span>Llamar al Río<small>646 25 16 40</small></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="barra" aria-hidden="true">
+        <ul class="grifos">
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">1</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">2</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">3</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">4</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">5</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">6</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">7</span></li>
+          <li class="grifo"><svg viewBox="0 0 60 190"><use href="#grifo"/></svg><span class="grifo__num">8</span></li>
+        </ul>
+        <div class="riel"></div>
+      </div>
+    </div>
+    <div class="carta">
+      <div class="envoltura">
+        <div class="carta__cab">
+          <h2>Qué sale por cada grifo</h2>
+          <p class="precio">Caña o tinto de verano, 2 €</p>
+        </div>
+        <ol class="lista-grifos">
+          <li><b>1</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>2</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>3</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>4</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>5</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>6</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>7</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+          <li><b>8</b><span>Grifo · <mark class="relleno">marca sin confirmar</mark></span></li>
+        </ol>
+        <p class="nota-carta">Hay cerveza nacional y de importación. Qué sale por cada grifo y el precio del resto: <mark class="relleno">sin confirmar</mark>. La pegatina de la barra solo dice lo de la caña.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCALES -->
+  <section class="locales madera" aria-labelledby="t-locales">
+    <div class="envoltura">
+      <h2 id="t-locales" class="antetitulo">Dos Embrujos, los mismos dueños: Elena y Nete</h2>
+      <div class="locales__rejilla">
+
+        <article class="local local--plaza" aria-labelledby="t-plaza">
+          <p class="antetitulo">La cervecería</p>
+          <h2 id="t-plaza">En la plaza</h2>
+          <p>Donde estaba el Peter, en la Plaza de la Constitución <mark class="relleno">número sin confirmar</mark>. Abrió el jueves 4 de diciembre de 2025. Mucha madera, terraza con dos carpas y la pantalla grande siempre con partido.</p>
+
+          <div class="marcador" aria-hidden="true">
+            <div class="marcador__fila">
+              <span class="marcador__equipo">Embrujo</span>
+              <span class="marcador__reloj">21:30<small>descanso</small></span>
+              <span class="marcador__equipo">Plaza</span>
+            </div>
+            <div class="pantalla">
+              <p class="pantalla__msg pantalla--fija">Toda la Liga y Champions</p>
+              <div class="marcador__rotativo">
+                <p class="pantalla__msg">Toda la Liga y Champions</p>
+                <p class="pantalla__msg">Miércoles: fútbol</p>
+                <p class="pantalla__msg">Descanso: sorteo de cesta de embutidos</p>
+              </div>
+            </div>
+          </div>
+
+          <ul class="eventos">
+            <li><b>Pantalla</b><span>Toda la Liga y Champions.</span></li>
+            <li><b>Miércoles</b><span>Abrimos para el fútbol.</span></li>
+            <li><b>Descanso</b><span>Sorteo de una cesta de embutidos, en el descanso o a las 21:30.</span></li>
+            <li><b>Lun y mar</b><span>Cerrado por descanso.</span></li>
+          </ul>
+          <p style="margin-top:1em">Entre semana, de 16:00 a 23:00 más o menos; sábado y domingo desde las 13:00. <mark class="relleno">horario de la inauguración, puede haber cambiado</mark></p>
+        </article>
+
+        <article class="local local--rio" aria-labelledby="t-rio">
+          <p class="antetitulo">El otro Embrujo, en el río</p>
+          <h2 id="t-rio">Embrujo Río</h2>
+          <p>La terraza grande bajo los árboles, al lado del Carrión. A las 16:00 ya hay cocina.</p>
+          <ul class="datos">
+            <li>Patatas embrujadas, rabas, gambones, pulpo gratinado.</li>
+            <li>Tartas caseras: Pantera Rosa, Tigretón, Kinder Bueno.</li>
+            <li>Comida para llevar.</li>
+            <li>Días de cierre: <mark class="relleno">sin confirmar</mark></li>
+            <li>Dirección: <mark class="relleno">Camino la Renta, 1 o Camino de San Miguel, sin confirmar</mark></li>
+          </ul>
+          <p class="google"><b>4,6</b> <span>con 636 reseñas en Google</span></p>
+          <p><a class="boton boton--lleno" href="tel:+34646251640" style="margin-top:.6em">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+            <span>646 25 16 40</span></a></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVISADOR -->
+  <section class="aviso" aria-labelledby="t-aviso">
+    <div class="envoltura aviso__rejilla">
+      <div class="disco">
+        <svg viewBox="-20 -20 340 340" aria-hidden="true" focusable="false">
+          <g class="disco__ondas" style="fill:none;stroke:var(--ambar)" stroke-width="4">
+            <circle cx="150" cy="150" r="150"/>
+            <circle cx="150" cy="150" r="162"/>
+          </g>
+          <g class="disco__cuerpo">
+            <circle cx="150" cy="156" r="140" style="fill:var(--sombra)"/>
+            <circle cx="150" cy="150" r="140" style="fill:var(--disco)"/>
+            <circle cx="150" cy="150" r="126" fill="none" style="stroke:var(--disco-aro)" stroke-width="3"/>
+            <g class="disco__luz" style="fill:var(--ambar)">
+              <circle cx="150" cy="38" r="7"/><circle cx="229" cy="71" r="7"/><circle cx="262" cy="150" r="7"/><circle cx="229" cy="229" r="7"/>
+              <circle cx="150" cy="262" r="7"/><circle cx="71" cy="229" r="7"/><circle cx="38" cy="150" r="7"/><circle cx="71" cy="71" r="7"/>
+              <circle cx="150" cy="150" r="104" style="fill:none;stroke:var(--ambar)" stroke-width="3" opacity=".6"/>
+            </g>
+            <circle cx="150" cy="150" r="80" style="fill:var(--negro)"/>
+            <text x="150" y="196" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="800" font-size="84" style="fill:var(--espuma)">08</text>
+            <text x="150" y="112" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="600" font-size="16" letter-spacing="3" style="fill:var(--espuma-suave)">EMBRUJO</text>
+          </g>
+        </svg>
+      </div>
+      <div>
+        <p class="antetitulo">Cómo se pide en la Plaza</p>
+        <h2 id="t-aviso">Pide, siéntate <span>y espera a que vibre</span></h2>
+        <ol class="pasos">
+          <li><div><strong>Pides en la barra</strong><p>La caña, el picoteo, lo que sea. Aquí no hay que esperar a que venga nadie.</p></div></li>
+          <li><div><strong>Te damos el avisador</strong><p>Ese disco con luces. Te lo llevas a la mesa, a la terraza o al futbolín.</p></div></li>
+          <li><div><strong>Cuando vibra, vas a por ello</strong><p>Se ilumina y tiembla en la mesa. Tu pedido está listo en la barra.</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="envoltura">
+    <div class="pie__rejilla">
+      <div>
+        <h2>Plaza</h2>
+        <p>Plaza de la Constitución, Guardo</p>
+        <a href="tel:+34646981186">646 98 11 86</a>
+      </div>
+      <div>
+        <h2>Río</h2>
+        <p>Junto al Carrión, Guardo</p>
+        <a href="tel:+34646251640">646 25 16 40</a>
+      </div>
+      <div>
+        <h2>Los carteles</h2>
+        <p>Todo lo que pasa en los dos, en Instagram:</p>
+        <a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a>
+        <p>WhatsApp y correo: <mark class="relleno">sin confirmar</mark></p>
+      </div>
+    </div>
+    <p class="pie__firma">Embrujo · Guardo (Palencia) · Titular y NIF: <mark class="relleno">sin confirmar</mark></p>
+  </div>
+</footer>
+</body>
+</html>

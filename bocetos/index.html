@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo: bocetos de estética</title>
+<style>
+:root {
+  --fondo: #f3f1ec; --carta: #ffffff; --tinta: #1d1c1a; --apagado: #5a5750;
+  --filete: #dcd8cf; --acento: #1f4fd1; --chip: #fff0a8;
+  --sistema: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --fondo: #151515; --carta: #1e1e1e; --tinta: #eeece6; --apagado: #a9a59c; --filete: #34332f; --acento: #7fa0ff; --chip: #5b4d00; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 16px/1.55 var(--sistema); }
+a { color: var(--acento); }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; }
+.saltar { position: absolute; left: -999px; } .saltar:focus { left: 16px; top: 16px; background: var(--carta); padding: 8px 12px; z-index: 2; }
+.cab { max-width: 1240px; margin: 0 auto; padding: clamp(24px, 5vw, 56px) 16px 8px; }
+.cab h1 { font-size: clamp(28px, 5vw, 46px); line-height: 1.05; margin: 0 0 10px; letter-spacing: -0.02em; }
+.cab p { color: var(--apagado); max-width: 70ch; margin: 0 0 12px; }
+.cab ol { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.cab ol a { display: inline-block; padding: 8px 14px; border: 1px solid var(--filete); border-radius: 999px; background: var(--carta); color: var(--tinta); text-decoration: none; min-height: 44px; line-height: 26px; }
+main { max-width: 1240px; margin: 0 auto; padding: 16px; display: grid; gap: 28px; }
+.boceto { background: var(--carta); border: 1px solid var(--filete); border-radius: 14px; padding: clamp(16px, 3vw, 28px); min-width: 0; scroll-margin-top: 12px; }
+.boceto > header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: start; margin-bottom: 18px; }
+.num { font: 700 28px/1 var(--sistema); color: var(--apagado); font-variant-numeric: tabular-nums; }
+.boceto h2 { margin: 0 0 4px; font-size: clamp(21px, 3vw, 27px); }
+.idea { margin: 0; color: var(--apagado); }
+.chip { font-size: 13px; font-weight: 600; background: var(--chip); padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.abrir { white-space: nowrap; padding: 10px 16px; border-radius: 999px; background: var(--tinta); color: var(--fondo); text-decoration: none; font-weight: 600; }
+.vistas { display: grid; grid-template-columns: 390px minmax(0, 1fr); gap: 20px; align-items: start; }
+figure { margin: 0; min-width: 0; }
+figcaption { font-size: 13px; color: var(--apagado); margin-top: 6px; }
+iframe { display: block; border: 1px solid var(--filete); border-radius: 10px; background: #fff; }
+.movil iframe { width: 390px; max-width: 100%; height: 780px; }
+.escala { width: 100%; aspect-ratio: 1280 / 800; overflow: hidden; border-radius: 10px; position: relative; container-type: inline-size; }
+.escala iframe { width: 1280px; height: 800px; transform-origin: 0 0; transform: scale(calc(100cqw / 1280px)); position: absolute; top: 0; left: 0; }
+@supports not (width: 1cqw) { .escala iframe { transform: scale(0.6); } }
+.nota { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 6px 16px; margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--filete); }
+.nota dt { font-weight: 600; } .nota dd { margin: 0; color: var(--apagado); overflow-wrap: anywhere; }
+@media (max-width: 900px) {
+  .vistas { grid-template-columns: minmax(0, 1fr); }
+  .escritorio { display: none; }
+  .movil iframe { width: 100%; }
+  .boceto > header { grid-template-columns: auto minmax(0, 1fr); }
+  .abrir { grid-column: 1 / -1; justify-self: start; }
+  .nota { grid-template-columns: minmax(0, 1fr); } .nota dd { margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar a los bocetos</a>
+<header class="cab">
+  <h1>Embrujo: ocho maneras de verlo</h1>
+  <p>Bocetos de estética para la web de los dos Embrujos de Guardo, el del río y el de la plaza. No son la web: son para elegir mirando y no imaginando. Todos usan los datos reales que hay hasta hoy, y lo que está en amarillo está sin confirmar.</p>
+  <p>Cada uno trae su nota: tipografías, paleta, por qué encaja y qué se movería. Los datos y sus fuentes están en <code>bocetos/DATOS.md</code>.</p>
+  <ol aria-label="Bocetos"><li><a href="#b1">01 La fachada</a></li><li><a href="#b2">02 Río y Plaza</a></li><li><a href="#b3">03 El boleto del sorteo</a></li><li><a href="#b4">04 La pizarra de barra</a></li><li><a href="#b5">05 Los grifos</a></li><li><a href="#b6">06 El cartel de fiestas</a></li><li><a href="#b7">07 El conjuro</a></li><li><a href="#b8">08 La carretera</a></li></ol>
+</header>
+<main id="contenido" tabindex="-1">
+<section class="boceto" id="b1" aria-labelledby="t1">
+  <header>
+    <span class="num">01</span>
+    <div><h2 id="t1">La fachada</h2>
+    <p class="idea">La web es la fachada del Embrujo Río tal como la ve el pueblo: pared azul, rótulo negro con EMBRUJO en luz azul, banderines de verbena, sillas rojas y zócalo de piedra.</p></div>
+    <a class="abrir" href="01-fachada.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="01-fachada.html" title="La fachada, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="01-fachada.html" title="La fachada, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Bungee 400 para el rótulo y los titulares (letra de letrero); Figtree 400/700 para el texto.</dd><dt>Paleta</dt><dd>#1f4e8c azul pared (fondo de portada y terraza), #163a69 azul hondo (fondos de apoyo), #121212 negro rótulo (rótulo, pie, bordes), #7fd8ff luz LED (letras encendidas y títulos sobre oscuro), #fbf5e6 crema (fondo de lectura), #1b1b1b tinta (texto), #c8102e rojo silla (único acento: botones de llamar y días de la cartelera), #8b8479/#a8a194 piedra (zócalo), #ffe14d amarillo (solo relleno sin confirmar); los banderines usan rojo, #f4c430, #2a9d8f, blanco y #e76f51 solo como ilustración.</dd><dt>Por qué encaja</dt><dd>Es literalmente lo que la gente de Guardo reconoce al llegar al río: la pared azul y el rótulo encendido. Transmite verbena de verano, trato cercano y precios de pueblo sin ponerse fino. El rojo de las sillas de plástico hace de botón de llamar, que es lo que más se va a pulsar.</dd><dt>Qué se movería</dt><dd>Las letras de EMBRUJO se encienden una a una al entrar y la J parpadea de vez en cuando como un tubo viejo; los banderines se mecen con el aire; el río del pie corre despacio. Todo dentro de prefers-reduced-motion.</dd><dt>El otro tema</dt><dd>El tema de noche: fondo casi negro con la pared azul apagada, el rótulo y los contornos del edificio en neón azul como en el avatar de Instagram, los banderines en tonos bajos y el crema pasa a gris muy oscuro con texto claro.</dd><dt>Riesgo</dt><dd>Puede quedar demasiado de feria o infantil si se abusa de banderines y dibujos, y deja la Plaza (más moderna, de madera) como hermana pequeña del Río.</dd></dl>
+</section>
+<section class="boceto" id="b2" aria-labelledby="t2">
+  <header>
+    <span class="num">02</span>
+    <div><h2 id="t2">Río y Plaza</h2>
+    <p class="idea">Dos caras de la misma casa: la portada se parte en dos mitades y un interruptor ¿Río o Plaza? tiñe y filtra toda la página hacia uno de los dos bares.</p></div>
+    <a class="abrir" href="02-rio-y-plaza.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="02-rio-y-plaza.html" title="Río y Plaza, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="02-rio-y-plaza.html" title="Río y Plaza, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Fraunces 600 normal e itálica para el Río y los titulares, Barlow Condensed 500/700 en mayúsculas para la Plaza, Figtree 400/700 para el texto.</dd><dt>Paleta</dt><dd>Noche #0b0f0d fondo común con tinta #e9ece6; Río: fondo ribera #10241b, capa #183629, hojas #2c5a41, agua #2f6f73, tinta #eaf2e4, texto suave #b9ccb6; Plaza: madera oscura #1f140e, capa #2e1f15, veta #4a3222, ámbar de cerveza #f2b441 para títulos, tinta #f6ead8, texto suave #d6c1a6; acento único neón azul #6fd0ff (el del rótulo) para botones, foco, interruptor y el camino del mapa; amarillo #ffe36e solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>El Embrujo ya son dos bares con dos ambientes muy distintos, la terraza de tarde junto al Carrión y la cervecería de fútbol en la plaza, y la web tiene que dejar elegir sin separarlos. El neón azul del rótulo del Río hace de hilo común entre los dos, y el mapa dibujado explica en un vistazo dónde está cada uno.</dd><dt>Qué se movería</dt><dd>La sombra de las hojas se mece despacio sobre la mitad del Río, suben burbujas en la mitad de la Plaza, el agua del Carrión corre en el mapa y el camino de puntos avanza del río a la plaza; al pulsar el interruptor, la pastilla se desliza y la página cambia de color.</dd><dt>El otro tema</dt><dd>Un tema claro de día: Río en papel verde muy pálido (#eef4ea) con tinta #173226 y hojas en verde medio, Plaza en madera clara tipo roble (#f3e7d6) con tinta #2a1a10 y el ámbar oscurecido a #9a5b00 para títulos; el neón pasaría a un azul más profundo (#0a6c9c) para mantener 4,5:1 sobre claro.</dd><dt>Riesgo</dt><dd>Si el interruptor no se entiende o se queda en un lado, el que entra buscando el otro bar puede creer que la web es solo de uno.</dd></dl>
+</section>
+<section class="boceto" id="b3" aria-labelledby="t3">
+  <header>
+    <span class="num">03</span>
+    <div><h2 id="t3">El boleto del sorteo</h2>
+    <p class="idea">Toda la web es papel de rifa y ticket de caja sobre la barra de noche: la portada es un boleto troquelado con los dos locales en el talón, cada bar es su cuenta de caja y el sorteo tiene sus propias papeletas.</p></div>
+    <a class="abrir" href="03-boleto.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="03-boleto.html" title="El boleto del sorteo, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="03-boleto.html" title="El boleto del sorteo, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Alfa Slab One 400 para titulares y sellos de goma; Courier Prime 400/700 para el texto, las líneas del ticket y el numerador.</dd><dt>Paleta</dt><dd>Barra de noche #17191f con vetas #22252e de fondo; texto claro sobre fondo #efe6cf; papel del boleto #f4ecd6 y talón gastado #e9dcbc; tinta #26211c y tinta suave #574d43 sobre papel; acento único rojo de numerador #b1251d (números de serie, sellos, botones de llamar), #8e1b15 al pulsar; amarillo #ffe36e solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>Los sorteos son algo muy del Embrujo: cenas y raciones los miércoles en el Río y la cesta de embutidos en el descanso en la Plaza. El boleto y el ticket de caja son papeles que cualquiera de Guardo ha tenido en la mano en el bar, así que la web se siente de la casa y no de agencia. El formato de ticket además ordena bien horarios, carta y lo que falta por confirmar.</dd><dt>Qué se movería</dt><dd>Al pasar el ratón o el foco, el talón se despega y se tuerce un poco como si se fuera a rasgar; el numerador rojo avanza un número cada pocos segundos y al entrar en el boleto, con las cifras cayendo como en la máquina; los sellos se aprietan un pelo al pasar por encima.</dd><dt>El otro tema</dt><dd>Un tema claro de día: fondo de mostrador de madera clara o mantel #efe7da con los boletos en blanco roto #fffaf0 y sombra más suave, la tinta igual #26211c y el rojo algo más oscuro #a01f18 para mantener el contraste sobre fondo claro.</dd><dt>Riesgo</dt><dd>Si se abusa del troquel, los sellos y los puntos, puede parecer un bar de feria o un cupón de descuento y cansar en móvil con tanto papel seguido.</dd></dl>
+</section>
+<section class="boceto" id="b4" aria-labelledby="t4">
+  <header>
+    <span class="num">04</span>
+    <div><h2 id="t4">La pizarra de barra</h2>
+    <p class="idea">La web es la pizarra que hay colgada en la barra: fondo negro verdoso con polvo de tiza, marco de madera, la carta escrita a mano y los recuadros de Hoy hay y Para llevar.</p></div>
+    <a class="abrir" href="04-pizarra.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="04-pizarra.html" title="La pizarra de barra, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="04-pizarra.html" title="La pizarra de barra, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Caveat 600 para todo lo escrito a tiza (textos, carta, notas); Oswald 500/700 en mayúsculas para rótulos, títulos y botones.</dd><dt>Paleta</dt><dd>#141b17 pared (fondo de la página), #1f2d26 y #17221d pizarra (superficies y sombras), #eceee5 tiza (texto principal), #c3cabd tiza gastada (texto secundario, líneas de puntos), #7a4f2a / #9a6a3c / #4f311a madera (marcos, caballete, bandeja y borde del pie), #f4a7b9 tiza rosa (único acento: botones de llamar, títulos de apartado y rayas subrayando), #ffe14d amarillo (solo relleno sin confirmar, sobre todo los precios).</dd><dt>Por qué encaja</dt><dd>Es lo que ya hay en cualquier bar de pueblo y lo que la gente mira para pedir: la carta a tiza con las raciones y los postres caseros. Da sensación de cosa hecha a mano y del día, que encaja con la comida casera y el trato cercano de Elena y Nete. Sirve igual para el Río que para la Plaza sin que ninguno parezca el hermano pequeño.</dd><dt>Qué se movería</dt><dd>Los títulos se escriben como a tiza de izquierda a derecha (clip-path por pasos) y las rayas, la luna y la flecha se trazan con stroke; la pizarra del caballete se asienta al entrar. En la web de verdad el recuadro Hoy hay cambiaría cada día y se vería borrarse y reescribirse. Todo dentro de prefers-reduced-motion y con el estado final visible.</dd><dt>El otro tema</dt><dd>El tema claro sería una pizarra blanca de rotulador o un papel de estraza: fondo crema, letra de rotulador negro verdoso, marco de aluminio o de corcho y el rosa pasaría a rojo rotulador para los botones.</dd><dt>Riesgo</dt><dd>La letra a mano en textos largos cansa y puede quedar de plantilla de bar genérica si no se acompaña de fotos reales de los platos y de los dos locales.</dd></dl>
+</section>
+<section class="boceto" id="b5" aria-labelledby="t5">
+  <header>
+    <span class="num">05</span>
+    <div><h2 id="t5">Los grifos</h2>
+    <p class="idea">El Embrujo Plaza contado desde la barra: una fila de 8 tiradores como portada, un videomarcador de estadio con el fútbol y el avisador que vibra para explicar cómo se pide.</p></div>
+    <a class="abrir" href="05-grifos.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="05-grifos.html" title="Los grifos, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="05-grifos.html" title="Los grifos, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Big Shoulders Display 800 para titulares, números de grifo y marcador (letra de estadio, estrecha y alta); Barlow 400/600 para el texto.</dd><dt>Paleta</dt><dd>Negro #0e0b09 (fondo, mostrador y pantalla); madera oscura #2b1b11 con vetas #3a2416 y #4a2f1d (fondos con listones y bordes); ámbar cerveza #f5a623 (único acento: botones, números, LEDs del marcador y del avisador); espuma #f7efdd (texto principal y tarjeta del Río) y espuma suave #d9ccb3 (texto secundario); cromo #b9b2a6/#e9e5dd/#6f6a62 solo en los grifos y el riel; amarillo #ffe45c solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>La Plaza es una cervecería moderna con mucha madera, 8 grifos, pantalla de 100 pulgadas y avisador: son sus cosas concretas y aquí son el diseño. El marcador enseña lo que ya dicen sus carteles (Liga y Champions, miércoles de fútbol, cesta de embutidos en el descanso) y el avisador resuelve la duda de quien entra por primera vez.</dd><dt>Qué se movería</dt><dd>El avisador vibra y se enciende cada pocos segundos con ondas alrededor; el marcador rota sus mensajes como un videomarcador; al pasar por un grifo la maneta se inclina y cae un hilo de cerveza. En la web de verdad el marcador podría poner el partido de esa semana.</dd><dt>El otro tema</dt><dd>Tema claro de terraza de día: fondo espuma #f7efdd, madera clara en listones, texto negro madera y el ámbar oscurecido a #9a5b00 para mantener 4,5:1; el marcador seguiría oscuro como una pantalla encendida.</dd><dt>Riesgo</dt><dd>Deja al Río, que es el local con más años y más reseñas, en segundo plano y puede leerse como web solo de la cervecería.</dd></dl>
+</section>
+<section class="boceto" id="b6" aria-labelledby="t6">
+  <header>
+    <span class="num">06</span>
+    <div><h2 id="t6">El cartel de fiestas</h2>
+    <p class="idea">La web es el programa de fiestas del Embrujo: tipos de madera enormes y apretados, dos tintas planas que se pisan como en una imprenta de pueblo, banderines como los de la fachada del Río y una agenda con día, hora y sitio.</p></div>
+    <a class="abrir" href="06-cartel.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="06-cartel.html" title="El cartel de fiestas, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="06-cartel.html" title="El cartel de fiestas, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Anton 400 para los titulares de tipo de madera, en mayúsculas y muy apretados; Bitter 400/700 para el texto, los datos y los botones pequeños.</dd><dt>Paleta</dt><dd>Papel de cartel #f3e7c9 de fondo con trama de puntos, papel claro #fbf4e2 para los carteles pegados y #e9d6a8 para cinta, luna y banderines; tinta azul de imprenta #1b2470 para textos, bordes y el fondo del Programa (sale del azul de la fachada), azul suave #3b3f6b para textos secundarios; acento único rojo de fiestas #cf2618 (botón de llamar, fechas, desregistro de los titulares) y #a01c10 al pulsar; amarillo #ffe36e solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>El Embrujo vive de carteles: el aniversario, el Regreso al Embrujo Río, la inauguración de la Plaza o la Liga se anuncian en Instagram como si fueran fiestas. Un programa de fiestas es algo que todo el mundo en Guardo ha tenido en la mano, y el azul, el rojo y los banderines ya están en la fachada del Río.</dd><dt>Qué se movería</dt><dd>Cada cartel y cada acto del programa se pega al entrar en pantalla, cayendo un poco torcido y asentándose con su giro; los banderines ondean despacio; en la web de verdad el desregistro rojo podría temblar un pelo al pasar el ratón por los titulares.</dd><dt>El otro tema</dt><dd>Un tema oscuro de verbena: fondo azul noche #10164a con la trama en rojo muy apagado, carteles en papel #f3e7c9 como si estuvieran pegados en una pared de noche, titulares sueltos en papel claro con desregistro rojo #e0402f para mantener contraste, y la luna llena ganando protagonismo.</dd><dt>Riesgo</dt><dd>Si se cuela demasiado programa o se queda con fechas pasadas, parece un cartel viejo sin despegar y da sensación de bar sin actualizar.</dd></dl>
+</section>
+<section class="boceto" id="b7" aria-labelledby="t7">
+  <header>
+    <span class="num">07</span>
+    <div><h2 id="t7">El conjuro <span class="chip">el arriesgado</span></h2>
+    <p class="idea">La marca de los carteles llevada a web: noche azul sobre el Carrión, luna llena con el cuervo, el edificio del río perfilado en neón y la carta convertida en un grimorio de hechizos y pócimas.</p></div>
+    <a class="abrir" href="07-conjuro.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="07-conjuro.html" title="El conjuro, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="07-conjuro.html" title="El conjuro, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>IM Fell English SC 400 para el logotipo EMBRUJO y los titulares (tipo romano gastado, como en los carteles); Dancing Script 600 solo para la palabra plaza; Spectral 400 normal e itálica para el texto.</dd><dt>Paleta</dt><dd>Noche #070b1a (fondo y cielo); noche 2 #0d1530 (secciones y río); hoja #111c3d (páginas del grimorio); tormenta #243163 (nubes, niebla y bordes); sombra #03050d (árboles, orilla y pie); luna #f1ecdc (texto principal y la luna); luna suave #b3bcd8 (texto secundario); neón #4cc3ff (único acento: brillo del logo, edificio, botones, precios y la palabra plaza); amarillo #ffe45c con tinta #1a1500 solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>No se inventa una estética: sale de lo que el Embrujo ya enseña en Instagram, la luna, el cuervo, la tormenta y el edificio con neón azul de noche. El nombre del bar pide el juego (aquelarres, hechizos, pócimas) y la carta real lo aguanta: patatas embrujadas, pulpo gratinado, cañas a 2 €. La gente de Guardo reconoce los carteles en cuanto entra.</dd><dt>Qué se movería</dt><dd>Al cargar el neón del logo y del edificio parpadea como un rótulo que se enciende y luego zumba suave; el cuervo cruza la luna aleteando cada pocos segundos; dos capas de niebla se deslizan despacio sobre la orilla en sentidos contrarios; de vez en cuando cae un relámpago. En la web de verdad el grimorio podría pasar página entre la carta del río y la de la plaza.</dd><dt>El otro tema</dt><dd>Tema claro de tarde de tormenta: fondo pergamino #f1ecdc, texto noche #070b1a, nubes y bordes en gris azulado #c9cfe0, la luna en blanco con el cuervo negro y el neón oscurecido a #0a5f99 para mantener 4,5:1; el edificio seguiría con su neón como si se encendiera al anochecer.</dd><dt>Riesgo</dt><dd>Si se lleva un pelo más lejos puede leerse como bar temático de Halloween o como web de discoteca y espantar a quien busca comer en familia en la terraza.</dd></dl>
+</section>
+<section class="boceto" id="b8" aria-labelledby="t8">
+  <header>
+    <span class="num">08</span>
+    <div><h2 id="t8">La carretera <span class="chip">el arriesgado</span></h2>
+    <p class="idea">La web es una ruta por la CL-626: carteles de orientación azules con filete blanco, la Salida 1 al Río y la Salida 2 a la Plaza, un hito kilométrico y un panel de mensaje variable con las próximas salidas de cada día.</p></div>
+    <a class="abrir" href="08-carretera.html">Abrir entero</a>
+  </header>
+  <div class="vistas">
+    <figure class="movil"><iframe src="08-carretera.html" title="La carretera, vista de móvil" loading="lazy" width="390" height="780"></iframe><figcaption>Móvil, 390 px</figcaption></figure>
+    <figure class="escritorio"><div class="escala"><iframe src="08-carretera.html" title="La carretera, vista de escritorio" loading="lazy" width="1280" height="800"></iframe></div><figcaption>Escritorio, 1280 px a escala</figcaption></figure>
+  </div>
+  <dl class="nota"><dt>Tipografías</dt><dd>Overpass 400/800, parecida a la letra de las señales de carretera: 800 para destinos, títulos y distancias; 400 para el texto y las indicaciones.</dd><dt>Paleta</dt><dd>Asfalto de noche #1e2126 de fondo, #2a2e35 para la calzada y #3a3f47 para arcenes y marcos; blanco #ffffff para texto, filetes y marcas viales, gris #c9ced6 para texto secundario; acento único azul de cartel de orientación #1f53a8 (portada, Salida 2, botones de llamar) con #173f82 al pulsar; marrón de lugar de interés turístico #6e4424 como superficie de la Salida 1 (el Río); negro de panel #0c0d0f para el panel de próximas salidas y el pie; amarillo #ffe36e solo para lo sin confirmar.</dd><dt>Por qué encaja</dt><dd>A Guardo se llega por carretera y el Embrujo tiene dos sitios a los que hay que saber ir: con carteles de salida se entiende a la primera cuál es cuál y cómo llegar, sin mapa. La letra de señal y los contrastes altos se leen muy bien en el móvil y a pleno sol en la terraza, y el azul enlaza con la fachada y el neón azul del Río.</dd><dt>Qué se movería</dt><dd>La línea discontinua de la carretera avanza al hacer scroll (ya está en el boceto, con JS y solo si no se pide movimiento reducido); la flecha del cartel empuja hacia la salida; en la web de verdad el panel de próximas salidas encendería el día de hoy como un panel LED y el hito sumaría un kilómetro en cada aniversario.</dd><dt>El otro tema</dt><dd>Un tema claro de carretera de día: fondo gris cielo de meseta #eef0f2, calzada #d9dcdf con marcas en blanco y bordes gris #5a616b, los mismos carteles azul #1f53a8 y marrón #6e4424 (que ya tienen contraste propio con su texto blanco) y el panel de próximas salidas se quedaría en negro, como los paneles de verdad.</dd><dt>Riesgo</dt><dd>Puede parecer la web de la DGT o de un área de servicio y perder el punto de fiesta y noche que tiene el Embrujo si no se cuelan los carteles de Instagram.</dd></dl>
+</section>
+</main>
+</body>
+</html>

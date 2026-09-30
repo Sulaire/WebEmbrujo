@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo · La pizarra de barra</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+:root{
+  --pared:#141b17;           /* fondo de la página, la pared del bar */
+  --pizarra:#1f2d26;         /* superficie de la pizarra */
+  --pizarra-honda:#17221d;   /* bordes y sombras de la pizarra */
+  --polvo:rgba(236,239,229,.07); /* borrones de tiza */
+  --polvo-fuerte:rgba(236,239,229,.16);
+  --tiza:#eceee5;            /* texto principal, letra de tiza */
+  --tiza-suave:#c3cabd;      /* texto secundario */
+  --madera:#7a4f2a;          /* marco */
+  --madera-clara:#9a6a3c;
+  --madera-honda:#4f311a;
+  --acento:#f4a7b9;          /* tiza rosa: único acento, botones y rayas */
+  --acento-tinta:#1f2d26;    /* texto sobre el acento */
+  --relleno:#ffe14d;         /* solo lo que está sin confirmar */
+  --relleno-tinta:#1b1b1b;
+  --sombra:rgba(0,0,0,.45);
+  --r:6px;
+  --r-grande:10px;
+  --tiza-f:'Caveat', 'Comic Sans MS', cursive;
+  --rotulo-f:'Oswald', 'Arial Narrow', sans-serif;
+  --ruido:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .09 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--pared);color:var(--tiza);
+  font-family:var(--tiza-f);font-weight:600;font-size:clamp(1.3rem,1.1rem + .6vw,1.55rem);line-height:1.3;
+  overflow-wrap:break-word;
+  background-image:var(--ruido),radial-gradient(ellipse at 50% 0%,var(--polvo) 0%,transparent 60%);
+}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--acento);outline-offset:3px;border-radius:var(--r)}
+.saltar{position:absolute;left:8px;top:-60px;z-index:10;background:var(--acento);color:var(--acento-tinta);font-family:var(--rotulo-f);padding:10px 14px;border-radius:var(--r);text-decoration:none}
+.saltar:focus{top:8px}
+mark.relleno{background:var(--relleno);color:var(--relleno-tinta);padding:0 .3em;border-radius:3px;font-family:var(--rotulo-f);font-weight:500;font-size:.72em;letter-spacing:.02em;white-space:nowrap;vertical-align:.08em}
+
+.franja{background:var(--relleno);color:var(--relleno-tinta);font-family:var(--rotulo-f);font-weight:500;font-size:.8rem;line-height:1.35;padding:6px 16px;text-align:center;letter-spacing:.02em}
+
+.envoltura{width:min(100% - 32px,1100px);margin-inline:auto}
+
+/* ---------- marco de madera + pizarra ---------- */
+.marco{
+  padding:clamp(10px,2vw,16px);border-radius:var(--r-grande);
+  background:
+    repeating-linear-gradient(92deg,transparent 0 7px,var(--polvo) 7px 8px,transparent 8px 19px),
+    linear-gradient(180deg,var(--madera-clara),var(--madera) 45%,var(--madera-honda));
+  box-shadow:0 14px 30px var(--sombra),inset 0 0 0 2px var(--madera-honda);
+}
+.pizarra{
+  position:relative;border-radius:var(--r);
+  background:
+    var(--ruido),
+    radial-gradient(ellipse 60% 35% at 22% 30%,var(--polvo-fuerte),transparent 70%),
+    radial-gradient(ellipse 50% 30% at 80% 75%,var(--polvo),transparent 70%),
+    linear-gradient(160deg,var(--pizarra),var(--pizarra-honda));
+  box-shadow:inset 0 0 40px var(--sombra);
+  padding:clamp(20px,4vw,48px) clamp(16px,4vw,52px);
+}
+.tiza{text-shadow:0 0 1px var(--tiza),0 0 6px var(--polvo-fuerte)}
+.rotulo{font-family:var(--rotulo-f);font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1}
+.raya{display:block;width:min(260px,70%);height:14px;color:var(--acento)}
+
+/* ---------- botones ---------- */
+.botones{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.boton{
+  display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:10px 18px;
+  font-family:var(--rotulo-f);font-weight:500;font-size:1.05rem;letter-spacing:.03em;line-height:1.15;
+  text-decoration:none;border-radius:var(--r);
+  background:var(--acento);color:var(--acento-tinta);
+  box-shadow:0 3px 0 var(--madera-honda);
+}
+.boton small{display:block;font-size:.8em;opacity:1;font-weight:500}
+.boton svg{width:22px;height:22px;flex:none}
+.boton.hueco{background:transparent;color:var(--tiza);box-shadow:inset 0 0 0 2px var(--tiza-suave)}
+.boton:hover{filter:brightness(1.06)}
+.boton:active{transform:translateY(2px);box-shadow:0 1px 0 var(--madera-honda)}
+
+/* ---------- portada: caballete ---------- */
+.portada{padding:clamp(28px,6vw,64px) 0 8px}
+.caballete{position:relative;max-width:920px;margin-inline:auto}
+.caballete .marco{position:relative;z-index:1}
+.patas{width:88%;margin:-6px auto 0;height:clamp(60px,10vw,110px);color:var(--madera)}
+.portada .cabeza{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:start}
+.nombre{font-size:clamp(2.4rem,12vw,8.5rem);white-space:nowrap;margin:0;color:var(--tiza);letter-spacing:.06em}
+.luna{width:clamp(64px,14vw,130px);color:var(--tiza)}
+@media (max-width:599px){.portada .cabeza{grid-template-columns:minmax(0,1fr)}.luna{position:absolute;top:10px;right:10px;width:44px;opacity:.9}}
+.subtitulo{margin:.35em 0 0;font-size:clamp(1.5rem,1.2rem + 1.4vw,2.3rem);color:var(--tiza)}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px 28px;margin-top:24px}
+.dos h2{margin:0 0 4px;font-size:clamp(1.25rem,1rem + 1vw,1.7rem);color:var(--acento)}
+.dos p{margin:0;color:var(--tiza-suave)}
+.duenos{margin:18px 0 0;color:var(--tiza-suave)}
+
+/* ---------- los dos locales: pizarras colgadas ---------- */
+.seccion{padding:clamp(40px,7vw,80px) 0}
+.titulo-seccion{font-size:clamp(1.9rem,1.4rem + 2.4vw,3.2rem);margin:0 0 6px;color:var(--tiza)}
+.entrada{margin:0 0 26px;color:var(--tiza-suave);max-width:40ch}
+.colgadas{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:clamp(40px,5vw,48px) clamp(20px,3vw,40px)}
+.colgada{position:relative;padding-top:38px}
+.cordel{position:absolute;top:0;left:15%;right:15%;height:44px;color:var(--tiza-suave)}
+.colgada:nth-child(1) .marco{transform:rotate(-1deg)}
+.colgada:nth-child(2) .marco{transform:rotate(.8deg)}
+.colgada h3{font-size:clamp(1.8rem,1.4rem + 1.5vw,2.5rem);margin:0}
+.colgada .donde{margin:4px 0 14px;color:var(--tiza-suave)}
+.lista{list-style:none;margin:0;padding:0}
+.lista li{padding:6px 0 6px 28px;position:relative;border-bottom:1px dashed var(--polvo-fuerte)}
+.lista li:last-child{border-bottom:0}
+.lista li::before{content:"";position:absolute;left:4px;top:.72em;width:12px;height:3px;background:var(--acento);border-radius:2px;transform:rotate(-8deg)}
+.nota-google{margin:14px 0 0;font-family:var(--rotulo-f);font-weight:500;font-size:1rem;color:var(--tiza-suave);letter-spacing:.02em}
+.nota-google strong{color:var(--tiza);font-size:1.4em}
+.colgada .botones{margin-top:16px}
+
+/* ---------- la carta ---------- */
+.carta .pizarra{display:grid;grid-template-columns:minmax(0,1fr);gap:28px}
+@media (min-width:860px){.carta .pizarra{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px}}
+.carta h2{font-size:clamp(2.4rem,1.6rem + 3vw,4rem);margin:0;text-align:center}
+.carta .cabecera{grid-column:1/-1;text-align:center}
+.carta .cabecera p{margin:6px 0 0;color:var(--tiza-suave)}
+.carta .cabecera .raya{margin:6px auto 0}
+.bloque h3{font-size:1.3rem;color:var(--acento);margin:0 0 8px;letter-spacing:.08em}
+.bloque + .bloque{margin-top:26px}
+.platos{list-style:none;margin:0;padding:0}
+.platos li{display:flex;align-items:baseline;gap:8px;padding:5px 0}
+.platos .plato{flex:0 1 auto;min-width:0}
+.platos .puntos{flex:1 1 20px;border-bottom:2px dotted var(--tiza-suave);opacity:.55;transform:translateY(-.3em);min-width:16px}
+.platos .precio{flex:none}
+.platos .apunte{display:block;font-size:.8em;color:var(--tiza-suave)}
+.recuadros{display:grid;gap:22px;align-content:start}
+.recuadro{border:2px solid var(--tiza-suave);border-radius:var(--r-grande) 14px var(--r-grande) 18px;padding:16px 18px 18px;position:relative}
+.recuadro:nth-child(2){border-style:dashed;border-color:var(--acento)}
+.recuadro h3{margin:0 0 6px;font-size:1.5rem}
+.recuadro p{margin:.3em 0;color:var(--tiza)}
+.recuadro .flecha{position:absolute;right:10px;top:-26px;width:70px;height:36px;color:var(--acento)}
+.bandeja{height:12px;margin:0 8% 0;border-radius:0 0 var(--r) var(--r);background:linear-gradient(180deg,var(--madera),var(--madera-honda));position:relative}
+.bandeja::before,.bandeja::after{content:"";position:absolute;top:-6px;height:6px;border-radius:3px}
+.bandeja::before{left:18%;width:44px;background:var(--tiza)}
+.bandeja::after{left:26%;width:30px;background:var(--acento)}
+.aviso-precios{grid-column:1/-1;text-align:center;margin:0;color:var(--tiza-suave);font-size:.95em}
+
+/* ---------- pie ---------- */
+.pie{border-top:10px solid var(--madera);background:var(--pizarra-honda);padding:28px 0 36px;margin-top:20px}
+.pie .envoltura{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px 30px}
+.pie h2{font-size:1.1rem;color:var(--acento);margin:0 0 6px;letter-spacing:.08em}
+.pie p{margin:0}
+.pie a{display:inline-flex;align-items:center;min-height:44px;text-decoration-color:var(--acento);text-underline-offset:4px}
+.pie .final{grid-column:1/-1;font-family:var(--rotulo-f);font-weight:500;font-size:.85rem;color:var(--tiza-suave);letter-spacing:.03em;margin-top:6px}
+
+/* ---------- lo que se mueve: la tiza se escribe ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .escribe{animation:escribir 1.4s steps(18,end) both}
+  .escribe.d1{animation-delay:.25s}
+  .escribe.d2{animation-delay:.7s}
+  .raya path,.luna .trazo,.flecha path{stroke-dasharray:400;animation:trazar 1.6s ease-out .9s both}
+  .caballete .marco{animation:posar .7s ease-out both}
+  @keyframes escribir{from{clip-path:inset(-10% 100% -10% 0)}to{clip-path:inset(-10% -2% -10% 0)}}
+  @keyframes trazar{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}
+  @keyframes posar{from{transform:translateY(-10px) rotate(-.6deg)}to{transform:none}}
+}
+</style>
+</head>
+<body>
+<p class="franja">Boceto de estética 4 de 8 · La pizarra de barra · no es la web del bar · lo marcado en amarillo está sin confirmar</p>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- PORTADA: pizarra de caballete -->
+  <section class="portada envoltura" aria-labelledby="t-embrujo">
+    <div class="caballete">
+      <div class="marco">
+        <div class="pizarra">
+          <div class="cabeza">
+            <div>
+              <h1 id="t-embrujo" class="nombre rotulo tiza escribe">Embrujo</h1>
+              <svg class="raya" viewBox="0 0 260 14" aria-hidden="true"><path d="M3 9 C60 3 120 12 180 6 S240 5 257 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+            </div>
+            <svg class="luna" viewBox="0 0 120 120" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle class="trazo" cx="62" cy="52" r="38"/>
+              <path class="trazo" d="M44 40c4 2 6 6 4 10M70 30c3 1 5 4 4 7M74 66c4-1 7 1 8 5" opacity=".6"/>
+              <path d="M20 104c6-8 14-12 22-11 4-6 10-8 16-6l9-6-3 8c5 3 6 9 3 14-10 2-20 2-30 0-6 1-12 2-17 1z" fill="currentColor" stroke="none"/>
+              <path d="M8 106h70" opacity=".7"/>
+            </svg>
+          </div>
+          <p class="subtitulo tiza escribe d1">Dos bares en Guardo. Uno en el río, otro en la plaza.</p>
+
+          <div class="dos">
+            <div>
+              <h2 class="rotulo">Embrujo Río</h2>
+              <p>Terraza grande bajo los árboles, junto al Carrión. A las 16:00 ya hay cocina.</p>
+            </div>
+            <div>
+              <h2 class="rotulo">Embrujo Plaza</h2>
+              <p>Cervecería en la Plaza de la Constitución. 8 grifos, fútbol y picoteo.</p>
+            </div>
+          </div>
+
+          <div class="botones">
+            <a class="boton" href="tel:+34646251640">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+              <span>Llamar al Río<small>646 25 16 40</small></span>
+            </a>
+            <a class="boton" href="tel:+34646981186">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+              <span>Llamar a la Plaza<small>646 98 11 86</small></span>
+            </a>
+          </div>
+          <p class="duenos">De Elena y Nete. Los dos.</p>
+        </div>
+      </div>
+      <svg class="patas" viewBox="0 0 800 110" preserveAspectRatio="none" aria-hidden="true" fill="currentColor">
+        <path d="M150 0h34L96 110H66z"/>
+        <path d="M616 0h34l84 110h-30z"/>
+        <path d="M388 0h24l6 90h-36z" opacity=".75"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- LOS DOS LOCALES: dos pizarras colgadas -->
+  <section class="seccion envoltura" aria-labelledby="t-locales">
+    <h2 id="t-locales" class="titulo-seccion rotulo tiza escribe">Dónde estamos</h2>
+    <p class="entrada">Cada bar tiene su pizarra. Mismos dueños, planes distintos.</p>
+
+    <div class="colgadas">
+      <article class="colgada" aria-labelledby="t-rio">
+        <svg class="cordel" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 44 L100 6 L196 44"/><circle cx="100" cy="6" r="5" fill="currentColor"/></svg>
+        <div class="marco">
+          <div class="pizarra">
+            <h3 id="t-rio" class="rotulo tiza">Embrujo Río</h3>
+            <p class="donde">Junto al río Carrión. Camino la Renta, 1 o Camino de San Miguel <mark class="relleno">cuál, sin confirmar</mark></p>
+            <ul class="lista">
+              <li>Abrimos a las 16:00 y a esa hora ya hay cocina.</li>
+              <li>Cerramos los <mark class="relleno">días sin confirmar</mark></li>
+              <li>En verano, DJ los jueves y los viernes.</li>
+              <li>Los miércoles sorteamos cenas y raciones entre los que estáis.</li>
+              <li>Con la consumición, pincho.</li>
+              <li>Lo que quieras, te lo ponemos para llevar.</li>
+            </ul>
+            <p class="nota-google"><strong>4,6</strong> en Google · 636 reseñas</p>
+            <div class="botones">
+              <a class="boton" href="tel:+34646251640">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+                <span>646 25 16 40</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="colgada" aria-labelledby="t-plaza">
+        <svg class="cordel" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 44 L100 6 L196 44"/><circle cx="100" cy="6" r="5" fill="currentColor"/></svg>
+        <div class="marco">
+          <div class="pizarra">
+            <h3 id="t-plaza" class="rotulo tiza">Embrujo Plaza</h3>
+            <p class="donde">Plaza de la Constitución, donde el antiguo Peter. Número <mark class="relleno">sin confirmar</mark></p>
+            <ul class="lista">
+              <li>8 grifos de cerveza, de aquí y de fuera.</li>
+              <li>Pides en barra, te damos el avisador y cuando pita, a por ello.</li>
+              <li>Futbolín, diana y una pantalla de unas 100 pulgadas.</li>
+              <li>Toda la Liga y la Champions. Los miércoles abrimos por el fútbol.</li>
+              <li>En el descanso (o a las 21:30) sorteamos una cesta de embutidos.</li>
+              <li>Caña o tinto de verano, 2 €.</li>
+              <li>Lunes y martes cerramos, que también descansamos.</li>
+            </ul>
+            <div class="botones">
+              <a class="boton" href="tel:+34646981186">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+                <span>646 98 11 86</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- LA CARTA: la pizarra grande de la barra -->
+  <section class="seccion carta envoltura" aria-labelledby="t-carta">
+    <div class="marco">
+      <div class="pizarra">
+        <div class="cabecera">
+          <h2 id="t-carta" class="rotulo tiza escribe">La carta del Río</h2>
+          <svg class="raya" viewBox="0 0 260 14" aria-hidden="true"><path d="M3 8 C50 12 110 3 170 8 S235 10 257 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          <p>Casero, en raciones que dan para compartir.</p>
+        </div>
+
+        <div>
+          <div class="bloque">
+            <h3 class="rotulo">Raciones</h3>
+            <ul class="platos">
+              <li><span class="plato">Rabas</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Gambones</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Patatas embrujadas<span class="apunte">las de la casa</span></span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Solomillo a la plancha con queso y cebolla</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Pulpo gratinado</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Ensaladas</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+            </ul>
+          </div>
+          <div class="bloque">
+            <h3 class="rotulo">Postres caseros</h3>
+            <ul class="platos">
+              <li><span class="plato">Tarta Pantera Rosa</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Tigretón</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Kinder Bueno</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+              <li><span class="plato">Mascarpone con Lotus</span><span class="puntos" aria-hidden="true"></span><span class="precio"><mark class="relleno">? €</mark></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="recuadros">
+          <div class="recuadro">
+            <h3 class="rotulo">Hoy hay</h3>
+            <p>Tapas de verano: chorizo a la sidra, paella o torreznos.</p>
+            <p>Lo de hoy <mark class="relleno">se cambia cada día, sin confirmar</mark></p>
+          </div>
+          <div class="recuadro">
+            <svg class="flecha" viewBox="0 0 70 36" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M64 4 C50 6 30 10 16 28 M16 28 l2-12 M16 28 l11-3"/></svg>
+            <h3 class="rotulo">Para llevar</h3>
+            <p>Llamas al 646 25 16 40, lo pides y pasas a por ello.</p>
+            <p>Hora de recogida <mark class="relleno">sin confirmar</mark></p>
+            <div class="botones">
+              <a class="boton hueco" href="tel:+34646251640">
+                <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h4l2 5-3 2a12 12 0 0 0 6 6l2-3 5 2v4a2 2 0 0 1-2 2A18 18 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>
+                <span>Pedir para llevar</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <p class="aviso-precios">Los precios en amarillo están por poner.</p>
+      </div>
+    </div>
+    <div class="bandeja" aria-hidden="true"></div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="envoltura">
+    <div>
+      <h2 class="rotulo">Río</h2>
+      <p><a href="tel:+34646251640">646 25 16 40</a></p>
+    </div>
+    <div>
+      <h2 class="rotulo">Plaza</h2>
+      <p><a href="tel:+34646981186">646 98 11 86</a></p>
+    </div>
+    <div>
+      <h2 class="rotulo">Instagram</h2>
+      <p><a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a></p>
+      <p>WhatsApp <mark class="relleno">sin confirmar</mark></p>
+    </div>
+    <p class="final">Embrujo · Guardo, Palencia · Nos vemos.</p>
+  </div>
+</footer>
+</body>
+</html>

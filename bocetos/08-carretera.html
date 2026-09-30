@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo de Guardo · La carretera</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+:root {
+  --asfalto: #1e2126;
+  --asfalto-2: #2a2e35;
+  --arcen: #3a3f47;
+  --blanco: #ffffff;
+  --gris-texto: #c9ced6;
+  --azul: #1f53a8;
+  --azul-hondo: #173f82;
+  --marron: #6e4424;
+  --negro-panel: #0c0d0f;
+  --relleno: #ffe36e;
+  --tinta-relleno: #1e2126;
+  --radio: 10px;
+  --radio-peq: 6px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --letra: 'Overpass', 'Arial', sans-serif;
+  --avance: 0px;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--asfalto);
+  color: var(--blanco);
+  font-family: var(--letra);
+  font-weight: 400;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  overflow-x: clip;
+}
+svg { display: block; max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-weight: 800; line-height: 1.05; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+:focus-visible { outline: 3px solid var(--relleno); outline-offset: 3px; border-radius: var(--radio-peq); }
+
+.saltar {
+  position: absolute; left: 8px; top: -80px; z-index: 10;
+  background: var(--blanco); color: var(--asfalto);
+  padding: 12px 16px; min-height: 44px; font-weight: 800; text-decoration: none;
+  border-radius: var(--radio-peq);
+}
+.saltar:focus { top: 8px; }
+
+.franja {
+  background: var(--negro-panel); color: var(--gris-texto);
+  font-size: 0.8125rem; line-height: 1.35;
+  padding: 7px var(--gutter); text-align: center;
+}
+.franja mark { background: var(--relleno); color: var(--tinta-relleno); padding: 0 4px; border-radius: 3px; }
+
+mark.relleno {
+  background: var(--relleno); color: var(--tinta-relleno);
+  padding: 0 0.35em; border-radius: 4px;
+  font-weight: 800; font-size: 0.85em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+.envoltura { width: min(100% - 2 * var(--gutter), 1180px); margin-inline: auto; }
+main:focus { outline: none; }
+
+/* Cartel de orientación: azul con filete blanco por dentro */
+.cartel {
+  background: var(--azul);
+  color: var(--blanco);
+  border-radius: var(--radio);
+  padding: 6px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.35);
+}
+.cartel > .dentro {
+  border: 3px solid var(--blanco);
+  border-radius: calc(var(--radio) - 4px);
+  padding: clamp(14px, 3vw, 28px);
+}
+.cartel.marron { background: var(--marron); }
+
+/* ---------- Portada ---------- */
+.portada { padding-block: clamp(28px, 6vw, 72px) 0; }
+.portada-rejilla {
+  display: grid; gap: clamp(20px, 4vw, 48px);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: end;
+}
+@media (min-width: 900px) {
+  .portada-rejilla { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+}
+.placa-via {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 0.9rem; letter-spacing: 0.04em;
+  color: var(--gris-texto); margin-bottom: 14px;
+}
+.placa-via b {
+  background: var(--blanco); color: var(--asfalto);
+  border-radius: var(--radio-peq); padding: 3px 10px 1px; letter-spacing: 0.02em;
+}
+.portada h1 {
+  font-size: clamp(2.9rem, 1.6rem + 7vw, 7rem);
+  line-height: 0.9; text-transform: uppercase; letter-spacing: -0.02em;
+}
+.portada h1 span { display: block; font-size: 0.34em; letter-spacing: 0.02em; color: var(--gris-texto); font-weight: 400; margin-top: 10px; text-transform: none; }
+.portada .que {
+  margin-top: 18px; max-width: 36ch;
+  font-size: clamp(1.1rem, 1rem + 0.6vw, 1.4rem); color: var(--gris-texto);
+}
+.portada .que strong { color: var(--blanco); }
+
+.poste { position: relative; padding-bottom: 70px; }
+.poste::before, .poste::after {
+  content: ""; position: absolute; bottom: 0; width: 10px; height: 90px;
+  background: linear-gradient(90deg, #8b929c, #d5d9df 45%, #8b929c);
+  border-radius: 3px; z-index: -1;
+}
+.poste::before { left: 22%; }
+.poste::after { right: 22%; }
+.poste { isolation: isolate; }
+
+.senal-grande .fila {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: clamp(10px, 2vw, 18px);
+  padding-block: 10px;
+}
+.senal-grande .fila + .fila { border-top: 2px solid rgb(255 255 255 / 0.55); }
+.senal-grande .flecha { width: clamp(38px, 7vw, 56px); height: auto; }
+.senal-grande .destino { font-weight: 800; font-size: clamp(1.35rem, 1rem + 1.8vw, 2.2rem); line-height: 1; }
+.senal-grande .destino small { display: block; font-weight: 400; font-size: 0.5em; margin-top: 6px; letter-spacing: 0.01em; }
+.senal-grande .dist { font-weight: 800; font-size: clamp(1.2rem, 0.9rem + 1.4vw, 1.9rem); white-space: nowrap; }
+.pictos { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.picto {
+  width: 44px; height: 44px; border-radius: var(--radio-peq);
+  background: var(--blanco); color: var(--azul);
+  display: grid; place-items: center;
+}
+.picto svg { width: 30px; height: 30px; }
+.marron .picto { color: var(--marron); }
+
+.llamar {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px;
+}
+.boton {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 52px; padding: 10px 18px 8px;
+  background: var(--azul); color: var(--blanco);
+  border: 3px solid var(--blanco); border-radius: var(--radio);
+  text-decoration: none; font-weight: 800; line-height: 1.15;
+  max-width: 100%;
+}
+.boton svg { width: 24px; height: 24px; flex: none; }
+.boton span { display: block; }
+.boton small { display: block; font-weight: 400; font-size: 0.85rem; }
+.boton:hover { background: var(--azul-hondo); }
+
+/* ---------- Carretera (separador) ---------- */
+.carretera {
+  margin-top: clamp(28px, 5vw, 56px);
+  height: 92px; position: relative;
+  background:
+    linear-gradient(var(--blanco), var(--blanco)) 0 14px / 100% 4px no-repeat,
+    linear-gradient(var(--blanco), var(--blanco)) 0 calc(100% - 14px) / 100% 4px no-repeat,
+    var(--asfalto-2);
+  border-block: 6px solid var(--arcen);
+}
+.carretera::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 5px; margin-top: -2.5px;
+  background: repeating-linear-gradient(90deg, var(--blanco) 0 44px, transparent 44px 88px);
+  background-position-x: calc(var(--avance) * -1);
+}
+.carretera .hito-peq {
+  position: absolute; right: var(--gutter); top: -40px;
+}
+
+/* ---------- Salidas ---------- */
+.seccion { padding-block: clamp(40px, 7vw, 88px); }
+.titulo-seccion {
+  display: flex; align-items: center; gap: 14px; margin-bottom: clamp(20px, 3vw, 32px);
+  font-size: clamp(1.7rem, 1.2rem + 2vw, 2.8rem);
+}
+.salidas {
+  display: grid; gap: clamp(28px, 4vw, 40px);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) { .salidas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.salida { position: relative; padding-top: 30px; }
+.pestana {
+  position: absolute; top: 0; left: 18px; z-index: 1;
+  background: var(--blanco); color: var(--asfalto);
+  border: 3px solid var(--asfalto);
+  border-radius: var(--radio-peq);
+  font-weight: 800; font-size: 0.95rem; letter-spacing: 0.03em; text-transform: uppercase;
+  padding: 8px 14px 5px;
+  display: flex; align-items: center; gap: 8px;
+}
+.pestana svg { width: 20px; height: 20px; }
+.salida .cartel { height: 100%; }
+.salida .dentro { height: 100%; display: flex; flex-direction: column; gap: 16px; padding-top: 34px; }
+.salida h3 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); text-transform: uppercase; }
+.salida h3 small { display: block; font-size: 0.45em; font-weight: 400; text-transform: none; margin-top: 6px; }
+.como {
+  background: rgb(0 0 0 / 0.22); border-radius: var(--radio-peq);
+  padding: 14px 16px;
+}
+.como b { display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.lista li { position: relative; padding-left: 26px; }
+.lista li::before {
+  content: ""; position: absolute; left: 2px; top: 5px; width: 14px; height: 14px;
+  background: var(--blanco);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.salida .boton { background: var(--blanco); color: var(--asfalto); border-color: var(--blanco); margin-top: auto; align-self: flex-start; }
+.salida .boton:hover { background: var(--gris-texto); }
+
+/* Hito kilométrico */
+.hito-bloque {
+  margin-top: clamp(32px, 5vw, 56px);
+  display: grid; gap: 20px; align-items: center;
+  grid-template-columns: auto minmax(0, 1fr);
+}
+.hito {
+  width: 84px; background: var(--blanco); color: var(--asfalto);
+  border-radius: 42px 42px 6px 6px; text-align: center;
+  padding: 0 0 12px; overflow: hidden; box-shadow: 0 6px 18px rgb(0 0 0 / 0.4);
+}
+.hito .gorro { background: var(--azul); height: 40px; margin-bottom: 8px; }
+.hito b { display: block; font-size: 0.75rem; letter-spacing: 0.1em; }
+.hito strong { display: block; font-size: 2.2rem; font-weight: 800; line-height: 1; }
+.hito-bloque p { color: var(--gris-texto); max-width: 52ch; }
+.hito-bloque p strong { color: var(--blanco); }
+
+/* ---------- Próximas salidas: panel de mensaje variable ---------- */
+.panel {
+  background: var(--negro-panel);
+  border: 6px solid var(--arcen);
+  border-radius: var(--radio);
+  padding: clamp(14px, 3vw, 28px);
+  box-shadow: inset 0 0 0 2px #000, 0 12px 30px rgb(0 0 0 / 0.4);
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 1px, transparent 1.3px);
+  background-size: 5px 5px;
+}
+.panel-cabeza {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px;
+  font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.85rem;
+  color: var(--gris-texto);
+  padding-bottom: 12px; border-bottom: 2px dashed var(--arcen); margin-bottom: 6px;
+}
+.dias { list-style: none; margin: 0; padding: 0; }
+.dia {
+  display: grid; gap: 6px 18px;
+  grid-template-columns: minmax(0, 1fr);
+  padding-block: 14px; border-bottom: 1px solid var(--arcen);
+}
+.dia:last-child { border-bottom: 0; }
+@media (min-width: 700px) { .dia { grid-template-columns: 7.5rem minmax(0, 1fr); } }
+.dia > b {
+  font-weight: 800; font-size: 1.35rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.parada { display: grid; gap: 6px; }
+.parada p { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; }
+.sal {
+  display: inline-block; min-width: 4.8rem; text-align: center;
+  font-weight: 800; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase;
+  border-radius: 4px; padding: 3px 6px 1px;
+}
+.sal.rio { background: var(--marron); color: var(--blanco); }
+.sal.plaza { background: var(--azul); color: var(--blanco); }
+.cerrado { color: var(--gris-texto); }
+.panel-pie { margin-top: 14px; font-size: 0.9rem; color: var(--gris-texto); }
+
+/* ---------- Pie ---------- */
+.pie {
+  background: var(--negro-panel);
+  padding-block: clamp(32px, 5vw, 56px);
+  border-top: 6px solid var(--arcen);
+}
+.pie-rejilla {
+  display: grid; gap: 22px;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 800px) { .pie-rejilla { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.pie h2 { font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gris-texto); margin-bottom: 8px; }
+.pie a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; text-underline-offset: 4px; }
+.pie p { color: var(--gris-texto); }
+.pie p strong { color: var(--blanco); }
+.pie .fin { margin-top: 28px; font-size: 0.85rem; color: var(--gris-texto); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .flecha-mueve { animation: empuja 1.8s ease-in-out infinite; }
+  @keyframes empuja { 50% { transform: translateX(5px); } }
+  .boton { transition: background-color .2s, transform .2s; }
+  .boton:hover { transform: translateY(-2px); }
+}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<p class="franja">Boceto de estética 8 de 8 · La carretera · no es la web del bar · lo marcado en <mark>amarillo</mark> está sin confirmar</p>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-cerveza" viewBox="0 0 32 32"><path fill="currentColor" d="M7 8h14v19a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2zm14 4h3a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-3v-3h3v-6h-3zM7 4c1-1.5 3-2 4.5-1.2C13 1.5 16 1.5 17.5 3c1.8-.6 3.5.5 3.5 2.3V7H7z"/><path fill="#fff" d="M10 12h2v13h-2zm5 0h2v13h-2z" opacity=".55"/></symbol>
+    <symbol id="i-cubiertos" viewBox="0 0 32 32"><path fill="currentColor" d="M8 3h2v8h1.5V3h2v8H15V3h2v9a4 4 0 0 1-3 3.9V29h-3V15.9A4 4 0 0 1 8 12zm14 0c2.8 0 4 3.5 4 9 0 3-1.3 4.6-3 5V29h-3V3z"/></symbol>
+    <symbol id="i-musica" viewBox="0 0 32 32"><path fill="currentColor" d="M12 5l15-3v19.5a4 4 0 1 1-3-3.9V8.2l-9 1.8v14.5a4 4 0 1 1-3-3.9z"/></symbol>
+    <symbol id="i-arbol" viewBox="0 0 32 32"><path fill="currentColor" d="M16 2c5 0 8.5 3.8 8.5 8.3 2.3 1 3.5 3.3 3.5 5.7 0 4-3.2 6.5-7 6.5h-3.5V30h-3V22.5H11c-3.8 0-7-2.5-7-6.5 0-2.4 1.2-4.7 3.5-5.7C7.5 5.8 11 2 16 2z"/></symbol>
+    <symbol id="i-diana" viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="16" cy="16" r="2.5" fill="currentColor"/></symbol>
+    <symbol id="i-pantalla" viewBox="0 0 32 32"><path fill="currentColor" d="M3 5h26v17H3zm3 3v11h20V8zm5 16h10v3H11z"/></symbol>
+    <symbol id="i-tel" viewBox="0 0 24 24"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></symbol>
+    <symbol id="i-flecha-der" viewBox="0 0 48 48"><path fill="currentColor" d="M4 19h24V8l16 16-16 16V29H4z"/></symbol>
+    <symbol id="i-flecha-arr" viewBox="0 0 48 48"><path fill="currentColor" d="M19 44V20H8L24 4l16 16H29v24z"/></symbol>
+    <symbol id="i-salida" viewBox="0 0 24 24"><path fill="currentColor" d="M10 22V11.5L4.5 17 2.4 14.9 12 5.3l3.5 3.5V4H22v6.5h-4.8l-4.2-4.2V22z"/></symbol>
+  </defs>
+</svg>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- Portada -->
+  <section class="portada" aria-labelledby="t-portada">
+    <div class="envoltura portada-rejilla">
+      <div>
+        <p class="placa-via"><b>CL-626</b> Guardo · Montaña Palentina</p>
+        <h1 id="t-portada">Embrujo<span>de Guardo</span></h1>
+        <p class="que">Una <strong>terraza junto al río Carrión</strong> y una <strong>cervecería en la plaza</strong>. Dos salidas y los mismos dueños: Elena y Nete.</p>
+        <div class="llamar">
+          <a class="boton" href="tel:+34646251640">
+            <svg aria-hidden="true"><use href="#i-tel"/></svg>
+            <span>Llamar al Río<small>646 25 16 40</small></span>
+          </a>
+          <a class="boton" href="tel:+34646981186">
+            <svg aria-hidden="true"><use href="#i-tel"/></svg>
+            <span>Llamar a la Plaza<small>646 98 11 86</small></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="poste">
+        <div class="cartel senal-grande" role="img" aria-label="Cartel: Embrujo Río a mano derecha, Embrujo Plaza de frente, en el centro">
+          <div class="dentro">
+            <div class="fila">
+              <svg class="flecha flecha-mueve" viewBox="0 0 48 48" aria-hidden="true"><use href="#i-flecha-der"/></svg>
+              <p class="destino">Embrujo Río<small>Terraza del río Carrión</small></p>
+              <p class="dist">200 m</p>
+            </div>
+            <div class="fila">
+              <svg class="flecha" viewBox="0 0 48 48" aria-hidden="true"><use href="#i-flecha-arr"/></svg>
+              <p class="destino">Embrujo Plaza<small>Plaza de la Constitución</small></p>
+              <p class="dist">Centro</p>
+            </div>
+            <div class="pictos" aria-hidden="true">
+              <span class="picto"><svg><use href="#i-cerveza"/></svg></span>
+              <span class="picto"><svg><use href="#i-cubiertos"/></svg></span>
+              <span class="picto"><svg><use href="#i-musica"/></svg></span>
+              <span class="picto"><svg><use href="#i-arbol"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="carretera" aria-hidden="true"></div>
+  </section>
+
+  <!-- Los dos locales -->
+  <section class="seccion" aria-labelledby="t-salidas">
+    <div class="envoltura">
+      <h2 class="titulo-seccion" id="t-salidas">Elige salida</h2>
+      <div class="salidas">
+
+        <article class="salida" aria-labelledby="t-rio">
+          <p class="pestana"><svg aria-hidden="true"><use href="#i-salida"/></svg>Salida 1</p>
+          <div class="cartel marron">
+            <div class="dentro">
+              <h3 id="t-rio">Embrujo Río<small>La terraza grande bajo los árboles, al lado del Carrión</small></h3>
+              <div class="pictos" aria-hidden="true">
+                <span class="picto"><svg><use href="#i-arbol"/></svg></span>
+                <span class="picto"><svg><use href="#i-cubiertos"/></svg></span>
+                <span class="picto"><svg><use href="#i-musica"/></svg></span>
+              </div>
+              <div class="como">
+                <b>Cómo llegar</b>
+                <p>En Guardo, ve hacia el río Carrión y busca la fachada azul con banderines y las mesas rojas. Calle: <mark class="relleno">Camino la Renta, 1 o Camino de San Miguel, sin confirmar</mark></p>
+              </div>
+              <ul class="lista">
+                <li>A las 16:00 abre, y ya hay cocina.</li>
+                <li>Rabas, gambones, pulpo gratinado y las patatas embrujadas. Precios: <mark class="relleno">sin confirmar</mark></li>
+                <li>Postres de casa: tarta Pantera Rosa, Tigretón, Kinder Bueno.</li>
+                <li>También para llevar.</li>
+              </ul>
+              <a class="boton" href="tel:+34646251640"><svg aria-hidden="true"><use href="#i-tel"/></svg><span>646 25 16 40</span></a>
+            </div>
+          </div>
+        </article>
+
+        <article class="salida" aria-labelledby="t-plaza">
+          <p class="pestana"><svg aria-hidden="true"><use href="#i-salida"/></svg>Salida 2</p>
+          <div class="cartel">
+            <div class="dentro">
+              <h3 id="t-plaza">Embrujo Plaza<small>La cervecería de la plaza, donde estaba el Peter</small></h3>
+              <div class="pictos" aria-hidden="true">
+                <span class="picto"><svg><use href="#i-cerveza"/></svg></span>
+                <span class="picto"><svg><use href="#i-diana"/></svg></span>
+                <span class="picto"><svg><use href="#i-pantalla"/></svg></span>
+              </div>
+              <div class="como">
+                <b>Cómo llegar</b>
+                <p>Sube a la Plaza de la Constitución, en el centro de Guardo. Es el local del antiguo Peter, con terraza de dos carpas. Portal: <mark class="relleno">sin confirmar</mark></p>
+              </div>
+              <ul class="lista">
+                <li>8 grifos de cerveza, de aquí y de fuera, y algo de picoteo.</li>
+                <li>Pides en la barra y te llevas un avisador.</li>
+                <li>Futbolín, diana y una pantalla de unas 100 pulgadas.</li>
+                <li>Lunes y martes, cerrado por descanso.</li>
+              </ul>
+              <a class="boton" href="tel:+34646981186"><svg aria-hidden="true"><use href="#i-tel"/></svg><span>646 98 11 86</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="hito-bloque">
+        <div class="hito" role="img" aria-label="Hito kilométrico: kilómetro 17">
+          <div class="gorro"></div>
+          <b>KM</b>
+          <strong>17</strong>
+        </div>
+        <p><strong>Punto kilométrico 17.</strong> El Río abrió en 2008 y en junio de 2025 cumplió 17 años. La Plaza arrancó el 4 de diciembre de 2025. En Google, el Río tiene un <strong>4,6 con 636 reseñas</strong>.</p>
+      </div>
+    </div>
+    <div class="carretera" aria-hidden="true"></div>
+  </section>
+
+  <!-- Próximas salidas -->
+  <section class="seccion" aria-labelledby="t-panel">
+    <div class="envoltura">
+      <h2 class="titulo-seccion" id="t-panel">Próximas salidas</h2>
+      <div class="panel">
+        <div class="panel-cabeza"><span>Qué hay cada día</span><span>Guardo · CL-626</span></div>
+        <ul class="dias">
+          <li class="dia">
+            <b>Lun</b>
+            <div class="parada">
+              <p><span class="sal plaza">Plaza</span><span class="cerrado">Cerrado por descanso.</span></p>
+              <p><span class="sal rio">Río</span><span>Desde las 16:00. Cierre: <mark class="relleno">sin confirmar</mark></span></p>
+            </div>
+          </li>
+          <li class="dia">
+            <b>Mar</b>
+            <div class="parada">
+              <p><span class="sal plaza">Plaza</span><span class="cerrado">Cerrado por descanso.</span></p>
+              <p><span class="sal rio">Río</span><span>Desde las 16:00. Cierre: <mark class="relleno">sin confirmar</mark></span></p>
+            </div>
+          </li>
+          <li class="dia">
+            <b>Mié</b>
+            <div class="parada">
+              <p><span class="sal plaza">Plaza</span><span>Fútbol: toda la Liga y Champions. Sorteo de una cesta de embutidos en el descanso o a las 21:30.</span></p>
+              <p><span class="sal rio">Río</span><span>En verano, sorteo de cenas y raciones entre los clientes.</span></p>
+            </div>
+          </li>
+          <li class="dia">
+            <b>Jue</b>
+            <div class="parada">
+              <p><span class="sal rio">Río</span><span>En verano, pincha un DJ.</span></p>
+              <p><span class="sal plaza">Plaza</span><span>De 16:00 a 23:00 más o menos. <mark class="relleno">horario sin confirmar</mark></span></p>
+            </div>
+          </li>
+          <li class="dia">
+            <b>Vie</b>
+            <div class="parada">
+              <p><span class="sal rio">Río</span><span>En verano, DJ otra vez. En el cartel del Regreso al Embrujo Río: cañones y calimotxos a 2,5 €.</span></p>
+              <p><span class="sal plaza">Plaza</span><span>Caña o tinto de verano a 2 €, según la pegatina de la barra.</span></p>
+            </div>
+          </li>
+          <li class="dia">
+            <b>Sáb · Dom</b>
+            <div class="parada">
+              <p><span class="sal plaza">Plaza</span><span>Desde las 13:00. <mark class="relleno">sin confirmar</mark></span></p>
+              <p><span class="sal rio">Río</span><span>Terraza desde las 16:00.</span></p>
+            </div>
+          </li>
+        </ul>
+        <p class="panel-pie">Fuera de temporada el Río puede estar cerrado: <mark class="relleno">cierre de temporada sin confirmar</mark>. Lo último siempre sale en Instagram.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="envoltura">
+    <div class="pie-rejilla">
+      <div>
+        <h2>Salida 1 · Río</h2>
+        <a href="tel:+34646251640">646 25 16 40</a>
+        <p>Junto al río Carrión, Guardo (Palencia)</p>
+      </div>
+      <div>
+        <h2>Salida 2 · Plaza</h2>
+        <a href="tel:+34646981186">646 98 11 86</a>
+        <p>Plaza de la Constitución, Guardo</p>
+      </div>
+      <div>
+        <h2>Carteles del día</h2>
+        <a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo en Instagram</a>
+        <p>WhatsApp: <mark class="relleno">sin confirmar</mark></p>
+      </div>
+    </div>
+    <p class="fin">Embrujo de Guardo · Elena y Nete · Boceto, no es la web del bar</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+  var raiz = document.documentElement, pendiente = false;
+  function pinta() {
+    pendiente = false;
+    raiz.style.setProperty('--avance', (window.scrollY * 0.9).toFixed(1) + 'px');
+  }
+  window.addEventListener('scroll', function () {
+    if (!pendiente) { pendiente = true; requestAnimationFrame(pinta); }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>

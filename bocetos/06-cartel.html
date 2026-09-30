@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo de Guardo · El cartel de fiestas</title>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+:root {
+  --papel: #f3e7c9;
+  --papel-2: #e9d6a8;
+  --papel-luz: #fbf4e2;
+  --tinta: #1b2470;
+  --tinta-suave: #3b3f6b;
+  --acento: #cf2618;
+  --acento-hondo: #a01c10;
+  --relleno: #ffe36e;
+  --radio: 3px;
+  --desregistro: 3px;
+  --gutter: clamp(16px, 4vw, 40px);
+  --titular: 'Anton', 'Arial Narrow', Impact, sans-serif;
+  --texto: 'Bitter', Georgia, serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background-color: var(--papel);
+  background-image:
+    radial-gradient(color-mix(in srgb, var(--tinta) 7%, transparent) 1px, transparent 1.4px),
+    radial-gradient(color-mix(in srgb, var(--acento) 5%, transparent) 1px, transparent 1.6px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 3px 5px;
+  color: var(--tinta);
+  font-family: var(--texto);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 3px; border-radius: var(--radio); }
+
+.saltar {
+  position: absolute; left: 8px; top: -80px; z-index: 10;
+  background: var(--tinta); color: var(--papel-luz);
+  padding: 12px 16px; min-height: 44px; font-weight: 700; text-decoration: none;
+  border-radius: var(--radio);
+}
+.saltar:focus { top: 8px; }
+
+.franja {
+  background: var(--tinta); color: var(--papel-luz);
+  font-size: 0.8125rem; line-height: 1.35;
+  padding: 7px var(--gutter); text-align: center;
+}
+.franja mark { background: var(--relleno); color: var(--tinta); padding: 0 4px; }
+
+mark.relleno {
+  background: var(--relleno); color: var(--tinta);
+  padding: 0 0.3em; border-radius: var(--radio);
+  font-family: var(--texto); font-weight: 700; font-size: 0.85em;
+  letter-spacing: 0; text-transform: none; -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+.envoltura { width: min(100% - 2 * var(--gutter), 1180px); margin-inline: auto; }
+
+/* Tipos de madera con desregistro */
+.madera {
+  font-family: var(--titular); font-weight: 400;
+  text-transform: uppercase; line-height: 0.86; letter-spacing: -0.01em;
+  margin: 0; color: var(--tinta);
+  text-shadow: var(--desregistro) calc(var(--desregistro) * 0.7) 0 color-mix(in srgb, var(--acento) 85%, transparent);
+}
+.madera.roja {
+  color: var(--acento);
+  text-shadow: calc(var(--desregistro) * -1) calc(var(--desregistro) * 0.6) 0 color-mix(in srgb, var(--tinta) 30%, transparent);
+}
+
+/* Banderines */
+.banderines { display: block; width: 100%; height: clamp(26px, 5vw, 42px); }
+
+/* Portada */
+.portada { padding: clamp(8px, 2vw, 20px) 0 clamp(28px, 5vw, 56px); }
+.cartel-grande {
+  position: relative;
+  background: var(--papel-luz);
+  border: 3px solid var(--tinta);
+  box-shadow: 8px 8px 0 var(--tinta);
+  padding: clamp(18px, 4vw, 48px);
+  margin-top: 18px;
+  overflow: hidden;
+}
+.cartel-grande::after {
+  content: ""; position: absolute; inset: 8px; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--tinta) 55%, transparent);
+}
+.portada-rejilla {
+  display: grid; gap: clamp(16px, 3vw, 32px);
+  grid-template-columns: minmax(0, 1fr);
+  position: relative; z-index: 1;
+}
+.antetitulo {
+  font-family: var(--titular); text-transform: uppercase;
+  font-size: clamp(1.1rem, 0.9rem + 1.2vw, 1.8rem); letter-spacing: 0.06em;
+  color: var(--acento); margin: 0 0 6px; line-height: 1.1;
+}
+.portada-texto { container-type: inline-size; min-width: 0; }
+.nombre {
+  font-size: clamp(4.2rem, 23vw, 14rem);
+  font-size: min(28cqi, 14rem);
+  white-space: nowrap;
+}
+.nombre span { display: block; }
+.coletilla {
+  font-size: clamp(2rem, 9vw, 5.2rem); margin-top: 0.1em;
+}
+.que-es { max-width: 38ch; margin: 18px 0 0; font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem); }
+.luna-cuervo { width: min(100%, 210px); justify-self: center; align-self: center; }
+
+.llamadas { display: grid; gap: 12px; margin-top: 22px; grid-template-columns: minmax(0, 1fr); }
+.boton {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 56px; padding: 10px 16px;
+  background: var(--acento); color: var(--papel-luz);
+  border: 3px solid var(--tinta); border-radius: var(--radio);
+  box-shadow: 4px 4px 0 var(--tinta);
+  text-decoration: none; line-height: 1.15;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.boton:hover { background: var(--acento-hondo); }
+.boton:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--tinta); }
+.boton svg { flex: none; width: 24px; height: 24px; }
+.boton b { display: block; font-family: var(--titular); font-weight: 400; font-size: 1.35rem; letter-spacing: 0.02em; text-transform: uppercase; }
+.boton small { display: block; font-size: 0.95rem; font-weight: 700; }
+.boton.azul { background: var(--tinta); }
+.boton.azul:hover { background: var(--tinta-suave); }
+
+.dos-sitios {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin-top: 24px; border-top: 3px solid var(--tinta); border-bottom: 3px solid var(--tinta);
+}
+.dos-sitios p { margin: 0; padding: 10px 8px; font-size: 0.95rem; line-height: 1.3; }
+.dos-sitios p + p { border-left: 3px solid var(--tinta); }
+.dos-sitios strong { display: block; font-family: var(--titular); font-weight: 400; font-size: clamp(1.4rem, 1rem + 2vw, 2.2rem); text-transform: uppercase; line-height: 1; color: var(--acento); }
+
+/* Secciones */
+section { padding: clamp(28px, 6vw, 72px) 0; }
+.cabecera-seccion { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin-bottom: clamp(18px, 4vw, 36px); }
+.cabecera-seccion h2 { font-size: clamp(3rem, 14vw, 7.5rem); }
+.cabecera-seccion p { margin: 0; max-width: 36ch; color: var(--tinta-suave); font-weight: 700; }
+
+/* Carteles pegados */
+.pared {
+  display: grid; gap: clamp(28px, 5vw, 48px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+}
+.cartel {
+  --giro: -1.4deg;
+  position: relative;
+  background: var(--papel-luz);
+  border: 3px solid var(--tinta);
+  padding: clamp(22px, 4vw, 36px) clamp(18px, 3.5vw, 32px) clamp(20px, 3.5vw, 30px);
+  transform: rotate(var(--giro));
+  box-shadow: 0 10px 18px -12px color-mix(in srgb, var(--tinta) 60%, transparent);
+}
+.cartel:nth-child(2) { --giro: 1.2deg; }
+.cartel::before, .cartel::after {
+  content: ""; position: absolute; top: -14px; width: 84px; height: 26px;
+  background: color-mix(in srgb, var(--papel-2) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tinta) 15%, transparent);
+}
+.cartel::before { left: 18px; transform: rotate(-6deg); }
+.cartel::after { right: 18px; transform: rotate(5deg); }
+.cartel .sello {
+  display: inline-block; font-family: var(--titular); text-transform: uppercase;
+  font-size: 1rem; letter-spacing: 0.08em; line-height: 1;
+  background: var(--tinta); color: var(--papel-luz); padding: 7px 10px 6px;
+  border-radius: var(--radio);
+}
+.cartel.plaza .sello { background: var(--acento); }
+.cartel h3 { font-size: clamp(3.2rem, 15vw, 6rem); margin-top: 12px; }
+.cartel .donde { margin: 10px 0 14px; font-weight: 700; }
+.cartel ul { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--tinta); }
+.cartel li { padding: 9px 0; border-bottom: 2px dotted color-mix(in srgb, var(--tinta) 60%, transparent); }
+.cartel li strong { color: var(--acento); }
+.precio {
+  display: inline-grid; place-items: center; text-align: center;
+  width: 118px; height: 118px; border-radius: 50%;
+  background: var(--acento); color: var(--papel-luz);
+  border: 3px solid var(--tinta);
+  font-family: var(--titular); text-transform: uppercase; line-height: 1;
+  transform: rotate(-10deg); margin-top: 16px; padding: 10px;
+}
+.precio span { display: block; font-size: 2.6rem; }
+.precio small { font-size: 0.85rem; letter-spacing: 0.04em; }
+
+/* Programa */
+.programa { background: var(--tinta); color: var(--papel-luz); }
+.programa .madera { color: var(--papel-luz); }
+.programa .cabecera-seccion p { color: var(--papel-2); }
+.agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.acto {
+  display: grid; grid-template-columns: minmax(84px, 7rem) minmax(0, 1fr);
+  background: var(--papel-luz); color: var(--tinta);
+  border: 3px solid var(--papel-luz);
+}
+.acto .fecha {
+  background: var(--acento); color: var(--papel-luz);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 10px 6px; text-align: center; font-family: var(--titular); text-transform: uppercase; line-height: 0.9;
+}
+.acto .fecha .dia { font-size: clamp(2.6rem, 10vw, 4.4rem); }
+.acto .fecha .mes { font-size: clamp(1.1rem, 4vw, 1.6rem); letter-spacing: 0.05em; }
+.acto .fecha .semana { font-size: 0.95rem; letter-spacing: 0.08em; margin-bottom: 4px; }
+.acto .fecha.repe { background: var(--tinta); }
+.acto .fecha.repe .dia { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1; }
+.acto .cuerpo { padding: 12px clamp(12px, 3vw, 22px) 14px; }
+.acto h3 { font-family: var(--titular); font-weight: 400; text-transform: uppercase; font-size: clamp(1.5rem, 1rem + 2.4vw, 2.4rem); line-height: 1; margin: 0 0 6px; letter-spacing: 0.01em; }
+.acto p { margin: 0 0 8px; }
+.datos { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0; padding: 0; list-style: none; font-size: 0.9rem; font-weight: 700; }
+.datos li { border: 2px solid var(--tinta); padding: 2px 8px; border-radius: var(--radio); }
+.datos li.sitio-rio { background: var(--tinta); color: var(--papel-luz); }
+.datos li.sitio-plaza { background: var(--acento); color: var(--papel-luz); border-color: var(--acento); }
+.aviso-programa { margin: 18px 0 0; font-size: 0.95rem; color: var(--papel-2); }
+.aviso-programa mark { font-size: 0.9em; }
+
+/* Pie */
+.pie { padding: clamp(28px, 5vw, 48px) 0 36px; }
+.pie-rejilla { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); align-items: start; }
+.pie h2 { font-size: clamp(2.2rem, 8vw, 3.6rem); }
+.pie p { margin: 0 0 6px; }
+.pie a.tel { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.nota-google {
+  display: inline-block; border: 3px solid var(--tinta); padding: 8px 12px; border-radius: var(--radio);
+  font-weight: 700; transform: rotate(-2deg); background: var(--papel-luz);
+}
+.nota-google b { font-family: var(--titular); font-weight: 400; font-size: 1.8rem; color: var(--acento); line-height: 1; margin-right: 4px; }
+.imprenta { margin-top: 28px; padding-top: 12px; border-top: 3px double var(--tinta); font-size: 0.85rem; color: var(--tinta-suave); }
+
+@media (min-width: 560px) {
+  .llamadas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .portada-rejilla { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; }
+  .luna-cuervo { width: min(100%, 360px); }
+  .acto { grid-template-columns: 9rem minmax(0, 1fr); }
+}
+
+/* Movimiento: los carteles se pegan al entrar. El estado de reposo ya es visible. */
+@media (prefers-reduced-motion: no-preference) {
+  .se-pega.pegando { animation: pegar .55s cubic-bezier(.2, .9, .3, 1.25) both; }
+  @keyframes pegar {
+    0%   { transform: translateY(-18px) rotate(calc(var(--giro, 0deg) + 5deg)) scale(1.04); }
+    60%  { transform: translateY(2px) rotate(calc(var(--giro, 0deg) - 0.6deg)) scale(0.995); }
+    100% { transform: rotate(var(--giro, 0deg)); }
+  }
+  .banderines path { transform-origin: top center; animation: ondear 3.2s ease-in-out infinite alternate; }
+  .banderines path:nth-child(even) { animation-delay: -1.6s; }
+  @keyframes ondear { from { transform: skewX(-2deg); } to { transform: skewX(2deg); } }
+}
+.acto.se-pega { --giro: 0deg; }
+.acto.se-pega:nth-child(odd) { --giro: -0.5deg; }
+.acto.se-pega:nth-child(even) { --giro: 0.4deg; }
+.acto { transform: rotate(var(--giro, 0deg)); }
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<p class="franja">Boceto de estética 6 de 8 · El cartel de fiestas · no es la web del bar · lo marcado en <mark>amarillo</mark> está sin confirmar</p>
+
+<svg class="banderines" viewBox="0 0 400 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <line x1="0" y1="3" x2="400" y2="3" stroke="var(--tinta)" stroke-width="2"/>
+  <g>
+    <path d="M0 3 L20 3 L10 34 Z" fill="var(--acento)"/>
+    <path d="M25 3 L45 3 L35 34 Z" fill="var(--tinta)"/>
+    <path d="M50 3 L70 3 L60 34 Z" fill="var(--papel-2)"/>
+    <path d="M75 3 L95 3 L85 34 Z" fill="var(--acento)"/>
+    <path d="M100 3 L120 3 L110 34 Z" fill="var(--tinta)"/>
+    <path d="M125 3 L145 3 L135 34 Z" fill="var(--papel-2)"/>
+    <path d="M150 3 L170 3 L160 34 Z" fill="var(--acento)"/>
+    <path d="M175 3 L195 3 L185 34 Z" fill="var(--tinta)"/>
+    <path d="M200 3 L220 3 L210 34 Z" fill="var(--papel-2)"/>
+    <path d="M225 3 L245 3 L235 34 Z" fill="var(--acento)"/>
+    <path d="M250 3 L270 3 L260 34 Z" fill="var(--tinta)"/>
+    <path d="M275 3 L295 3 L285 34 Z" fill="var(--papel-2)"/>
+    <path d="M300 3 L320 3 L310 34 Z" fill="var(--acento)"/>
+    <path d="M325 3 L345 3 L335 34 Z" fill="var(--tinta)"/>
+    <path d="M350 3 L370 3 L360 34 Z" fill="var(--papel-2)"/>
+    <path d="M375 3 L395 3 L385 34 Z" fill="var(--acento)"/>
+  </g>
+</svg>
+
+<main id="contenido" tabindex="-1">
+
+  <header class="portada">
+    <div class="envoltura">
+      <div class="cartel-grande">
+        <div class="portada-rejilla">
+          <div class="portada-texto">
+            <p class="antetitulo">Guardo · Palencia · Programa de fiestas del</p>
+            <h1 class="madera nombre"><span>Embrujo</span></h1>
+            <p class="madera roja coletilla">Río y Plaza</p>
+            <p class="que-es">Dos bares de Elena y Nete en Guardo: la terraza grande bajo los árboles, junto al río Carrión, y la cervecería de la Plaza de la Constitución.</p>
+            <div class="llamadas">
+              <a class="boton" href="tel:+34646251640">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+                <span><b>Llamar al Río</b><small>646 25 16 40</small></span>
+              </a>
+              <a class="boton azul" href="tel:+34646981186">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
+                <span><b>Llamar a la Plaza</b><small>646 98 11 86</small></span>
+              </a>
+            </div>
+          </div>
+          <svg class="luna-cuervo" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <circle cx="104" cy="96" r="80" fill="var(--acento)" opacity=".9"/>
+            <circle cx="100" cy="100" r="80" fill="var(--papel-2)" stroke="var(--tinta)" stroke-width="3"/>
+            <circle cx="72" cy="78" r="12" fill="none" stroke="var(--tinta)" stroke-width="2" opacity=".35"/>
+            <circle cx="128" cy="130" r="18" fill="none" stroke="var(--tinta)" stroke-width="2" opacity=".35"/>
+            <circle cx="140" cy="70" r="7" fill="none" stroke="var(--tinta)" stroke-width="2" opacity=".35"/>
+            <line x1="18" y1="150" x2="190" y2="150" stroke="var(--tinta)" stroke-width="5" stroke-linecap="round"/>
+            <g transform="translate(60 62) scale(1.05)">
+              <path fill="var(--acento)" transform="translate(3 2)" d="M22 46 L4 50 L22 55 C24 64 36 70 48 70 L72 90 L82 88 L64 68 C76 64 82 52 78 42 C74 34 62 32 54 38 C48 30 34 30 27 38 Z"/>
+              <path fill="var(--tinta)" d="M22 46 L4 50 L22 55 C24 64 36 70 48 70 L72 90 L82 88 L64 68 C76 64 82 52 78 42 C74 34 62 32 54 38 C48 30 34 30 27 38 Z"/>
+              <circle cx="28" cy="45" r="2.4" fill="var(--papel-luz)"/>
+              <path d="M44 70 L42 84 M52 70 L52 84" stroke="var(--tinta)" stroke-width="3" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+        <div class="dos-sitios">
+          <p><strong>Río</strong>Terraza junto al Carrión. A las 16:00 ya hay cocina.</p>
+          <p><strong>Plaza</strong>Cervecería con 8 grifos en la Plaza de la Constitución.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section aria-labelledby="t-locales">
+    <div class="envoltura">
+      <div class="cabecera-seccion">
+        <h2 class="madera" id="t-locales">Dos casetas</h2>
+        <p>Mismos dueños, dos sitios. Elige: árboles y río, o fútbol y grifo.</p>
+      </div>
+      <div class="pared">
+        <article class="cartel se-pega" aria-labelledby="t-rio">
+          <span class="sello">Desde 2008</span>
+          <h3 class="madera" id="t-rio">Embrujo Río</h3>
+          <p class="donde">Junto al río Carrión. Calle: <mark class="relleno">Camino la Renta o de San Miguel, sin confirmar</mark></p>
+          <ul>
+            <li>A las <strong>16:00</strong> abrimos y ya hay cocina.</li>
+            <li>Rabas, gambones, pulpo gratinado, solomillo con queso y cebolla y nuestras <strong>patatas embrujadas</strong>.</li>
+            <li>Tarta Pantera Rosa, de Tigretón o de Kinder Bueno, hechas en casa.</li>
+            <li>Con la consumición, pincho. Y si quieres, te lo llevas a casa.</li>
+            <li>Cerramos: <mark class="relleno">días sin confirmar</mark></li>
+          </ul>
+        </article>
+        <article class="cartel plaza se-pega" aria-labelledby="t-plaza">
+          <span class="sello">Desde el 4 de diciembre de 2025</span>
+          <h3 class="madera roja" id="t-plaza">Embrujo Plaza</h3>
+          <p class="donde">Plaza de la Constitución, donde estaba el Peter. Número: <mark class="relleno">sin confirmar</mark></p>
+          <ul>
+            <li><strong>8 grifos</strong> de cerveza, de aquí y de fuera, y algo para picar.</li>
+            <li>Pides en barra, te damos el avisador y te sientas.</li>
+            <li>Futbolín, diana y una pantalla de unas 100 pulgadas.</li>
+            <li>Lunes y martes <strong>cerrado</strong> por descanso.</li>
+          </ul>
+          <div class="precio" role="img" aria-label="Caña y tinto de verano a 2 euros">
+            <div><small>Caña y tinto de verano</small><span>2 €</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="programa" aria-labelledby="t-programa">
+    <div class="envoltura">
+      <div class="cabecera-seccion">
+        <h2 class="madera" id="t-programa">Programa</h2>
+        <p>Lo que ha salido en los carteles del Embrujo. Día, hora y sitio.</p>
+      </div>
+      <ol class="agenda">
+        <li class="acto se-pega">
+          <div class="fecha"><span class="semana">Cada año</span><span class="dia">27</span><span class="mes">Junio</span></div>
+          <div class="cuerpo">
+            <h3>Aniversario del Embrujo Río</h3>
+            <p>El 27 de junio de 2025 cumplimos 17 años junto al río, y lo celebramos en la terraza.</p>
+            <ul class="datos"><li class="sitio-rio">Río</li><li>Hora: <mark class="relleno">sin confirmar</mark></li></ul>
+          </div>
+        </li>
+        <li class="acto se-pega">
+          <div class="fecha"><span class="semana">Viernes</span><span class="dia">3</span><span class="mes">Julio</span></div>
+          <div class="cuerpo">
+            <h3>Regreso al Embrujo Río</h3>
+            <p>Cañones y calimotxos a 2,5 €, de tapa festival de chorizos y a los platos DJ Alex.</p>
+            <ul class="datos"><li class="sitio-rio">Río</li><li>Hora: <mark class="relleno">sin confirmar</mark></li></ul>
+          </div>
+        </li>
+        <li class="acto se-pega">
+          <div class="fecha repe"><span class="semana">En verano</span><span class="dia">Jue y vie</span></div>
+          <div class="cuerpo">
+            <h3>DJ en la terraza</h3>
+            <p>Jueves y viernes de verano hay música en el Río. Los miércoles sorteamos cenas y raciones entre los que estáis.</p>
+            <ul class="datos"><li class="sitio-rio">Río</li><li>Hora: <mark class="relleno">sin confirmar</mark></li></ul>
+          </div>
+        </li>
+        <li class="acto se-pega">
+          <div class="fecha"><span class="semana">Jueves</span><span class="dia">4</span><span class="mes">Dic 2025</span></div>
+          <div class="cuerpo">
+            <h3>Inauguración del Embrujo Plaza</h3>
+            <p>Abrimos la cervecería a las 19:00. Al día siguiente, viernes 5 a las 20:00, terraza y música con DJ Alex.</p>
+            <ul class="datos"><li class="sitio-plaza">Plaza</li><li>19:00</li></ul>
+          </div>
+        </li>
+        <li class="acto se-pega">
+          <div class="fecha repe"><span class="semana">Cada jornada</span><span class="dia">Fútbol</span></div>
+          <div class="cuerpo">
+            <h3>Toda la Liga y Champions</h3>
+            <p>Los miércoles también abrimos para el fútbol. En el descanso, o a las 21:30, sorteo de una cesta de embutidos.</p>
+            <ul class="datos"><li class="sitio-plaza">Plaza</li><li>Sorteo 21:30 o en el descanso</li></ul>
+          </div>
+        </li>
+      </ol>
+      <p class="aviso-programa">Son carteles que ya han pasado. En la web de verdad aquí irían los próximos: <mark class="relleno">fechas de la temporada que viene sin confirmar</mark></p>
+    </div>
+  </section>
+
+  <footer class="pie" aria-labelledby="t-pie">
+    <div class="envoltura">
+      <div class="pie-rejilla">
+        <div>
+          <h2 class="madera" id="t-pie">Nos vemos</h2>
+          <p>Reservas y preguntas por teléfono o por Instagram, <a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a>.</p>
+        </div>
+        <div>
+          <p><strong>Río</strong>: <a class="tel" href="tel:+34646251640">646 25 16 40</a></p>
+          <p><strong>Plaza</strong>: <a class="tel" href="tel:+34646981186">646 98 11 86</a></p>
+          <p>WhatsApp: <mark class="relleno">sin confirmar</mark></p>
+        </div>
+        <div>
+          <p class="nota-google"><b>4,6</b> en Google · 636 reseñas del Río</p>
+        </div>
+      </div>
+      <p class="imprenta">Embrujo de Guardo · Guardo, Palencia · Correo y datos del titular: <mark class="relleno">sin confirmar</mark></p>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+(function () {
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (entradas) {
+    entradas.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('pegando'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.25 });
+  document.querySelectorAll('.se-pega').forEach(function (el) { io.observe(el); });
+})();
+</script>
+</body>
+</html>
