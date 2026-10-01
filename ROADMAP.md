@@ -8,7 +8,7 @@ Sulaire/WebAvpInox) y de lo que falta por confirmar en `bocetos/DATOS.md`.
 - [x] Ronda 1: ocho direcciones de diseño (01 a 08)
 - [x] Ronda 2: tres de terror (09 a 11)
 - [x] Ronda 3: el 07 con lo que gustó de los demás (12 a 14)
-- [ ] Ronda 4: dos tests de transición a la vista de cada local (15 y 16)
+- [x] Ronda 4: dos tests de transición a la vista de cada local, con fotos y carta (15 y 16)
 - [ ] Elegir el boceto final y apuntar por qué
 - [ ] Plan en cinco líneas aprobado por Jordi
 
