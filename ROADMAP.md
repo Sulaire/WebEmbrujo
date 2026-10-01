@@ -10,6 +10,7 @@ Sulaire/WebAvpInox) y de lo que falta por confirmar en `bocetos/DATOS.md`.
 - [x] Ronda 3: el 07 con lo que gustó de los demás (12 a 14)
 - [x] Ronda 4: dos tests de transición a la vista de cada local, con fotos y carta (15 y 16)
 - [x] Ronda 5: el 17 junta el 15 y el 16 con los cambios de Jordi
+- [x] Ronda 6: el 18 iguala los letreros, añade señales de bar y junta los dos mapas en un marco
 - [ ] Elegir el boceto final y apuntar por qué
 - [ ] Plan en cinco líneas aprobado por Jordi
 
