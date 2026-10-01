@@ -16,7 +16,8 @@
     "rama_de_trabajo": "claude/modest-clarke-7971sd"
   },
   "despliegue": {
-    "plataforma": "ninguno"
+    "plataforma": "estatico",
+    "url": "https://avpinox.es/estudio/embrujo/18-el-embrujo.html"
   },
   "progreso": {
     "archivo": "ROADMAP.md"
