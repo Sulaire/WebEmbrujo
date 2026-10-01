@@ -76,10 +76,16 @@ main:focus{outline:none}
 }
 .boton svg{width:1.1em;height:1.1em;flex:none}
 .boton b{font-weight:400;color:var(--luna)}
-.boton:hover{background:var(--neon);color:var(--noche)}
-.boton:hover b{color:var(--noche)}
 .boton.entrar{background:var(--neon);color:var(--noche);font-family:var(--f-titulo);font-size:1.12rem}
-.boton.entrar:hover{background:var(--luna)}
+/* el hover, solo con raton: en el movil se quedaba pegado tras un toque */
+@media (hover:hover){
+  .boton:hover{background:var(--neon);color:var(--noche)}
+  .boton:hover b{color:var(--noche)}
+  .boton.entrar:hover{background:var(--luna)}
+}
+/* en el movil, un toque se nota (sin hover pegado) y no espera al doble toque */
+a,button,label,summary{-webkit-tap-highlight-color:rgb(from var(--neon) r g b / .22);touch-action:manipulation}
+.boton:active{filter:brightness(1.25)}
 .boton.entrar svg{width:1.5em;height:1.5em}
 
 /* ---------- estado: abierto / cerrado ---------- */
@@ -88,7 +94,9 @@ main:focus{outline:none}
 .punto{width:.7em;height:.7em;border-radius:50%;flex:none;background:var(--tubo)}
 .estado[data-estado="abierto"] .punto{background:var(--abierto);box-shadow:0 0 8px var(--abierto)}
 .estado[data-estado="cerrado"] .punto{background:var(--cerrado)}
-.estado b{font-weight:400;color:var(--luna)}
+.estado b{font-weight:400;color:var(--luna);flex:none;white-space:nowrap}
+/* en el movil estrecho la pastilla se parte en dos lineas, no en dos columnas */
+.estado{flex-wrap:wrap;justify-content:center;column-gap:.35em}
 .estado span{color:var(--luna-suave)}
 
 /* ---------- neon: letras que se encienden ---------- */
@@ -97,6 +105,18 @@ main:focus{outline:none}
 .js .neon[data-estado="cerrado"] span{color:var(--tubo);text-shadow:var(--apagado-sombra)}
 
 html{scrollbar-gutter:stable}
+/* ---------- solo sin JS: indice arriba y separadores entre las paginas ---------- */
+.indice-sin-js{background:var(--noche-2);border-bottom:1px solid var(--tormenta);text-align:center;padding:.15rem var(--gutter);font-size:.95rem;color:var(--luna-suave);line-height:1.3}
+.indice-sin-js span{display:inline-block;margin-right:.3em}
+.indice-sin-js a,.separador-sin-js a{display:inline-flex;align-items:center;min-height:44px;padding-inline:.35em;font-family:var(--f-titulo);font-size:1.1em}
+.separador-sin-js{text-align:center;padding:2.4rem var(--gutter) 1.4rem;background:linear-gradient(var(--noche),var(--sombra));border-top:1px solid var(--tormenta)}
+.separador-sin-js h2{font-size:clamp(1.8rem,1.4rem + 2vw,2.8rem);margin:.3rem 0 .5rem}
+.separador-sin-js p{color:var(--luna-suave);max-width:32rem;margin-inline:auto}
+.separador-sin-js .indice-enlaces{margin:.2rem auto 0;color:var(--luna-suave)}
+.separador-sin-js.corto{padding:1.6rem var(--gutter) 1.2rem}
+.estrellas-sep{display:flex;text-align:center;align-items:center;justify-content:center;gap:.8rem;margin:0;font-family:var(--f-titulo);font-size:1.3rem;color:var(--luna)}
+.estrellas-sep svg{width:16px;height:16px;fill:var(--neon);filter:drop-shadow(0 0 4px var(--neon))}
+.js .indice-sin-js,.js .separador-sin-js{display:none}
 /* con una vista abierta, la pagina de detras no se mueve */
 html.con-vista,html.con-vista body{overflow:hidden}
 /* durante el viaje en escoba la pagina se desliza de lado: se mueve lo de
@@ -125,9 +145,13 @@ html.con-vista,html.con-vista body{overflow:hidden}
 .cielo .nube{fill:var(--tormenta)}
 .cielo .nube-2{fill:var(--noche-2)}
 .cuervo{fill:var(--sombra)}
-.cuervo .ala{fill:var(--sombra);stroke:var(--tormenta);stroke-width:1.6;stroke-linejoin:round}
-.cuervo .pluma{fill:none;stroke:var(--tormenta);stroke-width:1.4;stroke-linecap:round}
+.cuervo .ala{fill:var(--sombra);stroke:rgb(from var(--neon) r g b / .55);stroke-width:1.6;stroke-linejoin:round}
+.cuervo .pluma{fill:none;stroke:rgb(from var(--neon) r g b / .45);stroke-width:1.4;stroke-linecap:round}
 .cuervo .pata{fill:none;stroke:var(--sombra);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+/* el perfil de neon del cuervo (portada, banners, dorso de las cartas) */
+.cuervo-luz{fill:rgb(from var(--neon) r g b / .14);stroke:var(--neon);stroke-opacity:.3;stroke-width:11;stroke-linejoin:round;stroke-linecap:round}
+.cuervo-borde{fill:none;stroke:var(--neon);stroke-width:4.6;stroke-linejoin:round;stroke-linecap:round}
+.cuervo-borde use:nth-child(3){stroke-width:6.2}
 .cuervo .ojo{fill:var(--luna)}
 
 .vuelo{display:none}
@@ -216,8 +240,10 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
   .servicios-lista a{display:flex;flex-direction:column;align-items:center;gap:.15rem;padding:.55rem .3rem .5rem;text-align:center}
   .servicios-lista .ico{margin-bottom:.25rem}
 }
-.servicios-lista a:hover{border-color:var(--tormenta);background:var(--noche-2)}
-.servicios-lista a:hover .ico{filter:drop-shadow(0 0 4px var(--neon)) drop-shadow(0 0 12px var(--neon))}
+@media (hover:hover){
+  .servicios-lista a:hover{border-color:var(--tormenta);background:var(--noche-2)}
+  .servicios-lista a:hover .ico{filter:drop-shadow(0 0 4px var(--neon)) drop-shadow(0 0 12px var(--neon))}
+}
 .ico{width:clamp(34px,9vw,52px);height:auto;fill:none;stroke:var(--neon);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px rgb(from var(--neon) r g b / .8))}
 .que-es{font-family:var(--f-titulo);font-size:clamp(.92rem,.85rem + .35vw,1.1rem);line-height:1.15}
 .donde-es{font-size:.78rem;font-style:italic;color:var(--luna-suave)}
@@ -261,7 +287,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .tira-fotos .hueco{aspect-ratio:1;transition:box-shadow .2s}
 @media (min-width:760px){.tira-fotos .hueco{aspect-ratio:2/1}.tira-fotos .ilu{width:46%}}
 .tira-fotos .ilu{width:70%}
-.tira-fotos a:hover .hueco{box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--neon),0 0 18px rgb(from var(--neon) r g b / .35)}
+@media (hover:hover){.tira-fotos a:hover .hueco{box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--neon),0 0 18px rgb(from var(--neon) r g b / .35)}}
 .pie-foto{font-size:.85rem;text-align:center;color:var(--luna-suave)}
 .ver-fotos{margin:.2rem 0 -.5rem;font-style:italic;color:var(--luna-suave)}
 .ver-fotos a{display:inline-flex;align-items:center;min-height:44px;padding-inline:.2em}
@@ -301,16 +327,25 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .cara .grande em{font-style:normal;color:var(--neon)}
 .cara .mas{font-size:.86rem;line-height:1.3;color:var(--luna-suave)}
 .cara .fuente{margin-top:auto;padding-top:.4rem;border-top:1px dotted var(--tormenta);font-size:.76rem;line-height:1.3;color:var(--luna-suave);font-style:italic}
-.dorso{display:none}
-.js .dorso{
-  display:grid;place-items:center;transform:rotateY(180deg);
+.dorso{
+  position:relative;transform:rotateY(180deg);
   background:radial-gradient(circle at 50% 42%,var(--noche-2),var(--noche) 75%);
   border:1px solid var(--neon);box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--tormenta),0 0 18px rgb(from var(--neon) r g b / .3)}
-.dorso svg{width:78%;height:auto;max-height:92%}
+/* el dibujo del dorso llena la carta sin decidir su alto: lo decide la cara,
+   asi una carta boca abajo mide lo mismo que boca arriba (y en el movil no
+   sale un dorso altisimo) */
+.dorso svg{position:absolute;left:8%;top:5%;width:84%;height:90%}
 .d-trazo{fill:none;stroke:var(--neon);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
 .d-luna{fill:var(--luna)}
 .d-chispa{fill:var(--luna-suave)}
 .boca-abajo .giro{transform:rotateY(180deg)}
+/* Sin JS la carta tambien se gira: un checkbox (escondido, pero se enfoca con
+   el teclado y lo anuncia el lector) y su <label>, que es la carta. Boca abajo
+   por defecto; al tocarla se marca y se da la vuelta. El texto de la cara sigue
+   en la pagina, asi que el lector lo lee aunque este boca abajo. Con JS se
+   cambia por el boton de siempre (con sus estrellas). */
+.vuelta:not(:checked)+.naipe .giro{transform:rotateY(180deg)}
+.vuelta:focus-visible+.naipe{outline:3px solid var(--neon);outline-offset:4px}
 .pista{text-align:center;color:var(--luna-suave);font-style:italic;font-size:.9rem;margin:.6rem 0 0}
 .pista[hidden]{display:none}
 
@@ -372,16 +407,18 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .foto figcaption{font-size:.82rem;line-height:1.3;color:var(--luna-suave)}
 .abre-foto{all:unset;position:absolute;inset:0;border-radius:var(--radio);cursor:zoom-in}
 .abre-foto:focus-visible{outline:3px solid var(--neon);outline-offset:3px}
-.foto:has(.abre-foto:hover) .hueco{box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--neon),0 0 18px rgb(from var(--neon) r g b / .35)}
-.caja-luz{width:min(92vw,960px);max-height:92vh;padding:3.8rem clamp(.8rem,3vw,1.4rem) 1rem;border:2px solid var(--neon);border-radius:14px;background:var(--noche);color:var(--luna);box-shadow:0 0 40px rgb(from var(--neon) r g b / .35)}
+@media (hover:hover){.foto:has(.abre-foto:hover) .hueco{box-shadow:inset 0 0 0 4px var(--noche),inset 0 0 0 5px var(--neon),0 0 18px rgb(from var(--neon) r g b / .35)}}
+.caja-luz{width:min(92vw,960px);max-height:92vh;max-height:92dvh;padding:3.8rem clamp(.8rem,3vw,1.4rem) 1rem;border:2px solid var(--neon);border-radius:14px;background:var(--noche);color:var(--luna);box-shadow:0 0 40px rgb(from var(--neon) r g b / .35)}
 .caja-luz::backdrop{background:rgb(from var(--sombra) r g b / .88)}
 .caja-luz figure{margin:0}
 .caja-luz .hueco{aspect-ratio:16/10}
 .caja-luz .ilu{width:46%}
 .caja-luz figcaption{margin-top:.7rem;color:var(--luna-suave)}
 .cerrar{position:absolute;top:.6rem;right:.6rem;width:48px;height:48px;display:grid;place-items:center;border:1.5px solid var(--neon);border-radius:50%;background:var(--noche);color:var(--luna);cursor:pointer}
-.cerrar:hover{background:var(--neon);color:var(--noche)}
+@media (hover:hover){.cerrar:hover{background:var(--neon);color:var(--noche)}}
 .cerrar svg{width:22px;height:22px}
+/* abajo, otro "Cerrar" a mano del pulgar; arriba sigue la X */
+.caja-luz .cerrar-abajo{margin-top:.8rem;width:100%;justify-content:center}
 
 .aviso-carta{font-size:.92rem}
 .carta-platos{display:grid;grid-template-columns:minmax(0,1fr);gap:1.2rem 2.6rem;padding:clamp(.9rem,3vw,1.4rem);border:1px solid var(--tormenta);border-radius:var(--radio);background:var(--noche);position:relative}
@@ -395,6 +432,15 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .categoria .precio{font-family:var(--f-titulo);color:var(--luna);white-space:nowrap}
 .categoria .alergenos{grid-column:1/-1;font-size:.78rem;font-style:italic;color:var(--luna-suave)}
 .categoria .precio .euros{color:var(--neon)}
+/* "sin confirmar" en la columna del precio, en letra de texto: en versalitas
+   ocupaba tanto que el plato se partia en tres lineas en el movil */
+.categoria .precio mark{font-family:var(--f-texto)}
+/* las marcas cortas no se parten en dos ("foto / pendiente", "sin / confirmar") */
+.foto figcaption mark,.alergenos mark,.precio mark,.tabla mark,.dir mark,.ficha-rapida mark{white-space:nowrap}
+/* enlaces dentro del texto de la vista y de su pie: 44 px de alto para el dedo,
+   sin separar las lineas: el relleno agranda la zona del toque y el margen
+   negativo lo devuelve, asi la linea mide lo mismo */
+.lo-que-hay a,.vista-pie p a,.ficha-rapida dd a,.sin-js a{display:inline-block;line-height:1.3;padding:calc((46px - 1.3em) / 2) .15em;margin:calc((1.3em - 46px) / 2) -.15em}
 
 /* ---------- los mapas de cada local ---------- */
 /* El marco del mapa: bajo y apaisado, de alto fijo (unos 300 px en el movil
@@ -454,7 +500,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
    Con JS: a pantalla completa, fija, con su propio scroll, que empieza en
    "Volver al Embrujo" y acaba en su pie. Nada vacio por encima ni por debajo. */
 .vista{background:var(--noche);border-top:2px solid var(--neon);padding:0}
-.js .vista{display:none;position:fixed;inset:0;z-index:60;border-top:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+.js .vista{display:none;position:fixed;inset:0 0 auto 0;height:100vh;height:100dvh;z-index:60;scroll-padding-top:5.5rem;border-top:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
   backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-origin:50% 50%}
 .js .vista.activa{display:block}
 .vista-barra{background:var(--sombra);border-bottom:1px solid var(--tormenta);padding-block:.4rem}
@@ -467,7 +513,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
   box-shadow:0 0 0 6px var(--noche),0 0 0 7px var(--tormenta),0 0 34px rgb(from var(--neon) r g b / .35);
 }
 .volver{display:inline-flex;align-items:center;gap:.5em;min-height:48px;padding:.5em 1em;border:1.5px solid var(--luna-suave);border-radius:var(--radio);color:var(--luna);text-decoration:none;background:var(--noche)}
-.volver:hover{border-color:var(--neon);color:var(--neon)}
+@media (hover:hover){.volver:hover{border-color:var(--neon);color:var(--neon)}}
 .volver svg{width:1.1em;height:1.1em}
 .vista-pie{background:var(--sombra);border-top:1px solid var(--tormenta);padding-block:1rem 1.2rem}
 .vista-pie .caja{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6rem 1rem}
@@ -478,7 +524,34 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .vista .caja{max-width:calc(var(--ancho) + 2 * var(--gutter))}
 .pie-google{font-size:.9rem;font-style:italic;color:var(--luna-suave)}
 .pie-google[hidden],mark[hidden]{display:none}
-.vista-cabeza{position:relative;text-align:center;padding:1rem var(--gutter) .4rem}
+/* La cabeza de la vista: el nombre dentro de un rotulo de neon con marco,
+   colgado como los letreros de la portada y flanqueado por dos detalles de
+   bar en linea de neon (plato y cana en el Rio; cana y balon en la Plaza).
+   Al lado (escritorio) o debajo (movil), los datos rapidos: donde, el
+   horario de hoy y el boton de llamar. Asi no quedan huecos a los lados. */
+.vista-cabeza{position:relative;display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:.9rem;text-align:center;padding:1rem clamp(.9rem,3vw,2rem) .6rem}
+.cabeza-rotulo{display:flex;flex-direction:column;align-items:center;width:100%;min-width:0}
+.rotulo-vista{position:relative;display:flex;align-items:center;justify-content:space-between;gap:clamp(.3rem,2vw,1.2rem);width:100%;max-width:34rem;margin-top:1.5rem;
+  padding:0 clamp(.7rem,3vw,1.6rem) .2rem;border:2px solid var(--neon);border-radius:16px;background:linear-gradient(var(--sombra),var(--noche));
+  box-shadow:0 0 0 5px var(--pagina),0 0 0 6px var(--tormenta),0 0 22px rgb(from var(--neon) r g b / .4),inset 0 0 18px rgb(from var(--neon) r g b / .15)}
+.rotulo-vista::before,.rotulo-vista::after{content:"";position:absolute;top:calc(-1.5rem + 3px);width:1px;height:calc(1.5rem - 9px);background:var(--tormenta)}
+.rotulo-vista::before{left:18%}
+.rotulo-vista::after{right:18%}
+.rotulo-vista h2{min-width:0}
+.rotulo-vista .flanco{flex:none;width:clamp(30px,9vw,60px)}
+.js .rotulo-vista:has(.neon[data-estado="cerrado"]){border-color:var(--tubo);box-shadow:0 0 0 5px var(--pagina),0 0 0 6px var(--tormenta),inset 0 1px 0 rgb(from var(--luna) r g b / .08)}
+.js .rotulo-vista:has(.neon[data-estado="cerrado"]) .flanco{stroke:var(--tubo);filter:none}
+.ficha-rapida{width:100%;max-width:34rem;text-align:left;border:1px solid var(--tormenta);border-radius:var(--radio);background:rgb(from var(--noche) r g b / .6);padding:.3rem .9rem .9rem}
+.ficha-rapida dl{margin:0 0 .7rem}
+.ficha-rapida dl>div{display:grid;grid-template-columns:3.6rem minmax(0,1fr);column-gap:.6rem;align-items:baseline;padding:.25rem 0;border-bottom:1px dotted var(--tormenta)}
+.ficha-rapida dt{font-family:var(--f-titulo);font-size:1.05rem;color:var(--neon)}
+.ficha-rapida dd{margin:0;color:var(--luna);line-height:1.35}
+.ficha-rapida dd a{font-style:italic}
+.ficha-rapida .boton{width:100%;justify-content:center}
+@media (min-width:900px){
+  .vista-cabeza{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:center;column-gap:clamp(1.6rem,3vw,2.6rem);padding-block:1.4rem .9rem}
+  .ficha-rapida{max-width:none;padding:.5rem 1.2rem 1.1rem}
+}
 /* la tilde de "RÍO" sube por encima de la caja de la linea: el padding de
    arriba le deja sitio para que no toque la etiqueta de encima */
 .vista-cabeza h2{font-size:clamp(3.4rem,2.2rem + 7vw,7rem);line-height:1.05;letter-spacing:.1em;padding-top:.22em}
@@ -486,8 +559,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .vista-cabeza h2:focus-visible .neon{outline:3px solid var(--neon);outline-offset:6px;border-radius:6px}
 .vista-cabeza h2 .neon .pl{font-size:1.2em;letter-spacing:0}
 .vista-cabeza .etiqueta{margin-bottom:.2rem}
-.vista-cabeza .estado{margin:.6rem 0 .8rem}
-.vista-cabeza .botones{justify-content:center}
+.vista-cabeza .estado{margin:.9rem 0 0}
 .vista-cuerpo{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(1.4rem,3vw,2.4rem);padding:clamp(1rem,3vw,2rem) clamp(1rem,3vw,2rem) clamp(1.2rem,3vw,2rem)}
 @media (min-width:900px){.vista-cuerpo{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .vista-cuerpo h3{font-size:clamp(1.5rem,1.2rem + 1.2vw,2rem);margin-bottom:.6rem;padding-bottom:.25rem;border-bottom:1px solid var(--tormenta)}
@@ -517,8 +589,9 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 .chispa-v.azul svg{fill:var(--neon)}
 .pluma-v{position:absolute;left:0;top:0;width:16px;height:20px;opacity:0}
 .pluma-v svg{display:block;width:100%;height:100%;fill:var(--sombra);stroke:var(--luna-suave);stroke-width:1}
-.xv-cuerpo{fill:var(--sombra);stroke:var(--neon);stroke-width:1.2;stroke-linejoin:round}
-.xv-ala{fill:var(--noche-2);stroke:var(--neon);stroke-width:1.1;stroke-linejoin:round}
+.xv-cuerpo{fill:var(--sombra);stroke:var(--neon);stroke-width:1.8;stroke-linejoin:round}
+.xv-ala{fill:var(--noche-2);stroke:var(--neon);stroke-width:1.6;stroke-linejoin:round}
+.xv-luz{fill:none;stroke:var(--neon);stroke-opacity:.2;stroke-width:4.5;stroke-linejoin:round}
 .xv-ojo{fill:var(--luna)}
 .xv-pata{fill:none;stroke:var(--sombra);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -544,7 +617,11 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 
   .naipe{transition:transform .2s}
   .giro{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
-  .boca-abajo:hover .giro{transform:rotateY(170deg) translateY(-4px)}
+  /* la carta se asoma al pasar el raton; en el movil no (el hover se quedaba
+     pegado tras el toque y la carta quedaba torcida) */
+  @media (hover:hover){
+    .boca-abajo:hover .giro,.vuelta:not(:checked)+.naipe:hover .giro{transform:rotateY(170deg) translateY(-4px)}
+  }
   .estrella{animation:brotar 2.2s ease-out forwards;animation-delay:var(--d,0s);opacity:0}
   .estrella.queda{animation:brotar-queda 1.1s ease-out forwards,titila 3.4s ease-in-out infinite alternate;animation-delay:var(--d,0s),calc(var(--d,0s) + 1.1s)}
 
@@ -555,9 +632,18 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 
   .mano .sube{transform-box:view-box;transform-origin:50% 100%;animation:mece 5s ease-in-out infinite alternate}
   .lamina .mano-l .sube{transform-box:fill-box;transform-origin:50% 100%;animation:mece 5s ease-in-out infinite alternate}
-  .capa-viaje .xv-ala.bate{transform-box:fill-box;transform-origin:85% 95%;animation:aleteo .2s ease-in-out infinite alternate}
+  .capa-viaje .bate{transform-box:fill-box;transform-origin:85% 95%;animation:aleteo .2s ease-in-out infinite alternate}
   .mapa .ruta{animation:anda 1.6s linear infinite}
 
+  /* Durante el viaje solo se mueven la carta, la vista y el personaje: lo
+     decorativo de detras (niebla, avisador, mano, ruta del mapa...) se para,
+     para que el movil no tenga que repintar nada mas. Y con una vista abierta
+     la pagina de detras no se ve: sus animaciones esperan. */
+  /* (con la lista de lo que se anima, no con "*": cambiar una clase del html
+     con "*" obligaba a recalcular el estilo de toda la pagina, ~180 ms con la
+     CPU lenta, justo al arrancar el viaje) */
+  .viajando :is(.niebla,.rotulo .neon span,.disco .cuerpo-g,.disco .led,.disco .ondas circle,.mano-l .sube,.mapa .ruta,.estrella){animation-play-state:paused!important}
+  .con-vista:not(.viajando) #principal :is(.niebla,.rotulo .neon span,.disco .cuerpo-g,.disco .led,.disco .ondas circle,.mano-l .sube,.estrella){animation-play-state:paused}
   /* la vista se enciende al llegar la bruja */
   .vista.llega .vista-marco{animation:marco-vista 1.1s steps(1,end) both}
   .vista.llega .lamina .linea-neon,.vista.llega .lamina .reflejo-neon{animation:linea 1.1s steps(1,end) both}
@@ -582,13 +668,14 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
   82%{border-color:var(--tubo)}
   88%,100%{}
 }
+/* al llegar: parpadeos a saltos (steps), sin sombras ni filtros animados */
 @keyframes marco-vista{
-  0%{border-color:var(--tubo);box-shadow:0 0 0 6px var(--noche),0 0 0 7px var(--tormenta)}
+  0%{border-color:var(--tubo)}
   18%{border-color:var(--neon)}
-  26%{border-color:var(--tubo);box-shadow:0 0 0 6px var(--noche),0 0 0 7px var(--tormenta)}
+  26%{border-color:var(--tubo)}
   40%,100%{}
 }
-@keyframes linea{0%{stroke:var(--tubo);filter:none}20%{stroke:var(--neon)}28%{stroke:var(--tubo);filter:none}45%,100%{}}
+@keyframes linea{0%{opacity:.25}20%{}28%{opacity:.25}45%,100%{}}
 @keyframes zumbido{0%,100%{opacity:1}50%{opacity:.8}51%{opacity:1}}
 @keyframes cruza{
   0%{transform:translateX(-140%) translateY(18px) rotate(-3deg)}
@@ -612,6 +699,10 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 <body>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <div class="franja"><span class="franja-texto"><strong>Boceto 18 · El Embrujo</strong> · no es la web del bar · lo marcado en amarillo está sin confirmar</span></div>
+<!-- sin JS las vistas de cada local salen debajo: este indice lo dice arriba -->
+<nav class="indice-sin-js" aria-label="Las páginas de cada local">
+  <span>Más abajo:</span> <a href="#rio">Ir al Río</a> · <a href="#plaza">Ir a la Plaza</a>
+</nav>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
@@ -622,14 +713,26 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     <symbol id="s-volver" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 5 L3 12 L10 19 M3 12 H21"/></symbol>
     <symbol id="s-estrella" viewBox="0 0 20 20"><path d="M10 0 L12 8 L20 10 L12 12 L10 20 L8 12 L0 10 L8 8 Z"/></symbol>
     <!-- el cuervo: de perfil, posado, mirando a la derecha. Pico, cabeza, ala plegada, cola en abanico y patas -->
+    <!-- Detras de la silueta, su perfil de neon: un halo ancho y suave y un
+         trazo azul fino. La silueta negra tapa la mitad de dentro del trazo, asi
+         que solo queda la luz del borde: se lee sobre la noche y sobre la luna. -->
     <symbol id="s-cuervo" viewBox="0 0 120 100" overflow="visible">
+      <g class="cuervo-luz">
+        <path id="cu-cola" d="M46 66 L10 84 Q4 88 8 93 Q14 97 22 94 Q28 97 34 92 L56 72 Z"/>
+        <path id="cu-cuerpo" d="M44 62 C40 46 52 30 70 28 C74 20 82 16 90 17 C96 18 100 22 101 26 L119 30 L101 34 C99 38 96 41 92 43 C94 56 88 68 74 74 C64 78 52 74 44 62 Z"/>
+        <path id="cu-patas" d="M64 75 L61 91 M71 74 L73 91 M55 92 L66 92 M67 92 L79 92"/>
+      </g>
+      <g class="cuervo-borde">
+        <use href="#cu-cola"/><use href="#cu-cuerpo"/><use href="#cu-patas"/>
+        <path d="M50 44 C60 36 76 36 82 46 C84 56 74 66 56 72 L26 84 C34 74 42 66 46 58 C46 52 47 48 50 44 Z"/>
+      </g>
       <g class="cuervo">
-        <path d="M46 66 L10 84 Q4 88 8 93 Q14 97 22 94 Q28 97 34 92 L56 72 Z"/>
-        <path d="M44 62 C40 46 52 30 70 28 C74 20 82 16 90 17 C96 18 100 22 101 26 L119 30 L101 34 C99 38 96 41 92 43 C94 56 88 68 74 74 C64 78 52 74 44 62 Z"/>
+        <use href="#cu-cola"/>
+        <use href="#cu-cuerpo"/>
         <path class="ala" d="M50 44 C60 36 76 36 82 46 C84 56 74 66 56 72 L26 84 C34 74 42 66 46 58 C46 52 47 48 50 44 Z"/>
         <path class="pluma" d="M40 72 L60 62 M46 67 L66 56 M53 61 L72 50"/>
-        <path class="pata" d="M64 75 L61 91 M71 74 L73 91 M55 92 L66 92 M67 92 L79 92"/>
-        <circle class="ojo" cx="90" cy="25" r="2.2"/>
+        <use class="pata" href="#cu-patas"/>
+        <circle class="ojo" cx="90" cy="25" r="2.6"/>
       </g>
     </symbol>
     <symbol id="s-dorso" viewBox="0 0 100 150">
@@ -643,8 +746,12 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     </symbol>
     <!-- el cuervo en vuelo (del 16), de perfil: el ala de este lado arriba, las patas recogidas -->
     <symbol id="s-cuervo-vuela" viewBox="0 0 124 76" overflow="visible">
+      <!-- su luz de borde: un halo azul ancho detras del cuerpo y de las alas -->
+      <path class="xv-luz" d="M70 44 C62 52 52 58 40 62 L44 56 L35 58 L41 51 C50 48 60 45 70 44 Z"/>
+      <path class="xv-luz" id="xv-c" d="M121 33 L106 29 C103 22 96 19 90 20.5 C84 22 80 26 74 28.5 C62 32 48 31 37 29 L18 21.5 L20 28.5 L9 28 L18 34 L9 39.5 L21 39.5 L15 47 L28 42 L39 41 C51 48 70 49 85 45 C95 42.5 101 39 106 36.5 Z"/>
+      <path class="xv-luz bate" d="M88 33 C82 21 72 10 57 2 L58.5 10.5 L49 3.5 L50.5 12.5 L41 6.5 L43.5 16 L34 12.5 L38.5 22.5 C48 31 62 37 75 39 Z"/>
       <path class="xv-ala" d="M70 44 C62 52 52 58 40 62 L44 56 L35 58 L41 51 C50 48 60 45 70 44 Z"/>
-      <path class="xv-cuerpo" d="M121 33 L106 29 C103 22 96 19 90 20.5 C84 22 80 26 74 28.5 C62 32 48 31 37 29 L18 21.5 L20 28.5 L9 28 L18 34 L9 39.5 L21 39.5 L15 47 L28 42 L39 41 C51 48 70 49 85 45 C95 42.5 101 39 106 36.5 Z"/>
+      <use class="xv-cuerpo" href="#xv-c"/>
       <path class="xv-ala bate" d="M88 33 C82 21 72 10 57 2 L58.5 10.5 L49 3.5 L50.5 12.5 L41 6.5 L43.5 16 L34 12.5 L38.5 22.5 C48 31 62 37 75 39 Z"/>
       <circle class="xv-ojo" cx="98" cy="27" r="1.6"/>
       <path class="xv-pata" d="M62 46 L57 55 L53 57 M68 46 L64.5 56 L60.5 58"/>
@@ -679,7 +786,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     <div class="niebla" aria-hidden="true"></div>
 
     <div class="caja">
-      <p class="lugar">Guardo · Palencia · junto al Carrión</p>
+      <p class="lugar">Guardo · Palencia · junto al&nbsp;Carrión</p>
       <h1 class="rotulo" id="rotulo"><span class="sr">El Embrujo, en Guardo: Embrujo Río y Embrujo Plaza</span><span class="neon" aria-hidden="true"><span class="el" style="--n:0">El</span><span style="--n:1">E</span><span style="--n:2">M</span><span style="--n:3">B</span><span style="--n:4">R</span><span style="--n:5">U</span><span style="--n:6">J</span><span style="--n:7">O</span></span></h1>
       <p class="anos">Hechizando Guardo desde 2008 <span><b id="anos">18 años</b> de embrujo junto al Carrión</span></p>
       <p class="tipo"><svg class="cana-neon" viewBox="0 0 40 52" aria-hidden="true" focusable="false"><path class="vidrio" d="M8 14 H28 L26 48 H10 Z M28 20 H32 Q37 20 37 26 V34 Q37 40 32 40 H27"/><path class="espuma-n" d="M6 14 Q5 7 11 8 Q13 3 18 5 Q22 1 26 5 Q31 4 31 9 Q33 14 28 14 Z"/><path class="burbuja" d="M15 40 v.1 M19 32 v.1 M14 26 v.1 M21 22 v.1"/></svg><span>Bar · terraza · cervecería · raciones caseras</span></p>
@@ -716,7 +823,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
         <li><a href="#carta-plaza"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 12 H42 M10 12 V6 M17 12 V6 M24 12 V6 M31 12 V6 M38 12 V6 M14 12 V17 M24 12 V17 M34 12 V17 M15 22 H33 L31 44 H17 Z M18 22 Q17 18 21 19 Q24 16 27 19 Q31 18 30 22"/></svg><span class="que-es">Cañas y 8 grifos</span><span class="donde-es">en la <span class="plaza">plaza</span></span></a></li>
         <li><a href="#carta-rio"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M4 32 H44 M8 32 Q8 42 24 42 Q40 42 40 32 M14 32 Q16 25 24 25 Q32 25 34 32 M18 20 Q15 16 18 12 Q21 8 18 4 M25 20 Q22 16 25 12 Q28 8 25 4 M32 20 Q29 16 32 12"/></svg><span class="que-es">Raciones caseras</span><span class="donde-es">en el Río</span></a></li>
         <li><a href="#postres-rio"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 40 H42 V26 L6 20 Z M6 20 L30 8 L42 26 M6 31 L42 33 M30 8 Q31 4 34 5 M33 5 a2 2 0 1 1 .1 0"/></svg><span class="que-es">Postres caseros</span><span class="donde-es">en el Río</span></a></li>
-        <li><a href="#que-rio"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 16 Q24 2 42 16 Z M24 9 V36 M14 36 H34 M18 36 V30 M30 36 V30 M4 41 q5 -3 10 0 t10 0 t10 0 t10 0"/></svg><span class="que-es">Terraza junto al río</span><span class="donde-es">en el Río</span></a></li>
+        <li><a href="#que-rio"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M6 16 Q24 2 42 16 Z M24 9 V36 M14 36 H34 M18 36 V30 M30 36 V30 M4 41 q5 -3 10 0 t10 0 t10 0 t10 0"/></svg><span class="que-es">Terraza junto al&nbsp;río</span><span class="donde-es">en el Río</span></a></li>
         <li><a href="#que-plaza"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M4 8 H44 V34 H4 Z M18 34 L15 42 M30 34 L33 42 M12 42 H36 M24 21 m-7 0 a7 7 0 1 0 14 0 a7 7 0 1 0 -14 0 M24 14 V17 L21 20 M24 17 L27 20 M21 27 L24 25 L27 27"/></svg><span class="que-es">Fútbol en pantalla grande</span><span class="donde-es">en la <span class="plaza">plaza</span></span></a></li>
         <li><a href="#llevar-rio"><svg class="ico" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M9 16 H39 L36 44 H12 Z M17 16 V12 Q17 5 24 5 Q31 5 31 12 V16 M18 29 Q24 35 30 29"/></svg><span class="que-es">Para llevar</span><span class="donde-es">en el Río</span></a></li>
       </ul>
@@ -781,7 +888,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
       <use class="cuervo-tejado" href="#s-cuervo" x="150" y="7" width="66" height="55"/>
     </svg>
           <div class="cuerpo-carta">
-            <span class="etiqueta">Embrujo Plaza · desde el 4 de diciembre de 2025</span>
+            <span class="etiqueta">Embrujo Plaza · desde el 4 de diciembre de&nbsp;2025</span>
             <h3 id="t-c-plaza">La <span class="plaza">plaza</span></h3>
             <p class="que">La cervecería de la Plaza de la Constitución.</p>
             <ul class="sellos" aria-label="En la Plaza"><li>8 grifos</li><li>Picoteo</li><li>Fútbol</li><li>Futbolín y diana</li></ul>
@@ -835,25 +942,27 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     <div class="caja">
       <div class="titulo-seccion">
         <h2 id="t-sorteos">Los sorteos</h2>
-        <p>Cada Embrujo sortea lo suyo. Dale la vuelta a la carta.</p>
+        <p>Cada Embrujo sortea lo suyo. Dale la vuelta a la&nbsp;carta.</p>
       </div>
       <ul class="naipes">
         <li>
-          <button class="naipe" type="button" aria-pressed="true" data-queda>
+          <input class="vuelta sr" type="checkbox" id="v-sorteo-rio" aria-label="Dar la vuelta a la carta: sorteo del Río">
+          <label class="naipe" for="v-sorteo-rio" data-queda>
             <span class="giro">
               <span class="cara">
                 <span class="de">Embrujo Río</span>
                 <span class="cuando">Los miércoles</span>
                 <span class="grande">Sorteo de <em>cenas y raciones</em></span>
-                <span class="mas">Entre los clientes del Río.</span>
+                <span class="mas">Entre los clientes del&nbsp;Río.</span>
                 <span class="fuente">Así fue en el verano de 2025 (guardo.org) <mark class="relleno">si sigue este año, sin confirmar</mark></span>
               </span>
-              <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
+              <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
             </span>
-          </button>
+          </label>
         </li>
         <li>
-          <button class="naipe" type="button" aria-pressed="true" data-queda>
+          <input class="vuelta sr" type="checkbox" id="v-sorteo-plaza" aria-label="Dar la vuelta a la carta: sorteo de la Plaza">
+          <label class="naipe" for="v-sorteo-plaza" data-queda>
             <span class="giro">
               <span class="cara">
                 <span class="de">Embrujo <span class="plaza">plaza</span></span>
@@ -862,12 +971,12 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
                 <span class="mas">Toda la Liga y Champions.</span>
                 <span class="fuente">Cartel de la Plaza <mark class="relleno">qué días hay sorteo, sin confirmar</mark></span>
               </span>
-              <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
+              <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
             </span>
-          </button>
+          </label>
         </li>
       </ul>
-      <p class="pista" hidden>Pulsa una carta para darle la vuelta.</p>
+      <p class="pista">Pulsa una carta para darle la vuelta.</p>
     </div>
   </section>
 
@@ -908,6 +1017,14 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 
 </div><!-- /principal -->
 
+<!-- sin JS: un separador claro entre la pagina del Embrujo y las de cada local -->
+<nav class="separador-sin-js" aria-labelledby="t-separa">
+  <p class="estrellas-sep" aria-hidden="true"><svg viewBox="0 0 20 20" focusable="false"><use href="#s-estrella"/></svg><svg viewBox="0 0 20 20" focusable="false"><use href="#s-estrella"/></svg><svg viewBox="0 0 20 20" focusable="false"><use href="#s-estrella"/></svg></p>
+  <h2 id="t-separa">Cada local, en su página</h2>
+  <p>Aquí acaba la página del Embrujo. Debajo van el Río y la Plaza, uno detrás de otro.</p>
+  <p class="indice-enlaces"><a href="#rio">Ir al Río</a> · <a href="#plaza">Ir a la Plaza</a> · <a href="#contenido">Volver arriba</a></p>
+</nav>
+
 <!-- ===== EL RIO ===== -->
 <section class="vista" id="rio" data-local="rio" aria-labelledby="t-rio">
   <div class="vista-barra"><div class="caja">
@@ -939,10 +1056,22 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
       <line class="reflejo-neon" x1="-120" y1="114" x2="-50" y2="114"/><line class="reflejo-neon" x1="440" y1="104" x2="510" y2="104"/>
     </svg>
       <div class="vista-cabeza">
-        <span class="etiqueta">Embrujo Río · junto al Carrión · desde 2008</span>
-        <h2 id="t-rio" tabindex="-1"><span class="sr">Embrujo Río</span><span class="neon" data-local="rio" aria-hidden="true"><span style="--n:0">R</span><span style="--n:1">Í</span><span style="--n:2">O</span></span></h2>
-        <p class="estado" data-estado-de="rio" hidden></p>
-        <div class="botones"><a class="boton" href="tel:+34646251640"><svg aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar al Río · <b>646 25 16 40</b></span></a></div>
+        <div class="cabeza-rotulo">
+          <span class="etiqueta">Embrujo Río · junto al Carrión · desde 2008</span>
+          <div class="rotulo-vista">
+            <svg class="ico flanco" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M4 32 H44 M8 32 Q8 42 24 42 Q40 42 40 32 M14 32 Q16 25 24 25 Q32 25 34 32 M18 20 Q15 16 18 12 Q21 8 18 4 M25 20 Q22 16 25 12 Q28 8 25 4 M32 20 Q29 16 32 12"/></svg>
+            <h2 id="t-rio" tabindex="-1"><span class="sr">Embrujo Río</span><span class="neon" data-local="rio" aria-hidden="true"><span style="--n:0">R</span><span style="--n:1">Í</span><span style="--n:2">O</span></span></h2>
+            <svg class="ico flanco" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M11 16 H31 L29 44 H13 Z M31 21 H35 Q40 21 40 27 V33 Q40 39 35 39 H30 M9 16 Q8 9 14 10 Q16 5 21 7 Q25 3 29 7 Q34 6 34 11 Q36 16 31 16 M18 38 v.1 M22 30 v.1 M17 25 v.1 M24 22 v.1"/></svg>
+          </div>
+          <p class="estado" data-estado-de="rio" hidden></p>
+        </div>
+        <div class="ficha-rapida">
+          <dl>
+            <div><dt>Dónde</dt><dd>Camino la Renta, 1, Guardo · <a href="#mapa-rio">cómo llegar</a></dd></div>
+            <div><dt>Hoy</dt><dd data-hoy="rio"><a href="#horario-rio">mira el horario</a></dd></div>
+          </dl>
+          <a class="boton" href="tel:+34646251640"><svg aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar al Río · <b>646 25 16 40</b></span></a>
+        </div>
       </div>
       <div class="vista-cuerpo">
         <div>
@@ -960,7 +1089,8 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
           <h3>Promociones</h3>
           <ul class="naipes">
             <li>
-              <button class="naipe" type="button" aria-pressed="true">
+              <input class="vuelta sr" type="checkbox" id="v-promo-rio" aria-label="Dar la vuelta a la carta: promoción del Río">
+          <label class="naipe" for="v-promo-rio">
                 <span class="giro">
                   <span class="cara">
                     <span class="de">La promoción</span>
@@ -968,22 +1098,23 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
                     <span class="mas">+ festival de chorizos de tapa, con DJ Alex</span>
                     <span class="fuente">Cartel «Regreso al Embrujo Río», viernes 3 de julio <mark class="relleno">si se repite, sin confirmar</mark></span>
                   </span>
-                  <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Promoción del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
+                  <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Promoción del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
                 </span>
-              </button>
+              </label>
             </li>
             <li>
-              <button class="naipe" type="button" aria-pressed="true">
+              <input class="vuelta sr" type="checkbox" id="v-promo-rio-2" aria-label="Dar la vuelta a la carta: sorteo del Río (los miércoles)">
+          <label class="naipe" for="v-promo-rio-2">
                 <span class="giro">
                   <span class="cara">
                     <span class="de">Los miércoles</span>
                     <span class="grande">Sorteo de <em>cenas y raciones</em></span>
-                    <span class="mas">Entre los clientes del Río.</span>
+                    <span class="mas">Entre los clientes del&nbsp;Río.</span>
                     <span class="fuente">guardo.org, verano de 2025 <mark class="relleno">si sigue este año, sin confirmar</mark></span>
                   </span>
-                  <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
+                  <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo del Río, boca abajo. Púlsala para darle la vuelta.</span></span>
                 </span>
-              </button>
+              </label>
             </li>
           </ul>
         </div>
@@ -1105,8 +1236,8 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
             </div>
           </div>
         </div>
-        <div class="horario">
-          <h3>Horario del Río</h3>
+        <div class="horario" id="horario-rio">
+          <h3 tabindex="-1">Horario del Río</h3>
           <table class="tabla" data-tabla="rio">
             <thead><tr><th scope="col">Día</th><th scope="col">Río</th></tr></thead>
             <tbody>
@@ -1130,6 +1261,8 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
   </div></footer>
 </section>
 
+<div class="separador-sin-js corto" aria-hidden="true"><p class="estrellas-sep"><svg viewBox="0 0 20 20" focusable="false"><use href="#s-estrella"/></svg><span>Fin del Río · empieza la Plaza</span><svg viewBox="0 0 20 20" focusable="false"><use href="#s-estrella"/></svg></p></div>
+
 <!-- ===== LA PLAZA ===== -->
 <section class="vista" id="plaza" data-local="plaza" aria-labelledby="t-plaza">
   <div class="vista-barra"><div class="caja">
@@ -1148,10 +1281,22 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
       <use class="cuervo-tejado" href="#s-cuervo" x="150" y="7" width="66" height="55"/>
     </svg>
       <div class="vista-cabeza">
-        <span class="etiqueta">Embrujo Plaza · cervecería · desde el 4 de diciembre de 2025</span>
-        <h2 id="t-plaza" tabindex="-1"><span class="sr">Embrujo Plaza</span><span class="neon" data-local="plaza" aria-hidden="true"><span class="pl" style="--n:0">plaza</span></span></h2>
-        <p class="estado" data-estado-de="plaza" hidden></p>
-        <div class="botones"><a class="boton" href="tel:+34646981186"><svg aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar a la Plaza · <b>646 98 11 86</b></span></a></div>
+        <div class="cabeza-rotulo">
+          <span class="etiqueta">Embrujo Plaza · cervecería · desde el 4 de diciembre de&nbsp;2025</span>
+          <div class="rotulo-vista">
+            <svg class="ico flanco" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M11 16 H31 L29 44 H13 Z M31 21 H35 Q40 21 40 27 V33 Q40 39 35 39 H30 M9 16 Q8 9 14 10 Q16 5 21 7 Q25 3 29 7 Q34 6 34 11 Q36 16 31 16 M18 38 v.1 M22 30 v.1 M17 25 v.1 M24 22 v.1"/></svg>
+            <h2 id="t-plaza" tabindex="-1"><span class="sr">Embrujo Plaza</span><span class="neon" data-local="plaza" aria-hidden="true"><span class="pl" style="--n:0">plaza</span></span></h2>
+            <svg class="ico flanco" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M8 24 a16 16 0 1 0 32 0 a16 16 0 1 0 -32 0 M24 17 L30.7 21.9 L28.1 29.8 H19.9 L17.3 21.9 Z M24 17 V8 M30.7 21.9 L39.2 19 M28.1 29.8 L33.4 37 M19.9 29.8 L14.6 37 M17.3 21.9 L8.8 19"/></svg>
+          </div>
+          <p class="estado" data-estado-de="plaza" hidden></p>
+        </div>
+        <div class="ficha-rapida">
+          <dl>
+            <div><dt>Dónde</dt><dd>Plaza de la Constitución, donde estaba el Peter · <a href="#mapa-plaza">cómo llegar</a></dd></div>
+            <div><dt>Hoy</dt><dd data-hoy="plaza"><a href="#horario-plaza">mira el horario</a></dd></div>
+          </dl>
+          <a class="boton" href="tel:+34646981186"><svg aria-hidden="true" focusable="false"><use href="#s-tel"/></svg><span>Llamar a la Plaza · <b>646 98 11 86</b></span></a>
+        </div>
       </div>
       <div class="vista-cuerpo">
         <div>
@@ -1168,7 +1313,8 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
           <h3>Promociones</h3>
           <ul class="naipes">
             <li>
-              <button class="naipe" type="button" aria-pressed="true">
+              <input class="vuelta sr" type="checkbox" id="v-promo-plaza" aria-label="Dar la vuelta a la carta: promoción de la Plaza">
+          <label class="naipe" for="v-promo-plaza">
                 <span class="giro">
                   <span class="cara">
                     <span class="de">La promoción</span>
@@ -1176,12 +1322,13 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
                     <span class="mas">En la barra de la Plaza.</span>
                     <span class="fuente">Pegatina del cartel de la Plaza <mark class="relleno">fecha sin confirmar</mark></span>
                   </span>
-                  <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Promoción de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
+                  <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Promoción de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
                 </span>
-              </button>
+              </label>
             </li>
             <li>
-              <button class="naipe" type="button" aria-pressed="true">
+              <input class="vuelta sr" type="checkbox" id="v-promo-plaza-2" aria-label="Dar la vuelta a la carta: sorteo de la Plaza (con el fútbol)">
+          <label class="naipe" for="v-promo-plaza-2">
                 <span class="giro">
                   <span class="cara">
                     <span class="de">En el descanso o a las 21:30</span>
@@ -1189,9 +1336,9 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
                     <span class="mas">Con el fútbol.</span>
                     <span class="fuente">Cartel de la Plaza <mark class="relleno">qué días, sin confirmar</mark></span>
                   </span>
-                  <span class="dorso"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
+                  <span class="dorso" aria-hidden="true"><svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><use href="#s-dorso"/></svg><span class="sr">Sorteo de la Plaza, boca abajo. Púlsala para darle la vuelta.</span></span>
                 </span>
-              </button>
+              </label>
             </li>
           </ul>
         </div>
@@ -1275,8 +1422,8 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
             </div>
           </div>
         </div>
-        <div class="horario">
-          <h3>Horario de la <span class="plaza">plaza</span></h3>
+        <div class="horario" id="horario-plaza">
+          <h3 tabindex="-1">Horario de la <span class="plaza">plaza</span></h3>
           <table class="tabla" data-tabla="plaza">
             <thead><tr><th scope="col">Día</th><th scope="col">Plaza</th></tr></thead>
             <tbody>
@@ -1303,6 +1450,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
 
 <dialog class="caja-luz" id="caja-luz" aria-labelledby="luz-t">
   <figure><div class="hueco"></div><figcaption id="luz-t"></figcaption></figure>
+  <button class="boton cerrar-abajo" type="button">Cerrar la foto</button>
   <button class="cerrar" type="button" aria-label="Cerrar la foto"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 5 L19 19 M19 5 L5 19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
 </dialog>
 
@@ -1473,6 +1621,11 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     });
     var dia=fecha.getDay();
     $$('.tabla tbody tr').forEach(function(tr){tr.classList.toggle('hoy',+tr.dataset.dia===dia);});
+    /* el horario de hoy en la cabeza de cada vista (sale de HORARIO, con sus marcas) */
+    $$('[data-hoy]').forEach(function(dd){
+      var l=dd.dataset.hoy,t=HORARIO.locales[l].dias[CLAVES[dia]];
+      dd.innerHTML=NOMBRES[dia].charAt(0).toUpperCase()+NOMBRES[dia].slice(1)+', '+(t?'de ':'')+celda(l,dia)+' · <a href="#horario-'+l+'">la semana</a>';
+    });
   }
   function fechaDe(valor){
     var f=new Date();
@@ -1511,7 +1664,17 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     }
   }
 
-  /* ===== naipes boca abajo ===== */
+  /* ===== naipes boca abajo =====
+     Sin JS cada carta es un checkbox con su <label> (se gira con CSS). Con JS
+     se cambia por el boton de siempre: aria-pressed, la cara escondida al
+     lector mientras esta boca abajo y las estrellas al girarla. */
+  $$('input.vuelta').forEach(function(inp){
+    var lab=inp.nextElementSibling,bt=document.createElement('button');
+    bt.type='button';bt.className='naipe';
+    if(lab.hasAttribute('data-queda'))bt.setAttribute('data-queda','');
+    while(lab.firstChild)bt.appendChild(lab.firstChild);
+    lab.replaceWith(bt);inp.remove();
+  });
   $$('.naipe').forEach(function(c){
     var cara=c.querySelector('.cara'),dorso=c.querySelector('.dorso'),queda=c.hasAttribute('data-queda');
     function poner(arriba){
@@ -1800,16 +1963,19 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     return {local:l,partes:partes,frente:frente,capa:capa,origen:o,dir:1};
   }
   function desmontar(){
+    raiz.classList.remove('viajando');
     if(!viaje)return;
-    viaje.partes.forEach(function(a){a.onfinish=null;a.cancel();});
+    viaje.partes.forEach(function(a){a.onfinish=null;var t=a.effect&&a.effect.target;if(t)t.style.willChange='';a.cancel();});
     if(viaje.frente)viaje.frente.remove();
     viaje.capa.remove();
     if(viaje.origen)viaje.origen.style.visibility='';
     viaje=null;
   }
+  /* will-change solo mientras dura el viaje: se pone al arrancar y se quita al desmontar */
   function correr(dir){
     viaje.dir=dir;
-    viaje.partes.forEach(function(a){a.playbackRate=dir;a.play();});
+    raiz.classList.add('viajando');
+    viaje.partes.forEach(function(a){var t=a.effect&&a.effect.target;if(t)t.style.willChange='transform,opacity';a.playbackRate=dir;a.play();});
     viaje.partes[0].onfinish=terminado;
   }
   function terminado(){
@@ -1851,6 +2017,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     // la pagina vuelve a donde estaba; si la carta no se ve nada (se entro
     // directo por #rio), se baja hasta ella para que se pose en su sitio
     irY(guardaY);aLaVista(origen(l));guardaY=window.scrollY;
+    vistas[l].classList.remove('llega');   // al irse, el parpadeo de llegada (si aun dura) se apaga
     if(!conViaje||!mueve()||!document.body.animate){desmontar();vuelto(l);return;}
     fase='cerrando';
     viaje=montar(l);
@@ -1936,7 +2103,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
       });
       f.appendChild(b);
     });
-    luz.querySelector('.cerrar').addEventListener('click',function(){luz.close();});
+    $$('.cerrar,.cerrar-abajo',luz).forEach(function(c){c.addEventListener('click',function(){luz.close();});});
     luz.addEventListener('click',function(ev){if(ev.target===luz)luz.close();});
     // Escape cierra la foto, no la vista de detras
     luz.addEventListener('keydown',function(ev){if(ev.key==='Escape')ev.stopPropagation();});
