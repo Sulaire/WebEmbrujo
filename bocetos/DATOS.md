@@ -24,6 +24,12 @@ Marcas: **[VARIAS]** lo dicen dos o más fuentes · **[UNA]** una sola fuente ·
 - Junto al río Carrión, Guardo (Palencia). Dirección: "Camino la Renta, 1, 34880
   Guardo" en Google y directorios; "Camino de San Miguel" en prensa y Facebook.
   **[SIN CONFIRMAR cuál es la buena]**.
+- Ubicación en Google Maps (captura de Jordi, 1 de octubre de 2026): en la orilla
+  **oeste** del Carrión, al norte, al final del **Camino de la Renta**, que sube
+  junto al río desde la CL-626. Para orientarse, el **supermercado Lupa**, en la
+  rotonda de la CL-626 con la Av. San Miguel, en la otra orilla. Eso apoya
+  "Camino la Renta, 1" **[UNA: Google; falta que lo confirme el bar]**.
+- Está lejos de la Plaza: los dos no caben bien en un mismo plano.
 - Abrió en **2008**; **17º aniversario** el 27 de junio de 2025 [VARIAS].
 - Abre a las **16:00** con cocina desde esa hora [VARIAS]. Los días de cierre
   **[SIN CONFIRMAR]** (las fuentes se contradicen). Restaurant Guru lo da
