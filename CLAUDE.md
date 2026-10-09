@@ -23,6 +23,15 @@ porqué de cada decisión.
 - `bocetos/scripts/fuentes.mjs` descarga las tipografías a `bocetos/fuentes/`
   (la web no le pide nada a Google). `bocetos/scripts/indice.mjs` monta el
   índice, y con `--sueltos DIR` saca cada boceto con sus fuentes dentro.
+- `bocetos/datos.json`: teléfonos, direcciones, mapas e Instagram, escritos una
+  sola vez. Los bocetos los repiten a mano; `node bocetos/scripts/comprobar-datos.mjs`
+  comprueba que todas las copias cuadran. Pásalo después de tocar un dato.
+- La copia que se enseña en avpinox.es/estudio/embrujo/ (repo Sulaire/WebAvpInox,
+  `public/estudio/embrujo/`) **no se copia a mano**: se genera con
+  `node bocetos/scripts/publicar-avpinox.mjs` (y `--comprobar` dice si se ha quedado
+  atrás). Subir a WebAvpInox publica en avpinox.es: solo con el visto bueno de Jordi.
+- `bocetos/PROBAR_EN_MOVIL.md`: lo que solo se puede comprobar con un móvil en la
+  mano. Se pasa antes de enseñar un boceto al bar y antes de publicar.
 
 ## Cosmerito: `hub.json` y `ROADMAP.md`
 

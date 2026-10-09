@@ -1,0 +1,18 @@
+{
+  "leeme": "Los datos de contacto del Embrujo, escritos una sola vez. Los bocetos los repiten a mano en el HTML; scripts/comprobar-datos.mjs comprueba que todas esas copias dicen lo mismo que este fichero. En la web de verdad el HTML se generará desde aquí. Fuentes y lo que falta por confirmar: DATOS.md.",
+  "locales": {
+    "rio": {
+      "nombre": "Embrujo Río",
+      "telefono": { "ver": "646 25 16 40", "tel": "+34646251640" },
+      "direccion": "Camino la Renta, 1",
+      "mapa": "https://www.google.com/maps/search/?api=1&query=Embrujo+Guardo+Camino+la+Renta+1+Guardo"
+    },
+    "plaza": {
+      "nombre": "Embrujo Plaza",
+      "telefono": { "ver": "646 98 11 86", "tel": "+34646981186" },
+      "direccion": "Plaza de la Constitución",
+      "mapa": "https://www.google.com/maps/search/?api=1&query=Plaza+de+la+Constitucion+Guardo"
+    }
+  },
+  "instagram": "embrujo_guardo"
+}
