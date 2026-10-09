@@ -18,7 +18,8 @@
   --luna:#f1ecdc;         /* texto principal y luna */
   --luna-suave:#b3bcd8;   /* texto secundario */
   --neon:#4cc3ff;         /* UNICO acento: neon azul */
-  --tubo:#4d5677;         /* tubo de neon apagado */
+  --tubo:#5b6690;         /* tubo de neon apagado: 3,6:1 sobre --sombra y 3,5:1 sobre --noche (medido
+                             en el letrero apagado, texto grande: pide 3:1 y se apunta a 3,2 o mas) */
   --abierto:#62e6a4;      /* punto de estado: abierto */
   --cerrado:#ff8f87;      /* punto de estado: cerrado */
   --relleno:#ffe45c;      /* solo lo sin confirmar */
@@ -1580,6 +1581,30 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
   const CLAVES=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
   const NOMBRES=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
 
+  /* ===== LA HORA DE GUARDO =====
+     Un instante (new Date()) es el mismo en todo el mundo, pero el dia y la hora
+     que le corresponden dependen de la zona horaria. El horario del bar es el de
+     Guardo: quien mira desde Canarias, desde otro pais o con el movil mal
+     configurado tiene que ver si el bar esta abierto AHORA en Guardo, no a su
+     hora. Por eso nada usa getDay() ni getHours() del dispositivo: el dia y los
+     minutos salen siempre de aqui, en Europe/Madrid (que ademas lleva solo el
+     cambio de hora de verano). Los "18 anos" no pasan por aqui: son un dia del
+     calendario (el aniversario), no un instante. */
+  var RELOJ_GUARDO=null;
+  try{RELOJ_GUARDO=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});}catch(e){}
+  var DIA_CORTO={do:0,lu:1,ma:2,mi:3,ju:4,vi:5,sa:6};
+  function horaDeGuardo(fecha){
+    if(RELOJ_GUARDO){
+      var p={};
+      RELOJ_GUARDO.formatToParts(fecha).forEach(function(x){p[x.type]=x.value;});
+      // "lun", "mié", "sáb"...: sin tildes y con dos letras basta para saber el dia
+      var d=DIA_CORTO[String(p.weekday||'').normalize('NFD').replace(/[^a-z]/gi,'').slice(0,2).toLowerCase()];
+      if(d!=null&&p.hour!=null)return {dia:d,minutos:(+p.hour%24)*60+(+p.minute)};
+    }
+    // un navegador sin zonas horarias en Intl: lo mejor que hay es la del dispositivo
+    return {dia:fecha.getDay(),minutos:fecha.getHours()*60+fecha.getMinutes()};
+  }
+
   function minutos(h){var p=h.split(':');return (+p[0])*60+(+p[1]);}
   function tramo(local,dia){
     var t=HORARIO.locales[local].dias[CLAVES[dia]];
@@ -1594,7 +1619,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
     return (hh===1?'a la ':'a las ')+hh+':'+mm;
   }
   function estado(local,fecha){
-    var d=fecha.getDay(),m=fecha.getHours()*60+fecha.getMinutes();
+    var g=horaDeGuardo(fecha),d=g.dia,m=g.minutos;
     var hoy=tramo(local,d);
     if(hoy&&m>=hoy.a&&m<hoy.c)return {abierto:true,texto:'cerramos '+aLas(hoy.t.cierra)};
     var ayer=tramo(local,(d+6)%7);
@@ -1649,7 +1674,7 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
         }
       });
     });
-    var dia=fecha.getDay();
+    var dia=horaDeGuardo(fecha).dia;
     $$('.tabla tbody tr').forEach(function(tr){tr.classList.toggle('hoy',+tr.dataset.dia===dia);});
     /* el horario de hoy en la cabeza de cada vista (sale de HORARIO, con sus marcas) */
     $$('[data-hoy]').forEach(function(dd){
@@ -1657,12 +1682,20 @@ section{padding-block:clamp(1.8rem,5vw,4rem)}
       dd.innerHTML=NOMBRES[dia].charAt(0).toUpperCase()+NOMBRES[dia].slice(1)+', '+(t?'de ':'')+celda(l,dia)+' · <a href="#horario-'+l+'">la semana</a>';
     });
   }
+  /* "martes 20:00" es martes a las 20:00 EN GUARDO: se busca el instante de la
+     proxima semana en que el reloj de Guardo marca eso (se corrige una segunda
+     vez por si en medio hay cambio de hora) */
   function fechaDe(valor){
     var f=new Date();
     if(valor==='ahora')return f;
-    var p=valor.split(','),dia=+p[0],h=p[1].split(':');
-    f.setDate(f.getDate()+((dia-f.getDay()+7)%7));
-    f.setHours(+h[0],+h[1],0,0);
+    var p=valor.split(','),h=p[1].split(':'),meta=(+p[0])*1440+(+h[0])*60+(+h[1]),SEM=10080;
+    f=new Date(Math.floor(f.getTime()/60000)*60000);
+    for(var i=0;i<3;i++){
+      var g=horaDeGuardo(f),dif=meta-(g.dia*1440+g.minutos);
+      dif=i===0?((dif%SEM)+SEM)%SEM:((dif+SEM/2)%SEM+SEM)%SEM-SEM/2;
+      if(!dif)break;
+      f=new Date(f.getTime()+dif*60000);
+    }
     return f;
   }
   var probador=document.querySelector('.probador');
