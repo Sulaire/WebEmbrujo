@@ -1,0 +1,830 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Embrujo · bar en Guardo (boceto 20)</title>
+<meta name="description" content="Embrujo, bar en Guardo (Palencia): el Embrujo Río, terraza con raciones caseras junto al Carrión, y el Embrujo Plaza, cervecería de 8 grifos en la Plaza de la Constitución.">
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<style>
+/* ===== Boceto 20 · Casa nocturna =====
+   Negro casi absoluto, blanco hueso y una sola luz: la luna de la portada.
+   Bodoni Moda para lo que se mira (nombres, titulares) e Inter para lo que se
+   usa (horarios, precios, botones, direcciones). Nada mas brilla. */
+:root{
+  --negro:#070707;        /* fondo: casi absoluto, neutro (sin azul) */
+  --negro-2:#0f0e0d;      /* desplegables y la franja de accesos */
+  --filete:#34312c;       /* lineas finas (no es texto) */
+  --hueso:#ebe5d6;        /* texto principal: 16,4:1 sobre el negro */
+  --hueso-2:#aaa496;      /* texto secundario: 8,0:1 */
+  --hueso-3:#8d887c;      /* notas pequenas: 5,5:1 */
+  --oro:#b8a073;          /* el unico acento, dorado apagado: solo numerales y etiquetas pequenas */
+  --tinta:#1b1915;        /* texto sobre el hueso (polaroids, boton relleno) */
+  --halo:rgb(206 222 242 / .5);  /* el resplandor de la luna: el UNICO brillo de la pagina */
+  --luna-1:#f6f3ea;       /* la luna, de su centro al borde */
+  --luna-2:#d9dbe0;
+  --luna-3:#b9c0cb;
+  --foto-1:#21160d;       /* huecos de foto: noche calida, para fotos oscuras */
+  --foto-2:#0b0907;
+  --foto-3:#3a2413;
+  --relleno:#ffe45c;      /* solo lo sin confirmar */
+  --relleno-tinta:#1a1500;
+
+  --g:16px;               /* margen lateral en el movil */
+  --ancho:1360px;
+  --display:'Bodoni Moda',Didot,'Bodoni 72',serif;
+  --texto:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  /* grano de pelicula: ruido SVG en linea, sin imagenes externas. La transparencia va dentro del propio SVG */
+  --grano:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grano-foto:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .95 0 0 0 0 .85 0 0 0 0 .7 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+@media (min-width:760px){:root{--g:32px}}
+@media (min-width:1100px){:root{--g:56px}}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{
+  margin:0;background:var(--negro);color:var(--hueso);
+  font:400 1rem/1.6 var(--texto);
+  overflow-x:clip;
+}
+/* el grano, detras de todo: textura del negro, nunca encima del texto */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:var(--grano);pointer-events:none}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.22em}
+h1,h2,h3,h4,p,ul,ol,dl,dd,figure{margin:0}
+ul{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--hueso);outline-offset:3px}
+:target,[id]{scroll-margin-top:80px}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+mark.relleno{
+  background:var(--relleno);color:var(--relleno-tinta);
+  font:500 .78rem/1.35 var(--texto);letter-spacing:0;text-transform:none;font-style:normal;
+  padding:.1em .4em;border-radius:2px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;
+}
+.salto{position:absolute;left:8px;top:-80px;z-index:50;background:var(--hueso);color:var(--tinta);
+  padding:12px 16px;font-weight:600;text-decoration:none}
+.salto:focus{top:8px}
+
+.caja{max-width:var(--ancho);margin-inline:auto;padding-inline:var(--g)}
+
+/* --- piezas de texto que se repiten --- */
+.etiqueta{font:600 .75rem/1.4 var(--texto);letter-spacing:.16em;text-transform:uppercase;color:var(--hueso-2)}
+.etiqueta .num{color:var(--oro);margin-right:.7em}
+.nota{font-size:.875rem;color:var(--hueso-3)}
+
+/* --- botones: rellenos o de filete, sin resplandor --- */
+.boton{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6em;
+  min-height:48px;padding:.7em 1.3em;
+  font:500 .9375rem/1.2 var(--texto);letter-spacing:.02em;text-decoration:none;
+  border:1px solid var(--hueso);color:var(--hueso);background:transparent;border-radius:0;
+}
+.boton svg{width:16px;height:16px;flex:none;fill:currentColor}
+.boton.lleno{background:var(--hueso);color:var(--tinta)}
+.boton:hover{background:var(--hueso);color:var(--tinta)}
+.boton.lleno:hover{background:transparent;color:var(--hueso)}
+.enlace{
+  display:inline-flex;align-items:center;gap:.5em;min-height:44px;
+  font:500 .9375rem/1.3 var(--texto);color:var(--hueso);
+}
+.enlace svg{width:16px;height:16px;fill:currentColor;flex:none}
+
+/* ===== franja del boceto ===== */
+.franja{border-bottom:1px solid var(--filete);font-size:.75rem;line-height:1.45;color:var(--hueso-2);padding:.5rem var(--g);text-align:center}
+.franja strong{color:var(--hueso);font-weight:600}
+
+/* ===== barra de arriba: menu y "Llamar", como el "Reservas" de Paradiso ===== */
+.barra{position:sticky;top:0;z-index:20;background:var(--negro);border-bottom:1px solid var(--filete)}
+.barra .caja{display:flex;align-items:center;gap:12px;min-height:64px}
+.marca{
+  font:500 1.0625rem/1 var(--display);letter-spacing:.32em;text-transform:uppercase;text-decoration:none;
+  display:inline-flex;align-items:center;min-height:44px;margin-right:auto;padding-right:.2em;
+}
+.menu-lista{display:none}
+.menu-lista a{display:inline-flex;align-items:center;min-height:44px;padding-inline:.9em;
+  font:500 .8125rem/1 var(--texto);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--hueso-2)}
+.menu-lista a:hover{color:var(--hueso);text-decoration:underline}
+.despliega{position:relative}
+.despliega>summary{list-style:none;cursor:pointer}
+.despliega>summary::-webkit-details-marker{display:none}
+.despliega>summary.boton{min-height:44px;padding:.55em 1.1em;font-size:.875rem;letter-spacing:.06em}
+.despliega[open]>summary.boton{background:var(--hueso);color:var(--tinta)}
+.menu-movil>summary{display:inline-flex;align-items:center;min-height:44px;padding:0 .6em;
+  font:500 .8125rem/1 var(--texto);letter-spacing:.12em;text-transform:uppercase;color:var(--hueso-2)}
+.panel{
+  position:absolute;right:0;top:calc(100% + 10px);z-index:30;min-width:250px;
+  background:var(--negro-2);border:1px solid var(--filete);padding:6px 0;
+}
+.panel a{display:flex;justify-content:space-between;align-items:center;gap:1.2em;min-height:48px;padding:.4em 1.1em;
+  font:500 .9375rem/1.2 var(--texto);text-decoration:none;color:var(--hueso)}
+.panel a+a{border-top:1px solid var(--filete)}
+.panel a:hover{background:var(--hueso);color:var(--tinta)}
+.panel a b{font-weight:600;font-variant-numeric:tabular-nums}
+.panel a span{color:inherit}
+@media (min-width:900px){
+  .menu-movil{display:none}
+  .menu-lista{display:flex;margin-right:12px}
+}
+
+/* ===== portada ===== */
+.portada{position:relative;padding-top:clamp(24px,4vw,48px);padding-bottom:clamp(40px,7vw,96px)}
+.portada .caja{container-type:inline-size;display:grid;grid-template-columns:1fr auto;align-items:end;column-gap:16px}
+.portada-lugar{grid-column:1;align-self:end;padding-bottom:6px}
+.portada-lugar p{font:400 .875rem/1.5 var(--texto);color:var(--hueso-2);max-width:22ch}
+.portada-lugar p+p{margin-top:.6em}
+.portada-lugar .etiqueta{display:block;margin-bottom:.8em}
+
+/* la luna con el cuervo de la marca: el UNICO cuerpo luminoso */
+.luna{grid-column:2;width:clamp(140px,30cqi,300px);justify-self:end;margin-right:3cqi}
+.luna svg{width:100%;height:auto;overflow:visible;filter:drop-shadow(0 0 34px var(--halo))}
+
+/* EMBRUJO: Bodoni Moda 800, de lado a lado. La J baja por debajo de la linea, como una didona de cartel */
+.rotulo{
+  grid-column:1/-1;margin-top:clamp(12px,3cqi,36px);
+  font:800 19.5cqi/.8 var(--display);letter-spacing:-.012em;text-transform:uppercase;
+  white-space:nowrap;color:var(--hueso);
+  display:flex;justify-content:center;
+  font-feature-settings:"kern","liga";
+}
+.rotulo .letras{display:block;padding-bottom:.2em}
+.rotulo .j{display:inline-block;margin-inline:-.01em;transform:scaleY(1.2);transform-origin:50% 0}
+.rotulo .m{margin-right:-.012em}
+/* el remate: la J se alarga por debajo de la linea, como las didonas de cartel,
+   y su gota queda colgando bajo la U */
+
+/* las dos casas, como las ciudades de Paradiso */
+.casas{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:clamp(22px,4cqi,48px)}
+.casa{display:flex;flex-direction:column;gap:6px;text-decoration:none}
+.casa-nombre{font:500 clamp(1.6rem,7.4cqi,4.4rem)/1 var(--display);letter-spacing:.14em;text-transform:uppercase}
+.casa:hover .casa-nombre{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.15em}
+.casa:last-child{align-items:flex-end;text-align:right}
+.estado{font:400 .8125rem/1.4 var(--texto);color:var(--hueso-2);display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+.estado b{font-weight:600;color:var(--hueso)}
+.estado i{width:7px;height:7px;border-radius:50%;border:1px solid var(--hueso);flex:none}
+.estado[data-estado="abierto"] i{background:var(--hueso)}
+.casa:last-child .estado{justify-content:flex-end}
+.sin-js-estado{font-size:.8125rem;color:var(--hueso-2)}
+.js .sin-js-estado{display:none}
+.nota-horario{grid-column:1/-1;margin-top:18px}
+@media (min-width:760px){
+  .casas{display:flex;align-items:baseline;justify-content:center;gap:clamp(18px,4cqi,64px)}
+  .casa{align-items:center !important;text-align:center !important}
+  .casa .estado{justify-content:center !important}
+  .casas .punto-medio{font:500 clamp(1.6rem,6cqi,4.4rem)/1 var(--display);color:var(--hueso-3)}
+  .nota-horario{text-align:center}
+}
+.punto-medio{display:none}
+@media (min-width:760px){.punto-medio{display:block}}
+
+/* ===== accesos rapidos ===== */
+.accesos{border-block:1px solid var(--filete);background:var(--negro-2)}
+.accesos ul{display:grid;grid-template-columns:1fr 1fr}
+.accesos li{border-bottom:1px solid var(--filete);min-width:0}
+.accesos li:nth-child(odd){border-right:1px solid var(--filete)}
+.accesos li:nth-child(n+3){border-bottom:0}
+.acceso{display:flex;flex-direction:column;gap:4px;min-height:96px;padding:16px 14px;text-decoration:none;height:100%}
+a.acceso:hover .acc-titulo{text-decoration:underline}
+.acc-titulo{font:600 .75rem/1.3 var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--hueso)}
+.acc-linea{font:400 .875rem/1.45 var(--texto);color:var(--hueso-2);font-variant-numeric:tabular-nums}
+.acceso-llamar{padding:16px 14px 8px}
+.acceso-llamar a{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;
+  font:500 .875rem/1.2 var(--texto);text-decoration:none;color:var(--hueso);border-top:1px solid var(--filete)}
+.acceso-llamar a:first-of-type{border-top:0}
+.acceso-llamar a b{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acceso-llamar a:hover b{text-decoration:underline}
+@media (min-width:900px){
+  .accesos ul{grid-template-columns:1.15fr 1fr 1fr 1.25fr}
+  .accesos li{border-bottom:0;border-right:1px solid var(--filete)}
+  .accesos li:last-child{border-right:0}
+  .acceso{padding:22px 24px}
+  .acceso-llamar{padding:22px 24px 10px}
+}
+@media (max-width:359px){
+  .acceso,.acceso-llamar{padding-inline:10px}
+  .acceso-llamar a{flex-direction:column;align-items:flex-start;justify-content:center;gap:0}
+}
+
+/* ===== los dos locales, a sangre ===== */
+.locales{padding-top:clamp(56px,10vw,140px)}
+.locales-intro{display:grid;gap:10px;margin-bottom:clamp(32px,6vw,72px)}
+.locales-intro p{font:500 italic clamp(1.4rem,3.2vw,2.4rem)/1.25 var(--display);max-width:26ch}
+.local{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"cabeza" "foto" "datos";
+  margin-bottom:clamp(64px,10vw,150px);
+}
+.local-cabeza{grid-area:cabeza;padding:0 var(--g) 24px}
+.local-foto{grid-area:foto}
+.local-datos{grid-area:datos;padding:28px var(--g) 0}
+.local h2{font:800 clamp(5.2rem,26vw,12rem)/.86 var(--display);letter-spacing:-.02em;margin-top:.12em}
+.local h2 .pre{display:block;font:500 italic clamp(1.2rem,4.6vw,2rem)/1.2 var(--display);letter-spacing:0;color:var(--hueso-2);margin-bottom:.3em}
+.local .estado{margin-top:18px;font-size:.875rem}
+.local-lema{font:500 clamp(1.25rem,2.4vw,1.6rem)/1.35 var(--display);max-width:30ch;margin-bottom:28px}
+.ficha{display:grid;gap:0;border-top:1px solid var(--filete);max-width:560px}
+.ficha>div{display:grid;grid-template-columns:7.2em 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--filete)}
+.ficha dt{font:600 .75rem/1.9 var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--hueso-2)}
+.ficha dd{font-size:.9375rem;line-height:1.55}
+.ficha dd .nota{display:block;margin-top:2px}
+.ficha dd .enlace{min-height:44px;font-weight:400;font-size:.9375rem}
+.local .botones{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px;align-items:center}
+.local .enlace{margin-top:10px}
+.google{margin-top:22px;font-size:.875rem;color:var(--hueso-2)}
+.google b{font:500 1.5rem/1 var(--display);color:var(--hueso);margin-right:.25em}
+
+/* huecos de foto: grandes, oscuros y calidos, con el grano de pelicula */
+.hueco{
+  position:relative;overflow:hidden;
+  background:
+    linear-gradient(180deg,transparent 45%,rgb(0 0 0 / .6)),
+    radial-gradient(60% 45% at 68% 62%,var(--foto-3),transparent 75%),
+    radial-gradient(35% 25% at 22% 40%,var(--foto-1),transparent 80%),
+    var(--foto-2);
+  display:flex;flex-direction:column;justify-content:flex-end;gap:8px;
+}
+.hueco::after{content:"";position:absolute;inset:0;background-image:var(--grano-foto);pointer-events:none}
+.hueco>*{position:relative;z-index:1}
+.local-foto .hueco{min-height:min(118vw,620px);padding:20px var(--g)}
+.hueco figcaption,.hueco .pie-hueco{font:400 .875rem/1.45 var(--texto);color:var(--hueso-2);display:flex;flex-wrap:wrap;gap:.5em;align-items:center}
+@media (min-width:900px){
+  .local{grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"cabeza foto" "datos foto";grid-template-rows:auto 1fr;column-gap:clamp(40px,5vw,96px)}
+  .local.al-reves{grid-template-columns:minmax(0,7fr) minmax(0,5fr);grid-template-areas:"foto cabeza" "foto datos"}
+  .local-cabeza{padding:clamp(24px,4vw,64px) 0 0 max(var(--g),calc((100vw - var(--ancho)) / 2 + var(--g)))}
+  .local-datos{padding:32px 0 clamp(24px,4vw,64px) max(var(--g),calc((100vw - var(--ancho)) / 2 + var(--g)))}
+  .local.al-reves .local-cabeza{padding:clamp(24px,4vw,64px) max(var(--g),calc((100vw - var(--ancho)) / 2 + var(--g))) 0 0}
+  .local.al-reves .local-datos{padding:32px max(var(--g),calc((100vw - var(--ancho)) / 2 + var(--g))) clamp(24px,4vw,64px) 0}
+  .local-foto .hueco{min-height:clamp(620px,86vh,900px);height:100%;padding:28px 32px}
+}
+
+/* ===== adelanto: polaroids ligeramente giradas ===== */
+.fotos{padding-block:clamp(56px,9vw,120px);overflow-x:clip}
+.fotos-cabeza{display:grid;gap:12px;margin-bottom:clamp(32px,5vw,56px)}
+.fotos-cabeza h2{font:500 italic clamp(2.2rem,6vw,4.6rem)/1 var(--display)}
+.fotos-cabeza p{color:var(--hueso-2);max-width:46ch}
+.polaroids{display:grid;grid-template-columns:1fr 1fr;gap:28px 16px;padding-inline:4px}
+.polaroid{background:var(--hueso);padding:8px 8px 0;transform:rotate(var(--giro,0deg));color:var(--tinta)}
+.polaroid a{display:block;text-decoration:none;color:inherit}
+.polaroid .hueco{aspect-ratio:1/1;padding:8px;justify-content:flex-end;align-items:flex-start}
+.polaroid p{font:500 .8125rem/1.3 var(--texto);padding:12px 4px 14px;color:var(--tinta)}
+.polaroid p span{display:block;font-weight:400;color:#4a463e}
+.polaroids li:nth-child(1){--giro:-2.4deg}
+.polaroids li:nth-child(2){--giro:1.8deg;margin-top:18px}
+.polaroids li:nth-child(3){--giro:1.2deg}
+.polaroids li:nth-child(4){--giro:-1.6deg;margin-top:14px}
+@media (min-width:900px){
+  .fotos .caja{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:56px;align-items:start}
+  .fotos-cabeza{position:sticky;top:120px}
+  .polaroids{gap:40px 28px}
+  .polaroid{padding:12px 12px 0}
+  .polaroid p{font-size:.875rem;padding:16px 4px 18px}
+  .polaroids li:nth-child(2){margin-top:64px}
+  .polaroids li:nth-child(3){margin-top:-24px}
+  .polaroids li:nth-child(4){margin-top:40px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .polaroid{transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  .polaroid:hover,.polaroid:focus-within{transform:rotate(0deg) translateY(-6px)}
+  .luna svg{animation:flota 12s ease-in-out infinite alternate}
+  @keyframes flota{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+}
+
+/* ===== la carta resumida ===== */
+.carta{padding-block:clamp(56px,9vw,128px);border-top:1px solid var(--filete)}
+.carta-cabeza{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:12px 32px;margin-bottom:clamp(28px,5vw,64px)}
+.carta-cabeza h2{font:800 clamp(3.2rem,11vw,8rem)/.9 var(--display);letter-spacing:-.02em}
+.carta-cabeza p{max-width:44ch;color:var(--hueso-2);font-size:.9375rem}
+.cartas{display:grid;gap:56px}
+.carta-local h3{font:500 italic clamp(1.8rem,4vw,2.6rem)/1.1 var(--display);margin-bottom:6px}
+.carta-local>.nota{margin-bottom:22px}
+.carta-local h4{font:600 .75rem/1.3 var(--texto);letter-spacing:.16em;text-transform:uppercase;color:var(--oro);margin:26px 0 6px}
+.platos li{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:10px 0;border-bottom:1px solid var(--filete)}
+.plato{font:500 1.1875rem/1.3 var(--display)}
+.plato small{display:block;font:400 .8125rem/1.45 var(--texto);color:var(--hueso-3);margin-top:2px}
+.precio{font:500 .9375rem/1.3 var(--texto);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;flex:none}
+.carta-local .ver-mas{margin-top:18px}
+@media (min-width:900px){.cartas{grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,120px)}}
+
+/* ===== sorteos: tipografia, escalonados ===== */
+.sorteos{padding-block:clamp(56px,9vw,128px);border-top:1px solid var(--filete)}
+.sorteos h2{font:600 .75rem/1.3 var(--texto);letter-spacing:.16em;text-transform:uppercase;color:var(--hueso-2);margin-bottom:clamp(28px,5vw,56px)}
+.sorteo{max-width:820px}
+.sorteo+.sorteo{margin-top:clamp(48px,8vw,96px);margin-left:auto;text-align:right}
+.sorteo .cuando{font:600 .8125rem/1.4 var(--texto);letter-spacing:.12em;text-transform:uppercase;color:var(--hueso)}
+.sorteo .cuando span{color:var(--oro)}
+.sorteo p.grande{font:500 clamp(2rem,6.4vw,4.6rem)/1.06 var(--display);margin:.25em 0 .35em;letter-spacing:-.01em}
+.sorteo p.grande em{font-style:italic}
+.sorteo .fuente{font-size:.875rem;color:var(--hueso-3);display:flex;flex-wrap:wrap;gap:.5em;align-items:center}
+.sorteo+.sorteo .fuente{justify-content:flex-end}
+
+/* ===== avisador: una frase, estrecha y a la derecha ===== */
+.avisador{padding-block:clamp(48px,8vw,112px);border-top:1px solid var(--filete)}
+.avisador .caja>div{max-width:620px;margin-left:auto}
+.avisador p.frase{font:500 italic clamp(1.6rem,4vw,2.6rem)/1.25 var(--display);margin:.5em 0 .7em}
+.avisador p:not(.frase){color:var(--hueso-2);font-size:.9375rem}
+
+/* ===== donde y horario ===== */
+.datos{padding-block:clamp(56px,9vw,128px);border-top:1px solid var(--filete)}
+.datos .caja{display:grid;gap:64px}
+.datos h2{font:800 clamp(2.6rem,7vw,5rem)/.95 var(--display);letter-spacing:-.015em;margin-bottom:28px}
+.sitio{padding:18px 0;border-top:1px solid var(--filete)}
+.sitio:last-of-type{border-bottom:1px solid var(--filete)}
+.sitio h3{font:500 1.6rem/1.15 var(--display);margin-bottom:6px}
+.sitio p{font-size:.9375rem;color:var(--hueso-2);margin-top:6px;max-width:52ch}
+.sitio p strong{color:var(--hueso);font-weight:500}
+.lejos{margin-top:16px}
+.tabla{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.9375rem}
+.tabla th,.tabla td{text-align:left;padding:12px 8px 12px 0;border-bottom:1px solid var(--filete);vertical-align:baseline}
+.tabla thead th{font:600 .75rem/1.3 var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--hueso-2)}
+.tabla tbody th{font-weight:500}
+.tabla td{color:var(--hueso-2)}
+.tabla tr.hoy th,.tabla tr.hoy td{color:var(--hueso)}
+.tabla tr.hoy th{font-weight:600}
+.tabla tr.hoy th::after{content:" · hoy";font-weight:400;color:var(--oro)}
+.aviso-h{margin-top:16px;font-size:.875rem;color:var(--hueso-3);max-width:60ch}
+@media (min-width:900px){.datos .caja{grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,120px)}}
+
+/* ===== pie ===== */
+.pie{border-top:1px solid var(--filete);padding-block:clamp(48px,7vw,96px) 32px}
+.pie .marca-pie{font:800 clamp(3rem,14vw,9rem)/.9 var(--display);letter-spacing:-.01em;text-transform:uppercase;margin-bottom:32px}
+.pie-rejilla{display:grid;gap:28px}
+.pie-rejilla h3{font:600 .75rem/1.3 var(--texto);letter-spacing:.14em;text-transform:uppercase;color:var(--hueso-2);margin-bottom:8px}
+.pie-rejilla p{font-size:.9375rem;line-height:1.55}
+.pie-rejilla a{display:inline-flex;align-items:center;min-height:44px}
+.pie-final{margin-top:40px;padding-top:20px;border-top:1px solid var(--filete);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:.8125rem;color:var(--hueso-3)}
+@media (min-width:760px){.pie-rejilla{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<div class="franja"><strong>Boceto 20 · Casa nocturna</strong> · no es la web del bar · lo marcado en amarillo está sin confirmar</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="s-tel" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></symbol>
+  <symbol id="s-mapa" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+</svg>
+
+<header class="barra">
+  <div class="caja">
+    <a class="marca" href="#contenido" aria-label="Embrujo, arriba del todo">Embrujo</a>
+    <nav aria-label="Menú">
+      <ul class="menu-lista">
+        <li><a href="#locales">Los locales</a></li>
+        <li><a href="#carta">La carta</a></li>
+        <li><a href="#horario">Horario</a></li>
+        <li><a href="#donde">Cómo llegar</a></li>
+      </ul>
+      <details class="despliega menu-movil">
+        <summary>Menú</summary>
+        <div class="panel">
+          <a href="#locales">Los locales</a>
+          <a href="#carta">La carta</a>
+          <a href="#horario">Horario</a>
+          <a href="#donde">Cómo llegar</a>
+        </div>
+      </details>
+    </nav>
+    <details class="despliega llamar">
+      <summary class="boton">Llamar</summary>
+      <div class="panel">
+        <a href="tel:+34646251640"><span>Embrujo Río</span><b>646 25 16 40</b></a>
+        <a href="tel:+34646981186"><span>Embrujo Plaza</span><b>646 98 11 86</b></a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+  <section class="portada" aria-labelledby="rotulo">
+    <div class="caja">
+      <div class="portada-lugar">
+        <span class="etiqueta">Guardo · Palencia</span>
+        <p>Un bar con terraza junto al Carrión y una cervecería en la plaza. De Elena y Nete, desde 2008.</p>
+      </div>
+      <div class="luna" aria-hidden="true">
+        <!-- la luna llena con el cuervo de los carteles posado en una rama, a contraluz -->
+        <svg viewBox="0 0 240 240">
+          <defs>
+            <radialGradient id="luz-luna" cx="42%" cy="38%" r="68%">
+              <stop offset="0" stop-color="var(--luna-1)"/>
+              <stop offset=".62" stop-color="var(--luna-2)"/>
+              <stop offset="1" stop-color="var(--luna-3)"/>
+            </radialGradient>
+            <filter id="suave" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+            <clipPath id="disco"><circle cx="120" cy="120" r="104"/></clipPath>
+          </defs>
+          <circle cx="120" cy="120" r="104" fill="url(#luz-luna)"/>
+          <g clip-path="url(#disco)" fill="#8f97a4" fill-opacity=".16" filter="url(#suave)">
+            <ellipse cx="88" cy="86" rx="30" ry="22"/>
+            <ellipse cx="146" cy="72" rx="18" ry="13"/>
+            <ellipse cx="156" cy="128" rx="26" ry="20"/>
+            <ellipse cx="104" cy="146" rx="14" ry="10"/>
+            <circle cx="70" cy="122" r="7"/>
+            <circle cx="172" cy="96" r="5"/>
+          </g>
+          <g clip-path="url(#disco)" fill="#070707">
+            <!-- la rama -->
+            <path d="M-4 192 C40 180 78 176 112 178 C140 180 170 172 200 160 C214 154 228 150 246 150 L246 156 C226 157 212 162 198 168 C170 180 140 188 112 186 C78 184 40 188 -4 200 Z"/>
+            <path d="M150 178 C158 186 168 192 182 194 L181 197 C166 196 155 190 147 181 Z"/>
+            <path d="M60 182 C56 172 50 166 40 162 L42 159 C53 163 60 170 64 181 Z"/>
+          </g>
+          <!-- el cuervo de los carteles: posado en la rama, de perfil, con su pico grueso y la cola larga -->
+          <g fill="#070707" transform="translate(84 74)">
+            <path d="M8 104 L30 80 C24 70 26 56 36 46 C44 38 52 34 56 26 C58 16 66 9 76 9 C83 9 88 13 91 17 L114 21 C108 26 99 29 92 30 C90 33 86 38 84 44 C84 58 78 72 66 82 C58 88 50 92 44 94 L16 110 Z"/>
+            <path d="M58 88 L56 102 M66 84 L68 102" stroke="#070707" stroke-width="3.2" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+      <h1 class="rotulo" id="rotulo"><span class="sr">Embrujo, en Guardo: Embrujo Río y Embrujo Plaza</span><span class="letras" aria-hidden="true"><span class="m">EM</span>BRU<span class="j">J</span>O</span></h1>
+
+      <div class="casas">
+        <a class="casa" href="#rio">
+          <span class="casa-nombre">Río</span>
+          <span class="estado" data-estado-de="rio" hidden></span>
+          <span class="sin-js-estado">abre a las 16:00</span>
+        </a>
+        <span class="punto-medio" aria-hidden="true">·</span>
+        <a class="casa" href="#plaza">
+          <span class="casa-nombre">Plaza</span>
+          <span class="estado" data-estado-de="plaza" hidden></span>
+          <span class="sin-js-estado">cierra lunes y martes</span>
+        </a>
+      </div>
+      <p class="nota-horario"><mark class="relleno">Horario de ejemplo, sin confirmar</mark></p>
+    </div>
+  </section>
+
+  <nav class="accesos" aria-label="Accesos rápidos">
+    <ul class="caja" style="padding-inline:0">
+      <li><a class="acceso" href="#horario"><span class="acc-titulo">Horario<span data-hoy-titulo hidden> de hoy</span></span><span class="acc-linea" data-hoy-acceso="rio">La semana de los dos</span><span class="acc-linea" data-hoy-acceso="plaza" hidden></span></a></li>
+      <li><a class="acceso" href="#donde"><span class="acc-titulo">Cómo llegar</span><span class="acc-linea">Camino la Renta, 1</span><span class="acc-linea">Plaza de la Constitución</span></a></li>
+      <li><a class="acceso" href="#carta"><span class="acc-titulo">La carta</span><span class="acc-linea">Raciones, postres caseros y ocho grifos</span></a></li>
+      <li><div class="acceso acceso-llamar"><span class="acc-titulo">Llamar</span>
+        <a href="tel:+34646251640"><span>Río</span><b>646 25 16 40</b></a>
+        <a href="tel:+34646981186"><span>Plaza</span><b>646 98 11 86</b></a>
+      </div></li>
+    </ul>
+  </nav>
+
+  <section class="locales" id="locales" aria-label="Los dos locales">
+    <div class="caja locales-intro">
+      <span class="etiqueta">Dos casas, los mismos dueños</span>
+      <p>Uno junto al río, con su terraza bajo los árboles. El otro en la plaza, con la cerveza y el fútbol.</p>
+    </div>
+
+    <article class="local" id="rio" aria-labelledby="t-rio">
+      <div class="local-cabeza">
+        <span class="etiqueta"><span class="num">I</span>Junto al Carrión · desde 2008</span>
+        <h2 id="t-rio"><span class="pre">Embrujo</span> Río</h2>
+        <p class="estado" data-estado-de="rio" hidden></p>
+      </div>
+      <figure class="local-foto">
+        <div class="hueco">
+          <figcaption>La terraza de noche, bajo los árboles <mark class="relleno">foto pendiente</mark></figcaption>
+        </div>
+      </figure>
+      <div class="local-datos">
+        <p class="local-lema">Una terraza enorme bajo los árboles, al lado del río. Cocina casera desde que abre.</p>
+        <dl class="ficha">
+          <div><dt>Qué hay</dt><dd>Raciones, plancha y postres caseros. Pincho con la consumición y comida para llevar. En verano, DJ jueves y viernes.</dd></div>
+          <div><dt>Dónde</dt><dd>Camino la Renta, 1, Guardo<span class="nota">La prensa lo sitúa en el Camino de San Miguel.</span></dd></div>
+          <div><dt>Hoy</dt><dd data-hoy="rio"><a class="enlace" href="#horario">Mira el horario de la semana</a></dd></div>
+        </dl>
+        <div class="botones">
+          <a class="boton lleno" href="tel:+34646251640"><svg aria-hidden="true"><use href="#s-tel"/></svg><span>Llamar · 646 25 16 40</span></a>
+          <a class="boton" href="#carta-rio">Ver la carta</a>
+        </div>
+        <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Embrujo+Guardo+Camino+la+Renta+1+Guardo" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#s-mapa"/></svg>Abrir en Google Maps<span class="sr"> (se abre en otra pestaña)</span></a>
+        <p class="google"><b>4,6</b> en Google, con 636 reseñas</p>
+      </div>
+    </article>
+
+    <article class="local al-reves" id="plaza" aria-labelledby="t-plaza">
+      <div class="local-cabeza">
+        <span class="etiqueta"><span class="num">II</span>Cervecería · desde diciembre de 2025</span>
+        <h2 id="t-plaza"><span class="pre">Embrujo</span> Plaza</h2>
+        <p class="estado" data-estado-de="plaza" hidden></p>
+      </div>
+      <figure class="local-foto">
+        <div class="hueco">
+          <figcaption>La barra y los ocho grifos <mark class="relleno">foto pendiente</mark></figcaption>
+        </div>
+      </figure>
+      <div class="local-datos">
+        <p class="local-lema">En la Plaza de la Constitución, donde estaba el Peter. Ocho grifos, picoteo y todo el fútbol.</p>
+        <dl class="ficha">
+          <div><dt>Qué hay</dt><dd>Cerveza nacional y de importación, picoteo, futbolín y diana. Pantallas, una de unas 100 pulgadas, con toda la Liga y Champions. Terraza con dos carpas.</dd></div>
+          <div><dt>Dónde</dt><dd>Plaza de la Constitución, Guardo<span class="nota">Número del portal <mark class="relleno">sin confirmar</mark></span></dd></div>
+          <div><dt>Hoy</dt><dd data-hoy="plaza"><a class="enlace" href="#horario">Mira el horario de la semana</a></dd></div>
+        </dl>
+        <div class="botones">
+          <a class="boton lleno" href="tel:+34646981186"><svg aria-hidden="true"><use href="#s-tel"/></svg><span>Llamar · 646 98 11 86</span></a>
+          <a class="boton" href="#carta-plaza">Ver la carta</a>
+        </div>
+        <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+la+Constitucion+Guardo" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#s-mapa"/></svg>Abrir en Google Maps<span class="sr"> (se abre en otra pestaña)</span></a>
+      </div>
+    </article>
+  </section>
+
+  <section class="fotos" id="fotos" aria-labelledby="t-fotos">
+    <div class="caja">
+      <div class="fotos-cabeza">
+        <span class="etiqueta">Por dentro</span>
+        <h2 id="t-fotos">Así se está de noche</h2>
+        <p>Aquí irán fotos de verdad, oscuras y cálidas, como se ven los dos de noche. <mark class="relleno">fotos pendientes, con permiso del bar</mark></p>
+      </div>
+      <ul class="polaroids">
+        <li class="polaroid"><a href="#rio"><div class="hueco"><mark class="relleno">foto pendiente</mark></div><p>La terraza<span>Embrujo Río</span></p></a></li>
+        <li class="polaroid"><a href="#carta-rio"><div class="hueco"><mark class="relleno">foto pendiente</mark></div><p>Patatas embrujadas<span>Embrujo Río</span></p></a></li>
+        <li class="polaroid"><a href="#plaza"><div class="hueco"><mark class="relleno">foto pendiente</mark></div><p>Los ocho grifos<span>Embrujo Plaza</span></p></a></li>
+        <li class="polaroid"><a href="#plaza"><div class="hueco"><mark class="relleno">foto pendiente</mark></div><p>Futbolín y diana<span>Embrujo Plaza</span></p></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="carta" id="carta" aria-labelledby="t-carta">
+    <div class="caja">
+      <div class="carta-cabeza">
+        <h2 id="t-carta">La carta</h2>
+        <p>Resumida, con los platos que han salido en prensa y en sus carteles. <mark class="relleno">falta la carta real, con precios y alérgenos</mark></p>
+      </div>
+      <div class="cartas">
+        <div class="carta-local" id="carta-rio">
+          <h3>En el Río</h3>
+          <p class="nota">Platos de guardo.org, junio de 2025. También para llevar.</p>
+          <h4>Raciones</h4>
+          <ul class="platos">
+            <li><span class="plato">Rabas</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Gambones</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Patatas embrujadas<small>La de la casa.</small></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Pulpo gratinado</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Ensaladas</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Solomillo a la plancha<small>Con queso y cebolla.</small></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Postres caseros</h4>
+          <ul class="platos">
+            <li><span class="plato">Tarta Pantera Rosa</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Tarta de Tigretón</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Tarta de Kinder Bueno</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Mascarpone con Lotus</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Para beber</h4>
+          <ul class="platos">
+            <li><span class="plato">Cañón o calimotxo<small>Cartel «Regreso al Embrujo Río», 3 de julio. <mark class="relleno">si se repite, sin confirmar</mark></small></span><span class="precio">2,5&nbsp;€</span></li>
+          </ul>
+        </div>
+        <div class="carta-local" id="carta-plaza">
+          <h3>En la Plaza</h3>
+          <p class="nota">Lo que dicen la prensa y su cartel.</p>
+          <h4>De grifo</h4>
+          <ul class="platos">
+            <li><span class="plato">Cerveza de grifo<small>Ocho grifos, nacional y de importación. Marcas <mark class="relleno">sin confirmar</mark></small></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Caña o tinto de verano<small>Pegatina del cartel de la Plaza. <mark class="relleno">fecha sin confirmar</mark></small></span><span class="precio">2&nbsp;€</span></li>
+          </ul>
+          <h4>Para picar</h4>
+          <ul class="platos">
+            <li><span class="plato">Picoteo para acompañar<small>Qué hay <mark class="relleno">sin confirmar</mark></small></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <p class="nota" style="margin-top:22px">Alérgenos de las dos cartas <mark class="relleno">sin confirmar</mark></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sorteos" aria-labelledby="t-sorteos">
+    <div class="caja">
+      <h2 id="t-sorteos">Los sorteos</h2>
+      <div class="sorteo">
+        <p class="cuando">Los miércoles <span>· Embrujo Río</span></p>
+        <p class="grande">Sorteo de <em>cenas y raciones</em> entre los clientes.</p>
+        <p class="fuente">Así fue en el verano de 2025 (guardo.org). <mark class="relleno">si sigue este año, sin confirmar</mark></p>
+      </div>
+      <div class="sorteo">
+        <p class="cuando">En el descanso del fútbol o a las 21:30 <span>· Embrujo Plaza</span></p>
+        <p class="grande">Una <em>cesta de embutidos</em>, con toda la Liga y Champions.</p>
+        <p class="fuente">Cartel de la Plaza. <mark class="relleno">qué días hay sorteo, sin confirmar</mark></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="avisador" aria-labelledby="t-avisador">
+    <div class="caja">
+      <div>
+        <h2 id="t-avisador" class="etiqueta">El avisador</h2>
+        <p class="frase">Pides en la barra, te damos el avisador y, cuando vibra, vas a por lo tuyo.</p>
+        <p>Así funciona en los dos: se pide en barra y te llevas el avisador a la mesa.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="datos" aria-label="Cómo llegar y horario">
+    <div class="caja">
+      <div>
+        <h2 id="donde" tabindex="-1">Cómo llegar</h2>
+        <div class="sitio">
+          <h3>Embrujo Río</h3>
+          <p><strong>Camino la Renta, 1, 34880 Guardo.</strong> La prensa lo sitúa en el Camino de San Miguel.</p>
+          <p>En la orilla oeste del Carrión, al final del Camino de la Renta, que sube junto al río desde la CL-626. Para orientarse: el supermercado Lupa, en la rotonda de la otra orilla. <mark class="relleno">cómo llegar, a confirmar con el bar</mark></p>
+          <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Embrujo+Guardo+Camino+la+Renta+1+Guardo" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#s-mapa"/></svg>Abrir en Google Maps<span class="sr"> el Río (se abre en otra pestaña)</span></a>
+        </div>
+        <div class="sitio">
+          <h3>Embrujo Plaza</h3>
+          <p><strong>Plaza de la Constitución, Guardo</strong>, en el local donde estaba el Peter.</p>
+          <p>En qué lado de la plaza y el número del portal <mark class="relleno">sin confirmar</mark></p>
+          <a class="enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+la+Constitucion+Guardo" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#s-mapa"/></svg>Abrir en Google Maps<span class="sr"> la Plaza (se abre en otra pestaña)</span></a>
+        </div>
+        <p class="nota lejos">Están lejos uno del otro: mejor ir con el mapa de cada uno.</p>
+      </div>
+      <div>
+        <h2 id="horario" tabindex="-1">Horario</h2>
+        <table class="tabla" data-tabla="los-dos">
+          <thead><tr><th scope="col">Día</th><th scope="col">Río</th><th scope="col">Plaza</th></tr></thead>
+          <tbody>
+            <tr data-dia="1"><th scope="row">Lunes</th><td><mark class="relleno">cerrado</mark></td><td>cerrado</td></tr>
+            <tr data-dia="2"><th scope="row">Martes</th><td><mark class="relleno">cerrado</mark></td><td>cerrado</td></tr>
+            <tr data-dia="3"><th scope="row">Miércoles</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="4"><th scope="row">Jueves</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="5"><th scope="row">Viernes</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="6"><th scope="row">Sábado</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">13:00 a 23:00</mark></td></tr>
+            <tr data-dia="0"><th scope="row">Domingo</th><td>16:00 a <mark class="relleno">0:00</mark></td><td><mark class="relleno">13:00 a 23:00</mark></td></tr>
+          </tbody>
+        </table>
+        <p class="aviso-h">La Plaza cierra lunes y martes por descanso (lo dice su cartel); sus horas son las de la inauguración. El Río abre a las 16:00; los días de cierre y la hora de cerrar, sin confirmar. A finales de septiembre de 2026 una web lo da cerrado temporalmente. <mark class="relleno">¿cierre de temporada? sin confirmar</mark></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <p class="marca-pie" aria-hidden="true">Embrujo</p>
+    <div class="pie-rejilla">
+      <div>
+        <h3>Embrujo Río</h3>
+        <p>Camino la Renta, 1, Guardo<br><a href="tel:+34646251640">646 25 16 40</a></p>
+      </div>
+      <div>
+        <h3>Embrujo Plaza</h3>
+        <p>Plaza de la Constitución, Guardo<br><a href="tel:+34646981186">646 98 11 86</a></p>
+      </div>
+      <div>
+        <h3>Instagram</h3>
+        <p>Reservas y preguntas, también por privado.<br><a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a></p>
+      </div>
+    </div>
+    <div class="pie-final">
+      <p>Embrujo Río y Embrujo Plaza · Guardo (Palencia) · de Elena y Nete</p>
+      <p>Boceto, no es la web del bar</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var raiz=document.documentElement;
+  raiz.classList.add('js');
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
+
+  /* ===== HORARIO: el unico sitio donde esta (el del 19, tal cual). De ejemplo, sin confirmar. =====
+     Cada dia: null (cerrado) o {abre,cierra}. Si cierra <= abre, el cierre es
+     de madrugada del dia siguiente (01:00 = la 1 de la noche; 00:00 = medianoche).
+     "seguro" dice que parte tiene fuente: lo demas sale en amarillo. */
+  const HORARIO={
+    confirmado:false,
+    fuente:'Plaza: cartel (lunes y martes cerrado) y prensa de la inauguración. Río: abre a las 16:00; cierres de Restaurant Guru.',
+    locales:{
+      rio:{
+        nombre:'Río',
+        seguro:{abre:true,cierra:false,cerrado:false},
+        dias:{
+          lunes:null, martes:null,
+          miercoles:{abre:'16:00',cierra:'01:00'},
+          jueves:{abre:'16:00',cierra:'01:00'},
+          viernes:{abre:'16:00',cierra:'01:00'},
+          sabado:{abre:'16:00',cierra:'01:00'},
+          domingo:{abre:'16:00',cierra:'00:00'}
+        }
+      },
+      plaza:{
+        nombre:'Plaza',
+        seguro:{abre:false,cierra:false,cerrado:true},
+        dias:{
+          lunes:null, martes:null,
+          miercoles:{abre:'16:00',cierra:'23:00'},
+          jueves:{abre:'16:00',cierra:'23:00'},
+          viernes:{abre:'16:00',cierra:'23:00'},
+          sabado:{abre:'13:00',cierra:'23:00'},
+          domingo:{abre:'13:00',cierra:'23:00'}
+        }
+      }
+    }
+  };
+  const CLAVES=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  const NOMBRES=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+  /* ===== LA HORA DE GUARDO (la del 19, tal cual) =====
+     El horario del bar es el de Guardo: quien mira desde Canarias, desde otro
+     pais o con el movil mal configurado tiene que ver si el bar esta abierto
+     AHORA en Guardo. Nada usa getDay() ni getHours() del dispositivo. */
+  var RELOJ_GUARDO=null;
+  try{RELOJ_GUARDO=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});}catch(e){}
+  var DIA_CORTO={do:0,lu:1,ma:2,mi:3,ju:4,vi:5,sa:6};
+  function horaDeGuardo(fecha){
+    if(RELOJ_GUARDO){
+      var p={};
+      RELOJ_GUARDO.formatToParts(fecha).forEach(function(x){p[x.type]=x.value;});
+      var d=DIA_CORTO[String(p.weekday||'').normalize('NFD').replace(/[^a-z]/gi,'').slice(0,2).toLowerCase()];
+      if(d!=null&&p.hour!=null)return {dia:d,minutos:(+p.hour%24)*60+(+p.minute)};
+    }
+    return {dia:fecha.getDay(),minutos:fecha.getHours()*60+fecha.getMinutes()};
+  }
+
+  function minutos(h){var p=h.split(':');return (+p[0])*60+(+p[1]);}
+  function tramo(local,dia){
+    var t=HORARIO.locales[local].dias[CLAVES[dia]];
+    if(!t)return null;
+    var a=minutos(t.abre),c=minutos(t.cierra);
+    if(c<=a)c+=1440;
+    return {a:a,c:c,t:t};
+  }
+  function aLas(h){
+    var p=h.split(':'),hh=+p[0],mm=p[1];
+    if(hh===0&&mm==='00')return 'a medianoche';
+    return (hh===1?'a la ':'a las ')+hh+':'+mm;
+  }
+  /* "hasta la 1:00", "hasta las 23:00", "hasta medianoche" */
+  function hasta(h){return 'hasta '+aLas(h).replace(/^a /,'');}
+  function estado(local,fecha){
+    var g=horaDeGuardo(fecha),d=g.dia,m=g.minutos;
+    var hoy=tramo(local,d);
+    if(hoy&&m>=hoy.a&&m<hoy.c)return {abierto:true,texto:hasta(hoy.t.cierra)};
+    var ayer=tramo(local,(d+6)%7);
+    if(ayer&&ayer.c>1440&&m+1440<ayer.c)return {abierto:true,texto:hasta(ayer.t.cierra)};
+    if(hoy&&m<hoy.a)return {abierto:false,texto:'abre hoy '+aLas(hoy.t.abre)};
+    for(var i=1;i<=7;i++){
+      var t=tramo(local,(d+i)%7);
+      if(t)return {abierto:false,texto:'abre '+(i===1?'mañana':'el '+NOMBRES[(d+i)%7])+' '+aLas(t.t.abre)};
+    }
+    return {abierto:false,texto:'sin horario'};
+  }
+
+  /* la tabla de horario sale de HORARIO (el HTML trae la misma, para verse sin JS) */
+  function hora(h){var p=h.split(':');return (+p[0])+':'+p[1];}
+  function marca(txt,seguro){return (seguro||HORARIO.confirmado)?txt:'<mark class="relleno">'+txt+'</mark>';}
+  function celda(local,dia){
+    var L=HORARIO.locales[local],t=L.dias[CLAVES[dia]];
+    if(!t)return marca('cerrado',L.seguro.cerrado);
+    if(L.seguro.abre&&!L.seguro.cierra)return hora(t.abre)+' a '+marca(hora(t.cierra),false);
+    return marca(hora(t.abre)+' a '+hora(t.cierra),L.seguro.abre&&L.seguro.cierra);
+  }
+  $$('.tabla').forEach(function(tb){
+    var cuales=tb.dataset.tabla==='los-dos'?['rio','plaza']:[tb.dataset.tabla];
+    $$('tbody tr',tb).forEach(function(tr){
+      var d=+tr.dataset.dia;
+      $$('td',tr).forEach(function(td,i){td.innerHTML=celda(cuales[i],d);});
+    });
+  });
+  function horasHoy(l,dia){var t=HORARIO.locales[l].dias[CLAVES[dia]];return t?hora(t.abre)+' a '+hora(t.cierra):'cerrado';}
+
+  function pintar(fecha){
+    ['rio','plaza'].forEach(function(l){
+      var e=estado(l,fecha),v=e.abierto?'abierto':'cerrado';
+      $$('[data-estado-de="'+l+'"]').forEach(function(p){
+        p.dataset.estado=v;p.hidden=false;
+        p.innerHTML='<i aria-hidden="true"></i><b>'+(e.abierto?'Abierto ahora':'Cerrado ahora')+'</b> <span>'+e.texto+'</span>';
+      });
+    });
+    var dia=horaDeGuardo(fecha).dia;
+    $$('.tabla tbody tr').forEach(function(tr){tr.classList.toggle('hoy',+tr.dataset.dia===dia);});
+    $$('[data-hoy]').forEach(function(dd){
+      var l=dd.dataset.hoy,t=HORARIO.locales[l].dias[CLAVES[dia]];
+      dd.innerHTML=NOMBRES[dia].charAt(0).toUpperCase()+NOMBRES[dia].slice(1)+', '+(t?'de ':'')+celda(l,dia)+'.<br><a class="enlace" href="#horario">Ver la semana</a>';
+    });
+    /* el acceso "Horario" adelanta el dato: hoy, los dos */
+    $$('[data-hoy-acceso]').forEach(function(s){
+      var l=s.dataset.hoyAcceso;s.hidden=false;
+      s.textContent=(l==='rio'?'Río ':'Plaza ')+horasHoy(l,dia);
+    });
+    $$('[data-hoy-titulo]').forEach(function(s){s.hidden=false;});
+  }
+  pintar(new Date());
+
+  /* los desplegables (Menú y Llamar) se cierran al tocar fuera, con Escape o al elegir */
+  var desp=$$('details.despliega');
+  document.addEventListener('click',function(ev){
+    desp.forEach(function(d){if(d.open&&(!d.contains(ev.target)||ev.target.closest('.panel a')))d.open=false;});
+  });
+  document.addEventListener('keydown',function(ev){
+    if(ev.key!=='Escape')return;
+    desp.forEach(function(d){if(d.open){d.open=false;d.querySelector('summary').focus();}});
+  });
+  desp.forEach(function(d){d.addEventListener('toggle',function(){if(d.open)desp.forEach(function(o){if(o!==d)o.open=false;});});});
+})();
+</script>
+</body>
+</html>

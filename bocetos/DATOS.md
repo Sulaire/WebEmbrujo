@@ -67,6 +67,7 @@ Marcas: **[VARIAS]** lo dicen dos o más fuentes · **[UNA]** una sola fuente ·
 - Teléfono **646 98 11 86** (cartel de Instagram de la Plaza).
 - **8 grifos** de cerveza nacional y de importación, picoteo [VARIAS].
 - Autoservicio: se pide en barra y te dan un **avisador** [VARIAS].
+- El avisador se usa **en los dos locales**, también en el Río [UNA: Jordi, 1 de octubre de 2026].
 - **Futbolín y diana**, pantallas (una de unas 100 pulgadas) [VARIAS].
 - Terraza con dos carpas [UNA]. "Moderno y elegante", mucha madera [UNA].
 - Cartel: "**Toda la Liga y Champions**. Abrimos los miércoles para que

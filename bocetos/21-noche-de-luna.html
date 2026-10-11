@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Embrujo · bar en Guardo, Río y Plaza (boceto 21)</title>
+<meta name="description" content="El Embrujo, bar en Guardo (Palencia): el Embrujo Río, terraza con raciones caseras junto al Carrión, y el Embrujo Plaza, cervecería de 8 grifos con fútbol en la Plaza de la Constitución.">
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ===== Boceto 21 · Noche de luna =====
+   Paradiso pasado por Mùn: azul noche, una luna de verdad como única luz,
+   letra fina enorme en mayúsculas espaciadas y un salvia apagado para cambiar
+   el ritmo. Dos familias: Jost (display fino y todo lo práctico) y Pinyon
+   Script una sola vez, para "plaza". Los colores viven solo aquí. */
+:root{
+  --noche:#0c1532;          /* fondo: azul noche, no negro */
+  --noche-alta:#101c42;     /* el cielo de arriba de la portada */
+  --noche-honda:#070d22;    /* pie y franja */
+  --noche-2:#131f45;        /* paneles (Llamar) */
+  --filete:#34406a;         /* filetes finos, decorativo */
+  --filete-claro:#56628c;   /* filete de botones y celdas sobre la noche */
+  --crema:#efe9da;          /* texto principal sobre la noche */
+  --crema-suave:#a8b2cb;    /* texto secundario: 8,5:1 sobre --noche */
+  --salvia:#a9bcae;         /* el segundo color, a sangre */
+  --salvia-clara:#e4ece5;   /* texto de botón relleno sobre el salvia */
+  --tinta:#0f1a2b;          /* texto sobre el salvia: 8,7:1 */
+  --tinta-suave:#2c3c36;    /* texto secundario sobre el salvia: 5,8:1 */
+  --abierto:#8fdcae;        /* punto de estado sobre la noche */
+  --cerrado:#f2a69c;
+  --abierto-s:#1d6b3d;      /* punto de estado sobre el salvia */
+  --cerrado-s:#9b2f25;
+  --relleno:#ffe45c;        /* solo lo sin confirmar */
+  --relleno-tinta:#1a1500;
+  --estrella:#dfe6ff;
+  --silueta:#03060e;        /* cuervo y rama, delante de la luna */
+  /* la luna: solo dentro de la luna */
+  --luna-1:#fbf8ee;
+  --luna-2:#e9e3cf;
+  --luna-3:#cdc5ad;
+  --luna-4:#9c947f;
+  --luna-5:#6c6658;
+  --mar:#7a766d;
+  --halo:#dfe6ff;
+  /* los huecos de foto: oscuros y cálidos, como una barra de noche */
+  --calido-1:#9a5523;
+  --calido-2:#4a2410;
+  --calido-3:#170c09;
+
+  --gutter:clamp(16px,5vw,56px);
+  --ancho:1180px;
+  --lento:1.4s;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:12px}
+body{
+  margin:0;background:var(--noche);color:var(--crema);
+  font-family:'Jost',system-ui,sans-serif;font-weight:400;font-size:1.0625rem;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+/* el grano de pelicula, global y sutil (SVG en linea, sin imagenes externas) */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:40;opacity:.07;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1.1 -.2'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
+p{margin:0}
+h1,h2,h3,h4{margin:0;font-weight:300;line-height:1.1}
+ul{margin:0;padding:0;list-style:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+mark.relleno{background:var(--relleno);color:var(--relleno-tinta);padding:.05em .4em;border-radius:2px;font-weight:500;font-size:.82em;letter-spacing:.01em;white-space:normal;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+:focus-visible{outline:2px solid var(--crema);outline-offset:3px;border-radius:2px}
+.salvia :focus-visible{outline-color:var(--tinta)}
+.caja{width:100%;max-width:calc(var(--ancho) + 2 * var(--gutter));margin-inline:auto;padding-inline:var(--gutter)}
+.saltar{position:absolute;left:12px;top:-60px;z-index:80;background:var(--crema);color:var(--noche);padding:.7em 1em;font-weight:500;text-decoration:none}
+.saltar:focus{top:12px}
+.js .sin-js{display:none}
+.antetitulo{font-size:.78rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--crema-suave)}
+.salvia .antetitulo{color:var(--tinta-suave)}
+.ico{width:1.1em;height:1.1em;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== franja del boceto ===== */
+.franja{background:var(--noche-honda);color:var(--crema-suave);font-size:.8rem;line-height:1.45;padding:.55rem 0;border-bottom:1px solid var(--filete)}
+.franja strong{color:var(--crema);font-weight:500}
+
+/* ===== portada ===== */
+.portada{
+  position:relative;overflow:hidden;isolation:isolate;
+  background:linear-gradient(180deg,var(--noche-alta) 0%,var(--noche) 78%);
+  padding:clamp(1.4rem,4vh,3rem) 0 clamp(2.2rem,5vh,3.6rem);text-align:center;
+}
+/* el cielo: estrellas muy sutiles, en CSS */
+.cielo{position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 78% 12%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1.4px 1.4px at 64% 34%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 30% 44%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 90% 52%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1.2px 1.2px at 6% 66%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 46% 8%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 22% 82%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 84% 86%,var(--estrella) 50%,transparent 51%);
+  background-size:330px 290px;opacity:.55}
+.cielo::after{content:"";position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 40% 60%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 70% 20%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 15% 35%,var(--estrella) 50%,transparent 51%),
+    radial-gradient(1px 1px at 92% 74%,var(--estrella) 50%,transparent 51%);
+  background-size:470px 410px;opacity:.6}
+.portada .donde-esta{margin-bottom:clamp(1.2rem,3.5vh,2.4rem)}
+
+.escena{position:relative;width:min(66vw,42svh,400px);margin-inline:auto;aspect-ratio:1}
+/* LA luna: el unico elemento luminoso de la pagina */
+.luna{
+  position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  background:
+    radial-gradient(circle at 36% 32%,var(--luna-1) 0%,var(--luna-2) 34%,var(--luna-3) 62%,var(--luna-4) 86%,var(--luna-5) 100%);
+  box-shadow:
+    0 0 28px 2px rgb(from var(--halo) r g b / .30),
+    0 0 90px 18px rgb(from var(--halo) r g b / .14),
+    0 0 220px 60px rgb(from var(--halo) r g b / .07);
+}
+/* los mares: manchas suaves, con el borde algo definido */
+.luna::before{content:"";position:absolute;inset:-4%;filter:url(#borde-mar);
+  background:
+    radial-gradient(ellipse 14% 12% at 34% 30%,rgb(from var(--mar) r g b / .62),rgb(from var(--mar) r g b / .35) 70%,transparent 100%),
+    radial-gradient(ellipse 9% 8.5% at 57% 28%,rgb(from var(--mar) r g b / .6),rgb(from var(--mar) r g b / .3) 70%,transparent 100%),
+    radial-gradient(ellipse 11% 9% at 65% 44%,rgb(from var(--mar) r g b / .55),rgb(from var(--mar) r g b / .28) 70%,transparent 100%),
+    radial-gradient(ellipse 12% 21% at 21% 54%,rgb(from var(--mar) r g b / .5),rgb(from var(--mar) r g b / .25) 70%,transparent 100%),
+    radial-gradient(ellipse 8% 6% at 42% 66%,rgb(from var(--mar) r g b / .42),transparent 100%),
+    radial-gradient(ellipse 5% 7% at 77% 58%,rgb(from var(--mar) r g b / .48),transparent 100%),
+    radial-gradient(ellipse 4.5% 3.6% at 84% 33%,rgb(from var(--mar) r g b / .7),transparent 100%),
+    radial-gradient(ellipse 7% 5% at 47% 41%,rgb(from var(--mar) r g b / .32),transparent 100%),
+    radial-gradient(ellipse 6% 9% at 27% 38%,rgb(from var(--mar) r g b / .4),transparent 100%),
+    radial-gradient(ellipse 5% 4% at 70% 34%,rgb(from var(--mar) r g b / .4),transparent 100%),
+    radial-gradient(ellipse 7% 4% at 30% 66%,rgb(from var(--mar) r g b / .3),transparent 100%)}
+/* relieve (luz difusa sobre ruido, en SVG en linea) y oscurecimiento del borde */
+.luna::after{content:"";position:absolute;inset:0;border-radius:50%;mix-blend-mode:multiply;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 60%,rgb(from var(--luna-5) r g b / .42) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='r' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='.03' numOctaves='5' seed='11'/><feDiffuseLighting surfaceScale='1.6' diffuseConstant='1.05'><feDistantLight azimuth='225' elevation='62'/></feDiffuseLighting></filter><rect width='100%' height='100%' filter='url(%23r)'/></svg>");
+  background-size:100% 100%,100% 100%;opacity:.5}
+.luna .grano{position:absolute;inset:0;border-radius:50%;mix-blend-mode:multiply;opacity:.55;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .29  0 0 0 0 .26  0 0 0 .8 -.3'/></filter><rect width='100%' height='100%' filter='url(%23f)'/></svg>");background-size:30% 30%}
+.crater{position:absolute;border-radius:50%;z-index:1;
+  background:radial-gradient(circle at 54% 56%,rgb(from var(--luna-1) r g b / .22) 0 30%,rgb(from var(--luna-5) r g b / .24) 46%,transparent 66%)}
+.crater.rayos{background:radial-gradient(circle,rgb(from var(--luna-1) r g b / .85) 0 7%,rgb(from var(--luna-1) r g b / .22) 20%,transparent 62%)}
+.cuervo{position:absolute;z-index:2;left:46%;bottom:-3%;width:66%;overflow:visible;color:var(--silueta)}
+
+.portada h1{
+  margin-top:clamp(1.6rem,4.5vh,3rem);
+  font-weight:200;font-size:clamp(2.7rem,13.5vw,8.6rem);line-height:.9;letter-spacing:.24em;
+  margin-right:-.24em;text-transform:uppercase;
+}
+.portada h1 .sub{display:block}
+.locales{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:0 clamp(.6rem,3vw,2.4rem);margin-top:clamp(1.2rem,3.4vh,2.4rem)}
+.locales .local{display:flex;flex-direction:column;gap:.2rem}
+.locales .local:first-child{align-items:flex-end;text-align:right}
+.locales .local:last-child{align-items:flex-start;text-align:left}
+.locales .nombre{display:inline-flex;align-items:center;min-height:48px;font-weight:300;font-size:clamp(1.35rem,6.4vw,2.9rem);letter-spacing:.3em;text-transform:uppercase;text-decoration:none;line-height:1}
+.locales .local:first-child .nombre{margin-right:-.3em}
+.locales .nombre:hover{text-decoration:underline;text-decoration-thickness:1px}
+.locales .rombo{font-size:clamp(.9rem,3.4vw,1.6rem);font-weight:300;line-height:48px;color:var(--crema-suave)}
+.estado{font-size:.82rem;font-weight:400;line-height:1.35;color:var(--crema-suave);letter-spacing:.02em}
+.estado b{display:block;font-weight:500;color:var(--crema);letter-spacing:.04em}
+.estado .punto{display:inline-block;width:.5em;height:.5em;border-radius:50%;margin-right:.45em;vertical-align:.08em;background:var(--cerrado)}
+.estado[data-estado="abierto"] .punto{background:var(--abierto)}
+.salvia .estado{color:var(--tinta-suave)} .salvia .estado b{color:var(--tinta)}
+.salvia .estado .punto{background:var(--cerrado-s)} .salvia .estado[data-estado="abierto"] .punto{background:var(--abierto-s)}
+.portada .notas{margin-top:1.1rem;font-size:.82rem;color:var(--crema-suave)}
+.portada .notas a{display:inline-block;padding:.7em .2em}
+
+/* ===== accesos rapidos ===== */
+.accesos{border-top:1px solid var(--filete);border-bottom:1px solid var(--filete)}
+.accesos ul{display:grid;grid-template-columns:1fr 1fr}
+.accesos li{padding:1.1rem 0 1rem;border-bottom:1px solid var(--filete)}
+.accesos li:nth-child(odd){padding-right:1rem;border-right:1px solid var(--filete)}
+.accesos li:nth-child(even){padding-left:1rem}
+.accesos li:nth-last-child(-n+2){border-bottom:0}
+.accesos .antetitulo{display:block;margin-bottom:.35rem;font-size:.72rem}
+.accesos a{display:flex;align-items:center;gap:.5em;min-height:44px;text-decoration:none;font-size:.95rem;line-height:1.3}
+.accesos a:hover .t{text-decoration:underline}
+.accesos a b{font-weight:500;white-space:nowrap}
+.accesos .hoy-acc{display:block;min-height:44px}
+.accesos .hoy-acc span{display:block}
+@media (min-width:900px){
+  .accesos ul{grid-template-columns:repeat(4,1fr)}
+  .accesos li{border-bottom:0;padding:1.4rem 1.4rem 1.2rem!important;border-right:1px solid var(--filete)}
+  .accesos li:first-child{padding-left:0!important}
+  .accesos li:last-child{border-right:0}
+}
+
+/* ===== botones: filete fino o rellenos, sin brillo ===== */
+.botones{display:flex;flex-wrap:wrap;gap:.6rem}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:.6em;min-height:48px;padding:.5em 1.3em;border:1px solid var(--filete-claro);color:var(--crema);background:transparent;
+  font:inherit;font-size:.8rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;line-height:1.2;transition:background-color .4s,color .4s,border-color .4s}
+.boton:hover{border-color:var(--crema)}
+.boton.lleno{background:var(--crema);color:var(--noche);border-color:var(--crema)}
+.boton.lleno:hover{background:var(--luna-2)}
+.boton b{font-weight:500;letter-spacing:.08em;white-space:nowrap}
+.salvia .boton{color:var(--tinta);border-color:var(--tinta)}
+.salvia .boton.lleno{background:var(--tinta);color:var(--salvia-clara)}
+.salvia .boton.lleno:hover{background:var(--noche)}
+
+/* ===== los dos locales ===== */
+.local-bloque{padding:clamp(3.5rem,9vw,7.5rem) 0}
+.local-bloque .rejilla{display:grid;gap:2rem}
+.local-bloque h2{font-weight:200;line-height:.95}
+.local-bloque h2 .antetitulo{display:block;margin-bottom:.9rem;font-size:.76rem;line-height:1.6}
+#rio h2 .grande{display:block;font-size:clamp(3.6rem,15vw,8.5rem);letter-spacing:.2em;text-transform:uppercase;margin-right:-.2em}
+.caligrafica{font-family:'Pinyon Script',cursive;font-weight:400;font-size:clamp(5rem,22vw,11rem);line-height:.9;letter-spacing:0;text-transform:none;display:block;padding:0 0 .08em .22em;margin-top:.12em}
+.local-bloque .lead{font-size:clamp(1.15rem,2.2vw,1.45rem);font-weight:300;line-height:1.45;max-width:30ch;margin-top:1.4rem}
+.ficha{margin-top:1.8rem;border-top:1px solid var(--filete)}
+.salvia .ficha{border-color:var(--tinta-suave)}
+.ficha>div{display:grid;grid-template-columns:5.5rem 1fr;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--filete)}
+.salvia .ficha>div{border-color:var(--tinta-suave)}
+.ficha dt{font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--crema-suave);padding-top:.25em}
+.salvia .ficha dt{color:var(--tinta-suave)}
+.ficha dd{margin:0;font-size:1rem;line-height:1.5}
+.ficha .que li{padding-left:1em;text-indent:-1em}
+.ficha .que li::before{content:"·";display:inline-block;width:1em;text-indent:0}
+.ficha .nota{display:block;font-size:.86rem;color:var(--crema-suave);margin-top:.2rem}
+.salvia .ficha .nota{color:var(--tinta-suave)}
+.ficha dd a{display:inline-block;padding-block:.55em;margin-block:-.55em}
+.local-bloque .botones{margin-top:1.6rem}
+.local-bloque .mapa-enlace{display:inline-flex;align-items:center;gap:.5em;min-height:48px;margin-top:.6rem;font-size:.95rem}
+.local-bloque .google{margin-top:1rem;font-size:.9rem;color:var(--crema-suave)}
+.local-bloque .google b{color:var(--crema);font-weight:500}
+.local-bloque .estado{margin-top:1.2rem;font-size:.9rem}
+.local-bloque .estado b{display:inline}
+.foto-local{position:relative;min-height:340px}
+@media (min-width:900px){
+  .local-bloque .rejilla{grid-template-columns:repeat(12,1fr);gap:0 clamp(1.5rem,3vw,3rem);align-items:stretch}
+  #rio .foto-local{grid-column:1 / span 7;grid-row:1}
+  #rio .texto-local{grid-column:8 / span 5;grid-row:1}
+  #plaza .texto-local{grid-column:1 / span 6;grid-row:1}
+  #plaza .foto-local{grid-column:7 / span 6;grid-row:1}
+  .foto-local{min-height:0;aspect-ratio:4/5;align-self:start;position:sticky;top:2rem}
+}
+/* el salvia, a sangre */
+.salvia{background:var(--salvia);color:var(--tinta)}
+
+/* ===== huecos de foto: oscuros y calidos ===== */
+.hueco{position:relative;overflow:hidden;display:flex;align-items:flex-end;min-height:220px;height:100%;
+  background:
+    radial-gradient(ellipse 55% 45% at var(--lx,32%) var(--ly,62%),rgb(from var(--calido-1) r g b / .85),transparent 70%),
+    radial-gradient(ellipse 40% 35% at var(--lx2,78%) var(--ly2,30%),rgb(from var(--calido-1) r g b / .35),transparent 70%),
+    linear-gradient(160deg,var(--calido-2),var(--calido-3) 70%)}
+.hueco::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,transparent 45%,rgb(from var(--calido-3) r g b / .92) 100%)}
+.hueco figcaption,.hueco .pie-hueco{position:relative;z-index:1;padding:1rem 1.1rem;font-size:.86rem;line-height:1.4;color:var(--crema)}
+.hueco figcaption span{display:block;margin-bottom:.35rem}
+
+.fotos{padding:clamp(3.5rem,8vw,6.5rem) 0 0}
+.fotos .cabeza{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.6rem 2rem;margin-bottom:1.6rem}
+.fotos h2{font-weight:200;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:.18em;text-transform:uppercase}
+.fotos .cabeza p{max-width:44ch;color:var(--crema-suave);font-size:.95rem}
+.rejilla-fotos{display:grid;gap:4px;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(150px,38vw)}
+.rejilla-fotos figure{margin:0;min-height:0}
+.rejilla-fotos .hueco{min-height:0}
+.rejilla-fotos .f1{grid-column:span 2;grid-row:span 2}
+.rejilla-fotos .f4{grid-column:span 2}
+@media (min-width:760px){
+  .rejilla-fotos{grid-template-columns:repeat(6,1fr);grid-auto-rows:clamp(170px,17vw,260px)}
+  .rejilla-fotos .f1{grid-column:span 3;grid-row:span 2}
+  .rejilla-fotos .f2{grid-column:span 2;grid-row:span 2}
+  .rejilla-fotos .f3{grid-column:span 1}
+  .rejilla-fotos .f4{grid-column:span 1}
+  .rejilla-fotos .f5{grid-column:span 4}
+  .rejilla-fotos .f6{grid-column:span 2}
+}
+
+/* ===== la carta ===== */
+.carta{padding:clamp(4rem,9vw,7.5rem) 0}
+.carta .cabeza{display:grid;gap:1rem;margin-bottom:2.6rem}
+.carta h2{font-weight:200;font-size:clamp(2.6rem,9vw,6rem);letter-spacing:.2em;text-transform:uppercase;line-height:.95}
+.carta .cabeza p{color:var(--crema-suave);max-width:52ch;font-size:.95rem}
+.columnas{display:grid;gap:3rem}
+@media (min-width:900px){
+  .carta .cabeza{grid-template-columns:7fr 5fr;align-items:end}
+  .columnas{grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,6rem)}
+}
+.columnas h3{font-weight:300;font-size:clamp(1.5rem,3.4vw,2.1rem);letter-spacing:.24em;text-transform:uppercase;padding-bottom:.9rem;border-bottom:1px solid var(--filete-claro);scroll-margin-top:1rem}
+.columnas h4{margin:1.8rem 0 .4rem;font-size:.74rem;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--crema-suave);scroll-margin-top:1rem}
+.platos li{display:flex;align-items:baseline;gap:.8rem;padding:.55rem 0;border-bottom:1px solid var(--filete)}
+.platos .plato{flex:1 1 auto}
+.platos .precio{flex:none;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.platos .de-donde{display:block;font-size:.82rem;color:var(--crema-suave)}
+.carta .alergenos{margin-top:1.1rem;font-size:.86rem;color:var(--crema-suave)}
+
+/* ===== sorteos ===== */
+.sorteos{padding:clamp(3.5rem,8vw,6.5rem) 0;border-top:1px solid var(--filete)}
+.sorteos .cabeza{margin-bottom:2rem}
+.sorteos h2{font-weight:200;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:.18em;text-transform:uppercase}
+.sorteo{display:grid;gap:.6rem 2rem;padding:1.8rem 0;border-top:1px solid var(--filete)}
+.sorteo:last-child{border-bottom:1px solid var(--filete)}
+.sorteo .cuando{font-size:.78rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--crema-suave)}
+.sorteo .que{font-weight:300;font-size:clamp(1.7rem,5vw,3rem);line-height:1.1}
+.sorteo .mas{margin-top:.5rem;font-size:.98rem}
+.sorteo .fuente{margin-top:.3rem;font-size:.84rem;color:var(--crema-suave)}
+@media (min-width:900px){
+  .sorteos .caja{display:grid;grid-template-columns:4fr 8fr;gap:0 4rem}
+  .sorteo{grid-template-columns:13rem 1fr}
+}
+
+/* ===== el avisador: banda salvia corta ===== */
+.avisador{padding:clamp(2.6rem,6vw,4.5rem) 0}
+.avisador .caja{display:grid;gap:1rem}
+.avisador h2{font-weight:500;font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:var(--tinta-suave)}
+.avisador p{font-weight:300;font-size:clamp(1.4rem,3.6vw,2.3rem);line-height:1.3;max-width:34ch}
+.avisador p small{display:block;margin-top:.8rem;font-size:.95rem;font-weight:400;line-height:1.5;color:var(--tinta-suave);max-width:60ch}
+@media (min-width:900px){.avisador .caja{grid-template-columns:4fr 8fr;gap:4rem;align-items:baseline}}
+
+/* ===== horario ===== */
+.horario{padding:clamp(4rem,9vw,7rem) 0}
+.horario .caja{display:grid;gap:2rem}
+.horario h2{font-weight:200;font-size:clamp(2.4rem,8vw,5.2rem);letter-spacing:.2em;text-transform:uppercase;line-height:.95;scroll-margin-top:1rem}
+.horario .intro{margin-top:1rem;color:var(--crema-suave);font-size:.95rem;max-width:38ch}
+@media (min-width:900px){.horario .caja{grid-template-columns:5fr 7fr;gap:4rem}}
+.tabla{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tabla th,.tabla td{text-align:left;padding:.75rem .5rem .75rem 0;border-bottom:1px solid var(--filete);font-weight:400;vertical-align:baseline}
+.tabla thead th{font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--crema-suave)}
+.tabla tbody th{font-weight:500}
+.tabla tr.hoy th,.tabla tr.hoy td{border-bottom-color:var(--crema)}
+.tabla tr.hoy th::after{content:" · hoy";font-weight:400;color:var(--crema-suave)}
+.horario .aviso-h{margin-top:1rem;font-size:.88rem;color:var(--crema-suave)}
+
+/* ===== solo en el boceto ===== */
+.probador{margin:0;border:1px dashed var(--filete-claro);padding:1rem 1.2rem 1.1rem}
+.probador legend{padding:0 .4em;font-size:.86rem}
+.probador .opciones{display:flex;flex-wrap:wrap;gap:.2rem 1.2rem}
+.probador label{display:inline-flex;align-items:center;gap:.5em;min-height:44px;font-size:.92rem;cursor:pointer}
+.probador input{accent-color:var(--crema);width:1.1rem;height:1.1rem}
+.probador-eco{font-size:.86rem;color:var(--crema-suave)}
+.boceto-bloque{padding:0 0 3rem}
+
+/* ===== pie ===== */
+.pie{background:var(--noche-honda);padding:3.2rem 0 calc(7.5rem + env(safe-area-inset-bottom));border-top:1px solid var(--filete);font-size:.95rem}
+.pie .rejilla{display:grid;gap:2rem}
+@media (min-width:760px){.pie .rejilla{grid-template-columns:1fr 1fr 1fr}}
+.pie h2{font-weight:500;font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--crema-suave);margin-bottom:.6rem}
+.pie a{display:inline-flex;align-items:center;gap:.5em;min-height:44px}
+.pie .firma{margin-top:2.6rem;padding-top:1.4rem;border-top:1px solid var(--filete);font-size:.84rem;color:var(--crema-suave)}
+.pie .firma strong{color:var(--crema);font-weight:500}
+
+/* ===== el boton redondo de Llamar, fijo ===== */
+.llamar-fijo{position:fixed;right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));z-index:60}
+.llamar-fijo summary{list-style:none;cursor:pointer;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;position:relative;
+  background:var(--noche);border:1px solid var(--filete-claro)}
+.llamar-fijo summary::-webkit-details-marker{display:none}
+.llamar-fijo .aro{position:absolute;inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);overflow:visible}
+.llamar-fijo .aro text{fill:var(--crema);font-family:'Jost',system-ui,sans-serif;font-size:10.4px;font-weight:500;letter-spacing:.2em}
+.llamar-fijo .lunita{width:30px;height:30px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,var(--luna-1),var(--luna-3) 62%,var(--luna-5))}
+.llamar-fijo[open] .lunita{background:radial-gradient(circle at 64% 32%,var(--luna-1),var(--luna-3) 62%,var(--luna-5))}
+.llamar-panel{position:absolute;right:0;bottom:calc(100% + 10px);width:min(290px,calc(100vw - 28px));background:var(--noche-2);border:1px solid var(--filete-claro);padding:.4rem 1rem}
+.llamar-panel p{font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--crema-suave);padding:.6rem 0 .2rem}
+.llamar-panel a{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:52px;text-decoration:none;border-top:1px solid var(--filete)}
+.llamar-panel a:first-of-type{border-top:0}
+.llamar-panel a span{display:inline-flex;align-items:center;gap:.6em}
+.llamar-panel a b{font-weight:500;font-variant-numeric:tabular-nums}
+/* en el movil, mientras se ven los accesos (que ya tienen Llamar), el boton espera; sin JS se ve siempre */
+@media (max-width:899px){.js .con-accesos .llamar-fijo:not([open]){opacity:0;visibility:hidden}}
+@media (min-width:900px){.llamar-fijo{right:28px;bottom:28px}.llamar-fijo summary{width:100px;height:100px}.llamar-fijo .lunita{width:36px;height:36px}}
+
+/* ===== la calma de Mun: transiciones lentas, siempre dentro de reduced-motion =====
+   Lo visible lo es por defecto: sin soporte, sin JS o con movimiento reducido no hay
+   nada escondido; la animacion solo acompaña la entrada al hacer scroll. */
+@media (prefers-reduced-motion:no-preference){
+  html{scroll-behavior:smooth}
+  .luna{animation:sale var(--lento) cubic-bezier(.2,.7,.2,1) both}
+  .cuervo{animation:sale calc(var(--lento) * 1.3) cubic-bezier(.2,.7,.2,1) .25s both}
+  .llamar-fijo .aro{animation:gira 28s linear infinite}
+  .llamar-fijo[open] .aro{animation-play-state:paused}
+  .llamar-fijo{transition:opacity .6s,visibility .6s}
+  @supports (animation-timeline:view()){
+    .aparece{animation:entra linear both;animation-timeline:view();animation-range:entry 0% entry 75%}
+  }
+}
+@keyframes sale{from{opacity:0;transform:translateY(14px)}}
+@keyframes gira{to{transform:rotate(360deg)}}
+@keyframes entra{from{opacity:0;transform:translateY(36px)}}
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- bordes irregulares para los mares de la luna -->
+    <filter id="borde-mar" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="3" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="26" xChannelSelector="R" yChannelSelector="G"/><feGaussianBlur stdDeviation="1.6"/></filter>
+    <symbol id="i-tel" viewBox="0 0 24 24"><path d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11 11 0 0 0 5.2 5.2l1.4-2.1 4.2 1.6V17a2.5 2.5 0 0 1-2.7 2.5C9.7 19 5 14.3 4.5 6.2A2.5 2.5 0 0 1 5 3.5z"/></symbol>
+    <symbol id="i-mapa" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4z"/></symbol>
+  </defs>
+</svg>
+
+<p class="franja"><span class="caja" style="display:block"><strong>Boceto 21 · Noche de luna</strong> · no es la web del bar · lo marcado en <mark class="relleno">amarillo</mark> está sin confirmar</span></p>
+
+<main id="contenido" tabindex="-1">
+
+  <header class="portada">
+    <div class="cielo" aria-hidden="true"></div>
+    <div class="caja">
+      <p class="antetitulo donde-esta">Guardo · Palencia</p>
+      <div class="escena" aria-hidden="true">
+        <div class="luna">
+          <span class="grano"></span>
+          <span class="crater rayos" style="left:37%;top:72%;width:16%;height:16%"></span>
+          <span class="crater" style="left:30.5%;top:46%;width:4.5%;height:4.5%"></span>
+          <span class="crater" style="left:21%;top:41%;width:3%;height:3%"></span>
+          <span class="crater" style="left:60%;top:70%;width:5%;height:5%"></span>
+          <span class="crater" style="left:51%;top:86%;width:3.5%;height:3.5%"></span>
+          <span class="crater" style="left:70%;top:20%;width:3%;height:3%"></span>
+                    <span class="crater" style="left:80%;top:72%;width:2.8%;height:2.8%"></span>
+        </div>
+        <!-- el cuervo de la marca, en silueta, posado en una rama delante de la luna -->
+        <svg class="cuervo" viewBox="0 0 200 170" focusable="false">
+          <path fill="currentColor" d="M-6 151.5 C40 149.5 90 147 130 148 C200 149 400 154 1400 166 L1400 178 C400 164 200 156.5 130 155.5 C90 154.5 40 155 -6 153.5 Z M150 150 C158 142 166 138 178 136 L179 138.5 C168 141 161 145 155 151 Z"/>
+          <path fill="currentColor" d="M22 50 C34 42 46 36 56 34 C60 24 72 18 84 19 C96 20 104 28 106 40 C110 52 120 64 128 78 C138 96 150 114 162 128 L186 146 L177 148 L169 143 L171 151 L150 138 C136 136 118 134 106 130 C88 124 74 110 70 94 C66 80 66 70 62 62 L57 64 L59 58 L53 58 C44 56 32 54 22 50 Z"/>
+          <path fill="currentColor" d="M93 126 L97 127 L95.5 149 L92 149 Z M105 128 L109 128.5 L109.5 149 L106 149 Z M84 147 L99 146.5 L99 150 L84 150.5 Z M100 147 L116 147 L116 150.5 L100 150 Z"/>
+        </svg>
+      </div>
+      <h1><span class="sr">El Embrujo, en Guardo: Embrujo Río y Embrujo Plaza</span><span aria-hidden="true">Embrujo</span></h1>
+      <div class="locales">
+        <div class="local">
+          <a class="nombre" href="#rio">Río<span class="sr">: Embrujo Río, junto al Carrión</span></a>
+          <p class="estado" data-estado-de="rio" aria-live="polite" hidden></p>
+        </div>
+        <span class="rombo" aria-hidden="true">✦</span>
+        <div class="local">
+          <a class="nombre" href="#plaza">Plaza<span class="sr">: Embrujo Plaza, en la Plaza de la Constitución</span></a>
+          <p class="estado" data-estado-de="plaza" aria-live="polite" hidden></p>
+        </div>
+      </div>
+      <p class="notas"><mark class="relleno">Horario de ejemplo, sin confirmar</mark> <span class="sin-js">¿Está abierto? <a href="#horario">Mira el horario de los dos</a>.</span></p>
+    </div>
+  </header>
+
+  <!-- lo que se busca en la web de un bar, a mano desde arriba -->
+  <nav class="accesos" aria-label="Accesos rápidos">
+    <ul class="caja">
+      <li>
+        <span class="antetitulo">Hoy</span>
+        <a class="hoy-acc" href="#horario" data-hoy-acceso><span class="t">Horario de los dos</span></a>
+      </li>
+      <li>
+        <span class="antetitulo">Cómo llegar</span>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Embrujo+Guardo+Camino+la+Renta+1+Guardo" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mapa"/></svg><span class="t">Río</span><span class="sr"> en Google Maps (se abre en otra pestaña)</span></a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+la+Constitucion+Guardo" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mapa"/></svg><span class="t">Plaza</span><span class="sr"> en Google Maps (se abre en otra pestaña)</span></a>
+      </li>
+      <li>
+        <span class="antetitulo">La carta</span>
+        <a href="#carta-rio"><span class="t">Del Río</span></a>
+        <a href="#carta-plaza"><span class="t">De la Plaza</span></a>
+      </li>
+      <li>
+        <span class="antetitulo">Llamar</span>
+        <a href="tel:+34646251640"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg><span class="t">Río <b>646 25 16 40</b></span></a>
+        <a href="tel:+34646981186"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg><span class="t">Plaza <b>646 98 11 86</b></span></a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ===== EL RIO ===== -->
+  <section class="local-bloque" id="rio" aria-labelledby="t-rio">
+    <div class="caja rejilla">
+      <figure class="foto-local aparece" style="margin:0">
+        <div class="hueco" style="--lx:28%;--ly:70%;--lx2:70%;--ly2:40%">
+          <figcaption><span>La terraza bajo los árboles, de noche, con las luces encendidas</span><mark class="relleno">foto pendiente</mark></figcaption>
+        </div>
+      </figure>
+      <div class="texto-local">
+        <h2 id="t-rio" tabindex="-1"><span class="antetitulo">Embrujo · junto al Carrión · desde 2008</span><span class="grande">Río</span></h2>
+        <p class="lead">El bar de siempre, con una terraza enorme bajo los árboles, al lado del&nbsp;río.</p>
+        <p class="estado" data-estado-de="rio" hidden></p>
+        <dl class="ficha">
+          <div><dt>Qué hay</dt><dd><ul class="que">
+            <li>Raciones caseras, plancha y postres caseros, con cocina desde las&nbsp;16:00.</li>
+            <li>Pincho con la consumición.</li>
+            <li>Comida para llevar.</li>
+            <li>En verano, DJ los jueves y los viernes (guardo.org, 2025).</li>
+          </ul></dd></div>
+          <div><dt>Dónde</dt><dd>Camino la Renta, 1, Guardo <span class="nota">La prensa lo sitúa en el Camino de San Miguel. <mark class="relleno">cuál es la buena, sin confirmar</mark></span></dd></div>
+          <div><dt>Hoy</dt><dd data-hoy="rio"><a href="#horario">Mira el horario</a></dd></div>
+        </dl>
+        <div class="botones">
+          <a class="boton lleno" href="tel:+34646251640"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg><span>Llamar · <b>646 25 16 40</b></span></a>
+          <a class="boton" href="#carta-rio">Ver la carta<span class="sr"> del Río</span></a>
+        </div>
+        <a class="mapa-enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Embrujo+Guardo+Camino+la+Renta+1+Guardo" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mapa"/></svg>Abrir en Google Maps<span class="sr"> el Río (se abre en otra pestaña)</span></a>
+        <p class="google"><b>4,6</b> en Google, con 636 reseñas. Lo que más se repite: comida casera, raciones generosas y buen trato.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LA PLAZA (a sangre, en salvia) ===== -->
+  <section class="local-bloque salvia" id="plaza" aria-labelledby="t-plaza">
+    <div class="caja rejilla">
+      <div class="texto-local">
+        <h2 id="t-plaza" tabindex="-1"><span class="antetitulo">Embrujo · cervecería · desde diciembre de 2025</span><span class="caligrafica">plaza</span></h2>
+        <p class="lead">La cervecería de la Plaza de la Constitución, donde estaba el Peter. Ocho grifos y el fútbol en pantalla grande.</p>
+        <p class="estado" data-estado-de="plaza" hidden></p>
+        <dl class="ficha">
+          <div><dt>Qué hay</dt><dd><ul class="que">
+            <li>Ocho grifos de cerveza nacional y de importación, y picoteo.</li>
+            <li>Toda la Liga y Champions, con una pantalla de unas 100&nbsp;pulgadas.</li>
+            <li>Futbolín y diana. Terraza con dos carpas.</li>
+            <li>Pides en barra y te dan el avisador.</li>
+          </ul></dd></div>
+          <div><dt>Dónde</dt><dd>Plaza de la Constitución, Guardo <span class="nota">Número del portal: <mark class="relleno">sin confirmar</mark></span></dd></div>
+          <div><dt>Hoy</dt><dd data-hoy="plaza"><a href="#horario">Mira el horario</a></dd></div>
+        </dl>
+        <div class="botones">
+          <a class="boton lleno" href="tel:+34646981186"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg><span>Llamar · <b>646 98 11 86</b></span></a>
+          <a class="boton" href="#carta-plaza">Ver la carta<span class="sr"> de la Plaza</span></a>
+        </div>
+        <a class="mapa-enlace" href="https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+la+Constitucion+Guardo" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-mapa"/></svg>Abrir en Google Maps<span class="sr"> la Plaza (se abre en otra pestaña)</span></a>
+      </div>
+      <figure class="foto-local aparece" style="margin:0">
+        <div class="hueco" style="--lx:64%;--ly:40%;--lx2:20%;--ly2:70%">
+          <figcaption><span>La barra con los ocho grifos, con la luz baja</span><mark class="relleno">foto pendiente</mark></figcaption>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ===== adelanto de fotos: rejilla de huecos ===== -->
+  <section class="fotos" id="fotos" aria-labelledby="t-fotos">
+    <div class="caja cabeza">
+      <h2 id="t-fotos">Por dentro</h2>
+      <p>De noche es como mejor se ven. Huecos para fotos de verdad, oscuras y cálidas. <mark class="relleno">faltan las fotos y su permiso</mark></p>
+    </div>
+    <div class="rejilla-fotos">
+      <figure class="f1 aparece"><div class="hueco" style="--lx:30%;--ly:66%"><figcaption><span>Terraza del Río, de noche</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+      <figure class="f2 aparece"><div class="hueco" style="--lx:58%;--ly:30%;--lx2:30%;--ly2:80%"><figcaption><span>Los grifos de la Plaza</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+      <figure class="f3 aparece"><div class="hueco" style="--lx:50%;--ly:55%"><figcaption><span>Patatas embrujadas</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+      <figure class="f4 aparece"><div class="hueco" style="--lx:72%;--ly:48%;--lx2:20%;--ly2:20%"><figcaption><span>La fachada azul del Río con su letrero</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+      <figure class="f5 aparece"><div class="hueco" style="--lx:22%;--ly:40%;--lx2:84%;--ly2:60%"><figcaption><span>Fútbol en la pantalla grande</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+      <figure class="f6 aparece"><div class="hueco" style="--lx:46%;--ly:62%"><figcaption><span>Postres caseros</span><mark class="relleno">foto pendiente</mark></figcaption></div></figure>
+    </div>
+  </section>
+
+  <!-- ===== la carta ===== -->
+  <section class="carta" id="carta" aria-labelledby="t-carta">
+    <div class="caja">
+      <div class="cabeza">
+        <h2 id="t-carta">La carta</h2>
+        <p><mark class="relleno">Carta de ejemplo con los platos que salen en prensa; falta la carta real</mark> Río: guardo.org, junio de 2025. Plaza: la prensa y su cartel.</p>
+      </div>
+      <div class="columnas">
+        <div class="aparece">
+          <h3 id="carta-rio" tabindex="-1">Río</h3>
+          <h4>Raciones</h4>
+          <ul class="platos">
+            <li><span class="plato">Rabas</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Gambones</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Patatas embrujadas</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Pulpo gratinado</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Ensaladas</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Plancha</h4>
+          <ul class="platos">
+            <li><span class="plato">Solomillo a la plancha con queso y cebolla</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4 id="postres-rio" tabindex="-1">Postres caseros</h4>
+          <ul class="platos">
+            <li><span class="plato">Tarta Pantera Rosa</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Tarta de Tigretón</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Tarta de Kinder Bueno</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+            <li><span class="plato">Mascarpone con Lotus</span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Para beber</h4>
+          <ul class="platos">
+            <li><span class="plato">Cañón<span class="de-donde">Cartel «Regreso al Embrujo Río», 3 de julio <mark class="relleno">si sigue, sin confirmar</mark></span></span><span class="precio">2,5&nbsp;€</span></li>
+            <li><span class="plato">Calimotxo<span class="de-donde">El mismo cartel</span></span><span class="precio">2,5&nbsp;€</span></li>
+          </ul>
+        </div>
+        <div class="aparece">
+          <h3 id="carta-plaza" tabindex="-1">Plaza</h3>
+          <h4>Cervezas</h4>
+          <ul class="platos">
+            <li><span class="plato">De grifo, nacional o de importación<span class="de-donde">Ocho grifos · marcas <mark class="relleno">sin confirmar</mark></span></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Picoteo</h4>
+          <ul class="platos">
+            <li><span class="plato">Picoteo para acompañar<span class="de-donde">Qué hay: <mark class="relleno">sin confirmar</mark></span></span><span class="precio"><mark class="relleno">sin confirmar</mark></span></li>
+          </ul>
+          <h4>Para beber</h4>
+          <ul class="platos">
+            <li><span class="plato">Caña<span class="de-donde">Pegatina del cartel de la Plaza <mark class="relleno">fecha sin confirmar</mark></span></span><span class="precio">2&nbsp;€</span></li>
+            <li><span class="plato">Tinto de verano<span class="de-donde">La misma pegatina</span></span><span class="precio">2&nbsp;€</span></li>
+          </ul>
+        </div>
+      </div>
+      <p class="alergenos">Alérgenos de todos los platos: <mark class="relleno">sin confirmar</mark></p>
+    </div>
+  </section>
+
+  <!-- ===== sorteos ===== -->
+  <section class="sorteos" id="sorteos" aria-labelledby="t-sorteos">
+    <div class="caja">
+      <div class="cabeza">
+        <h2 id="t-sorteos">Sorteos</h2>
+      </div>
+      <div>
+        <article class="sorteo aparece" aria-labelledby="t-sorteo-rio">
+          <p class="cuando">Los miércoles · Río</p>
+          <div>
+            <h3 class="que" id="t-sorteo-rio">Cenas y raciones</h3>
+            <p class="mas">Se sortean entre los clientes del Río.</p>
+            <p class="fuente">Así fue en el verano de 2025 (guardo.org) <mark class="relleno">si sigue este año, sin confirmar</mark></p>
+          </div>
+        </article>
+        <article class="sorteo aparece" aria-labelledby="t-sorteo-plaza">
+          <p class="cuando">En el descanso o a las 21:30 · Plaza</p>
+          <div>
+            <h3 class="que" id="t-sorteo-plaza">Una cesta de embutidos</h3>
+            <p class="mas">Con el fútbol: toda la Liga y Champions.</p>
+            <p class="fuente">Cartel de la Plaza <mark class="relleno">qué días hay sorteo, sin confirmar</mark></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== el avisador: banda salvia a sangre ===== -->
+  <section class="avisador salvia" aria-labelledby="t-avisador">
+    <div class="caja">
+      <h2 id="t-avisador">El avisador</h2>
+      <p class="aparece">Pides en barra, te damos el avisador y, cuando vibra, vas a por lo tuyo.<small>En los dos Embrujos. Se ilumina y tiembla en la mesa: tu pedido está listo.</small></p>
+    </div>
+  </section>
+
+  <!-- ===== horario de la semana ===== -->
+  <section class="horario" aria-labelledby="horario">
+    <div class="caja">
+      <div>
+        <h2 id="horario" tabindex="-1">Horario</h2>
+        <p class="intro">Los dos, día a día, en hora de Guardo. <mark class="relleno">Horario de ejemplo, sin confirmar</mark></p>
+      </div>
+      <div class="aparece">
+        <table class="tabla" data-tabla="los-dos">
+          <thead><tr><th scope="col">Día</th><th scope="col">Río</th><th scope="col">Plaza</th></tr></thead>
+          <tbody>
+            <tr data-dia="1"><th scope="row">Lunes</th><td><mark class="relleno">cerrado</mark></td><td>cerrado</td></tr>
+            <tr data-dia="2"><th scope="row">Martes</th><td><mark class="relleno">cerrado</mark></td><td>cerrado</td></tr>
+            <tr data-dia="3"><th scope="row">Miércoles</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="4"><th scope="row">Jueves</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="5"><th scope="row">Viernes</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">16:00 a 23:00</mark></td></tr>
+            <tr data-dia="6"><th scope="row">Sábado</th><td>16:00 a <mark class="relleno">1:00</mark></td><td><mark class="relleno">13:00 a 23:00</mark></td></tr>
+            <tr data-dia="0"><th scope="row">Domingo</th><td>16:00 a <mark class="relleno">0:00</mark></td><td><mark class="relleno">13:00 a 23:00</mark></td></tr>
+          </tbody>
+        </table>
+        <p class="aviso-h">La Plaza cierra lunes y martes por descanso (lo dice su cartel); sus horas son las de la inauguración. El Río abre a las 16:00; los días de cierre y la hora de cerrar, sin confirmar. A finales de septiembre de 2026 una web lo da cerrado temporalmente <mark class="relleno">¿cierre de temporada? sin confirmar</mark></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- solo en el boceto (y solo con JS): el selector para probar el horario -->
+  <section class="boceto-bloque" aria-labelledby="t-boceto" hidden>
+    <div class="caja">
+      <fieldset class="probador">
+        <legend id="t-boceto"><mark class="relleno">Solo en el boceto</mark> ver la web como si fuera, en Guardo…</legend>
+        <div class="opciones">
+          <label><input type="radio" name="momento" value="ahora" checked> ahora</label>
+          <label><input type="radio" name="momento" value="4,18:00"> jueves 18:00</label>
+          <label><input type="radio" name="momento" value="2,20:00"> martes 20:00</label>
+          <label><input type="radio" name="momento" value="6,14:00"> sábado 14:00</label>
+          <label><input type="radio" name="momento" value="3,23:30"> miércoles 23:30</label>
+        </div>
+        <p class="probador-eco" aria-live="polite">Cambia el estado de los dos locales en toda la página.</p>
+      </fieldset>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="caja">
+    <div class="rejilla">
+      <div>
+        <h2>Embrujo Río</h2>
+        <p>Camino la Renta, 1, Guardo, junto al Carrión</p>
+        <a href="tel:+34646251640"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg>646 25 16 40</a>
+      </div>
+      <div>
+        <h2>Embrujo Plaza</h2>
+        <p>Plaza de la Constitución, Guardo</p>
+        <a href="tel:+34646981186"><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg>646 98 11 86</a>
+      </div>
+      <div>
+        <h2>Instagram</h2>
+        <p>Reservas y preguntas, también por privado.</p>
+        <a href="https://www.instagram.com/embrujo_guardo/">@embrujo_guardo</a>
+      </div>
+    </div>
+    <p class="firma"><strong>Boceto, no es la web del bar.</strong> Embrujo Río y Embrujo Plaza · Guardo (Palencia) · de Elena y Nete</p>
+  </div>
+</footer>
+
+<!-- el boton redondo de Llamar: un <details>, funciona sin JS -->
+<details class="llamar-fijo">
+  <summary>
+    <span class="sr">Llamar al Embrujo</span>
+    <svg class="aro" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <defs><path id="circulo" d="M50 50 m-39 0 a39 39 0 1 1 78 0 a39 39 0 1 1 -78 0"/></defs>
+      <text><textPath href="#circulo" textLength="242" lengthAdjust="spacing">LLAMAR · LLAMAR · LLAMAR ·</textPath></text>
+    </svg>
+    <span class="lunita" aria-hidden="true"></span>
+  </summary>
+  <div class="llamar-panel">
+    <p>Llamar</p>
+    <a href="tel:+34646251640"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg>Río</span><b>646 25 16 40</b></a>
+    <a href="tel:+34646981186"><span><svg class="ico" aria-hidden="true" focusable="false"><use href="#i-tel"/></svg>Plaza</span><b>646 98 11 86</b></a>
+  </div>
+</details>
+
+<script>
+(function(){
+  'use strict';
+  function $$(s,c){return [].slice.call((c||document).querySelectorAll(s));}
+
+  /* ===== HORARIO: el unico sitio donde esta. De ejemplo, sin confirmar. =====
+     (el mismo del 19) Cada dia: null (cerrado) o {abre,cierra}. Si cierra <= abre,
+     el cierre es de madrugada del dia siguiente. "seguro" dice que parte tiene
+     fuente: lo demas sale en amarillo. */
+  const HORARIO={
+    confirmado:false,
+    fuente:'Plaza: cartel (lunes y martes cerrado) y prensa de la inauguración. Río: abre a las 16:00; cierres de Restaurant Guru.',
+    locales:{
+      rio:{
+        nombre:'Río',
+        seguro:{abre:true,cierra:false,cerrado:false},
+        dias:{
+          lunes:null, martes:null,
+          miercoles:{abre:'16:00',cierra:'01:00'},
+          jueves:{abre:'16:00',cierra:'01:00'},
+          viernes:{abre:'16:00',cierra:'01:00'},
+          sabado:{abre:'16:00',cierra:'01:00'},
+          domingo:{abre:'16:00',cierra:'00:00'}
+        }
+      },
+      plaza:{
+        nombre:'Plaza',
+        seguro:{abre:false,cierra:false,cerrado:true},
+        dias:{
+          lunes:null, martes:null,
+          miercoles:{abre:'16:00',cierra:'23:00'},
+          jueves:{abre:'16:00',cierra:'23:00'},
+          viernes:{abre:'16:00',cierra:'23:00'},
+          sabado:{abre:'13:00',cierra:'23:00'},
+          domingo:{abre:'13:00',cierra:'23:00'}
+        }
+      }
+    }
+  };
+  const CLAVES=['domingo','lunes','martes','miercoles','jueves','viernes','sabado'];
+  const NOMBRES=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+
+  /* ===== LA HORA DE GUARDO (la del 19) =====
+     El dia y los minutos salen siempre de aqui, en Europe/Madrid: quien mira desde
+     Canarias, desde otro pais o con el movil mal configurado ve lo mismo que en Guardo. */
+  var RELOJ_GUARDO=null;
+  try{RELOJ_GUARDO=new Intl.DateTimeFormat('es-ES',{timeZone:'Europe/Madrid',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});}catch(e){}
+  var DIA_CORTO={do:0,lu:1,ma:2,mi:3,ju:4,vi:5,sa:6};
+  function horaDeGuardo(fecha){
+    if(RELOJ_GUARDO){
+      var p={};
+      RELOJ_GUARDO.formatToParts(fecha).forEach(function(x){p[x.type]=x.value;});
+      var d=DIA_CORTO[String(p.weekday||'').normalize('NFD').replace(/[^a-z]/gi,'').slice(0,2).toLowerCase()];
+      if(d!=null&&p.hour!=null)return {dia:d,minutos:(+p.hour%24)*60+(+p.minute)};
+    }
+    return {dia:fecha.getDay(),minutos:fecha.getHours()*60+fecha.getMinutes()};
+  }
+  function minutos(h){var p=h.split(':');return (+p[0])*60+(+p[1]);}
+  function tramo(local,dia){
+    var t=HORARIO.locales[local].dias[CLAVES[dia]];
+    if(!t)return null;
+    var a=minutos(t.abre),c=minutos(t.cierra);
+    if(c<=a)c+=1440;
+    return {a:a,c:c,t:t};
+  }
+  function aLas(h){
+    var p=h.split(':'),hh=+p[0],mm=p[1];
+    if(hh===0&&mm==='00')return 'a medianoche';
+    return (hh===1?'a la ':'a las ')+hh+':'+mm;
+  }
+  function estado(local,fecha){
+    var g=horaDeGuardo(fecha),d=g.dia,m=g.minutos;
+    var hoy=tramo(local,d);
+    if(hoy&&m>=hoy.a&&m<hoy.c)return {abierto:true,texto:'cerramos '+aLas(hoy.t.cierra)};
+    var ayer=tramo(local,(d+6)%7);
+    if(ayer&&ayer.c>1440&&m+1440<ayer.c)return {abierto:true,texto:'cerramos '+aLas(ayer.t.cierra)};
+    if(hoy&&m<hoy.a)return {abierto:false,texto:'abrimos hoy '+aLas(hoy.t.abre)};
+    for(var i=1;i<=7;i++){
+      var t=tramo(local,(d+i)%7);
+      if(t)return {abierto:false,texto:'abrimos '+(i===1?'mañana':'el '+NOMBRES[(d+i)%7])+' '+aLas(t.t.abre)};
+    }
+    return {abierto:false,texto:'sin horario'};
+  }
+  function hora(h){var p=h.split(':');return (+p[0])+':'+p[1];}
+  function marca(txt,seguro){return (seguro||HORARIO.confirmado)?txt:'<mark class="relleno">'+txt+'</mark>';}
+  function celda(local,dia){
+    var L=HORARIO.locales[local],t=L.dias[CLAVES[dia]];
+    if(!t)return marca('cerrado',L.seguro.cerrado);
+    if(L.seguro.abre&&!L.seguro.cierra)return hora(t.abre)+' a '+marca(hora(t.cierra),false);
+    return marca(hora(t.abre)+' a '+hora(t.cierra),L.seguro.abre&&L.seguro.cierra);
+  }
+  function horasHoy(l,dia){var t=HORARIO.locales[l].dias[CLAVES[dia]];return t?hora(t.abre)+' a '+hora(t.cierra):'cerrado';}
+  /* la tabla sale de HORARIO (el HTML trae la misma, para verse sin JS) */
+  $$('.tabla').forEach(function(tb){
+    var cuales=tb.dataset.tabla==='los-dos'?['rio','plaza']:[tb.dataset.tabla];
+    $$('tbody tr',tb).forEach(function(tr){
+      var d=+tr.dataset.dia;
+      $$('td',tr).forEach(function(td,i){td.innerHTML=celda(cuales[i],d);});
+    });
+  });
+
+  var accHoy=document.querySelector('[data-hoy-acceso]');
+  function pintar(fecha){
+    ['rio','plaza'].forEach(function(l){
+      var e=estado(l,fecha),v=e.abierto?'abierto':'cerrado';
+      $$('[data-estado-de="'+l+'"]').forEach(function(p){
+        p.dataset.estado=v;p.hidden=false;
+        p.innerHTML='<b><i class="punto" aria-hidden="true"></i>'+(e.abierto?'Abierto ahora':'Cerrado ahora')+'</b> <span>'+e.texto+'</span>';
+      });
+    });
+    var dia=horaDeGuardo(fecha).dia;
+    $$('.tabla tbody tr').forEach(function(tr){tr.classList.toggle('hoy',+tr.dataset.dia===dia);});
+    $$('[data-hoy]').forEach(function(dd){
+      var l=dd.dataset.hoy,t=HORARIO.locales[l].dias[CLAVES[dia]];
+      dd.innerHTML=NOMBRES[dia].charAt(0).toUpperCase()+NOMBRES[dia].slice(1)+', '+(t?'de ':'')+celda(l,dia)+' · <a href="#horario">la semana</a>';
+    });
+    if(accHoy){
+      accHoy.innerHTML='<span class="sr">Horario de hoy: </span><span class="t">Río '+horasHoy('rio',dia)+'</span><span class="t">Plaza '+horasHoy('plaza',dia)+'</span>';
+    }
+  }
+  /* "martes 20:00" es martes a las 20:00 EN GUARDO (la del 19) */
+  function fechaDe(valor){
+    var f=new Date();
+    if(valor==='ahora')return f;
+    var p=valor.split(','),h=p[1].split(':'),meta=(+p[0])*1440+(+h[0])*60+(+h[1]),SEM=10080;
+    f=new Date(Math.floor(f.getTime()/60000)*60000);
+    for(var i=0;i<3;i++){
+      var g=horaDeGuardo(f),dif=meta-(g.dia*1440+g.minutos);
+      dif=i===0?((dif%SEM)+SEM)%SEM:((dif+SEM/2)%SEM+SEM)%SEM-SEM/2;
+      if(!dif)break;
+      f=new Date(f.getTime()+dif*60000);
+    }
+    return f;
+  }
+  var bloque=document.querySelector('.boceto-bloque'),eco=bloque.querySelector('.probador-eco');
+  bloque.hidden=false;
+  bloque.addEventListener('change',function(ev){
+    if(ev.target.name!=='momento')return;
+    var f=fechaDe(ev.target.value);
+    pintar(f);
+    eco.textContent='Río '+(estado('rio',f).abierto?'abierto':'cerrado')+' · Plaza '+(estado('plaza',f).abierto?'abierta':'cerrada')+'.';
+  });
+  pintar(new Date());
+
+  /* el boton redondo: se cierra con Escape o tocando fuera (sin JS, como un details) */
+  var llamar=document.querySelector('.llamar-fijo');
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'&&llamar.open){llamar.open=false;llamar.querySelector('summary').focus();}
+  });
+  document.addEventListener('click',function(e){if(llamar.open&&!llamar.contains(e.target))llamar.open=false;});
+  /* mientras los accesos estan a la vista, el boton redondo no hace falta (solo en el movil, por CSS) */
+  var accesos=document.querySelector('.accesos');
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      var e=es[0];document.body.classList.toggle('con-accesos',e.isIntersecting||e.boundingClientRect.top>0);
+    }).observe(accesos);
+  }
+})();
+</script>
+</body>
+</html>

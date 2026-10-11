@@ -22,6 +22,8 @@ const FAMILIAS = [
   'Rye', 'Nunito:wght@400;800',
   'Creepster', 'Archivo+Narrow:wght@400;700', 'VT323',
   'Cinzel+Decorative:wght@700', 'Cormorant+Garamond:ital,wght@0,500;1,500',
+  'Bodoni+Moda:ital,wght@0,500;0,800;1,500', 'Inter:wght@400;500;600',
+  'Jost:wght@200;300;400;500', 'Pinyon+Script',
 ];
 
 await mkdir(DESTINO, { recursive: true });
