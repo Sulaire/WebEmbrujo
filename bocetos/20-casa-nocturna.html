@@ -218,10 +218,12 @@ a.acceso:hover .acc-titulo{text-decoration:underline}
   grid-template-areas:"cabeza" "foto" "datos";
   margin-bottom:clamp(64px,10vw,150px);
 }
-.local-cabeza{grid-area:cabeza;padding:0 var(--g) 24px}
+.local-cabeza{grid-area:cabeza;padding:0 var(--g) 24px;container-type:inline-size}
 .local-foto{grid-area:foto}
 .local-datos{grid-area:datos;padding:28px var(--g) 0}
-.local h2{font:800 clamp(5.2rem,26vw,12rem)/.86 var(--display);letter-spacing:-.02em;margin-top:.12em}
+/* el tamaño, también según su columna (35cqi): "Plaza" mide 2,7 veces la letra y a 12rem no cabía
+   en la columna de ningún ordenador; en pantallas de 1000 a 1350 px se salía de la página */
+.local h2{font:800 min(clamp(5.2rem,26vw,12rem),35cqi)/.86 var(--display);letter-spacing:-.02em;margin-top:.12em}
 .local h2 .pre{display:block;font:500 italic clamp(1.2rem,4.6vw,2rem)/1.2 var(--display);letter-spacing:0;color:var(--hueso-2);margin-bottom:.3em}
 .local .estado{margin-top:18px;font-size:.875rem}
 .local-lema{font:500 clamp(1.25rem,2.4vw,1.6rem)/1.35 var(--display);max-width:30ch;margin-bottom:28px}
